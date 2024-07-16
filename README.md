@@ -52,6 +52,31 @@ Simulation of the process with discretisation gives realised moments (Haozhen wo
 Realised Moments + Expansion Method $\to$ pdf/cdf $\to$ compare to theoretical distribution
 - which expansion method works best?
 
+Gram-Charlier-Expansion Type A ("Gram-Charlier densities", original paper?)
+$$f(x) = p_n(x)\cdot \phi(x)$$
+with
+- $\phi(x)$ pdf of standardized normal distribution (zero mean, unit variance)
+- $p_n(x) = 1 + \frac{\gamma_1}{6}He_3(x) + \frac{\gamma_2}{24}He_4(x)$
+- $\gamma_1$ skewness
+- $\gamma_2$ excess kurtosis
+- $He_3(x) = x^3-3x$
+- $He_4(x) = x^4-6x^2+3$
+
+Edgeworth-Expansion ("Gram-Charlier densities", original paper?)
+$$f(x) = p_n(x)\cdot \phi(x)$$
+with
+- $\phi(x)$ pdf of standardized normal distribution (zero mean, unit variance)
+- $p_n(x) = 1 + \frac{\gamma_1}{6}He_3(x) + \frac{\gamma_2}{24}He_4(x) + \frac{\gamma_1^2}{72}He_6(x)$
+- $\gamma_1$ skewness
+- $\gamma_2$ excess kurtosis
+- $He_3(x) = x^3-3x$
+- $He_4(x) = x^4-6x^2+3$
+- $He_6(x) = x^6-15x^4+45x^2-15$
+
+There might be problems with positivity of $f(x)$ with certain $\gamma_1$ and $\gamma_2$, read "Barton and Dennis (1952)"
+![alt text](gram_charlier_positivity.png) (image from "Gram-Charlier densities")
+- only in region $AM_1BM_2A$ Gram-Charlier-Expansion is positive for every $x$
+
 ---
 
 Comparing realised moments and theoretical moments was done by Neuberger & Payne (2021)
