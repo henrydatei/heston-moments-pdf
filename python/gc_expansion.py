@@ -32,7 +32,7 @@ skewed_expansion = gram_charlier_expansion(x, skewed_skew, skewed_kurt)
 heavy_tailed_expansion = gram_charlier_expansion(x, heavy_tailed_skew, heavy_tailed_kurt)
 
 # Plotting
-plt.figure(figsize=(15, 10))
+# plt.figure(figsize=(15, 10))
 
 # Plot Normal distribution and its expansion
 plt.subplot(3, 1, 1)
