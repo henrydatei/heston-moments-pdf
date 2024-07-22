@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import norm, lognorm, t
+from scipy.stats import norm, lognorm, t, nct
 
 STEPS = 1000
 Z_START = -10
@@ -74,23 +74,29 @@ def gram_charlier_expansion(x, skewness, kurtosis):
 normal_skew, normal_kurt = norm.stats(moments='sk')
 lognorm_skew, lognorm_kurt = lognorm.stats(0.5, moments = 'sk')
 t_skew, t_kurt = t.stats(5, moments = 'sk')
+nct_skew, nct_kurt = nct.stats(5, 0.5, moments = 'sk')
 
 print(normal_skew, normal_kurt)
 print(lognorm_skew, lognorm_kurt)
 print(t_skew, t_kurt)
+print(nct_skew, nct_kurt)
 
 lognorm_skew, lognorm_kurt = transform_skew_kurt_into_positivity_region(lognorm_skew, lognorm_kurt, intersections)
 t_skew, t_kurt = transform_skew_kurt_into_positivity_region(t_skew, t_kurt, intersections)
+nct_skew, nct_kurt = transform_skew_kurt_into_positivity_region(nct_skew, nct_kurt, intersections)
 print(lognorm_skew, lognorm_kurt)
 print(t_skew, t_kurt)
+print(nct_skew, nct_kurt)
 
 # plot the positivity boundary
 plt.plot([x[0] for x in intersections], [x[1] for x in intersections], linestyle = 'None', marker = 'o', markersize = 2, color = 'r')
 plt.plot([lognorm_kurt], [lognorm_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'b')
 plt.plot([t_kurt], [t_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'g')
+plt.plot([nct_kurt], [nct_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'y')
 plt.title('Positivity Boundary of Gram-Charlier Density Function')
 plt.xlabel('Kurtosis')
 plt.ylabel('Skewness')
+plt.legend(['Positivity Boundary', 'Log-Normal', 't', 'NCT'])
 plt.tight_layout()
 plt.show()
 
@@ -101,29 +107,37 @@ x = np.linspace(-5, 5, 1000)
 normal_expansion = gram_charlier_expansion(x, normal_skew, normal_kurt)
 lognorm_expansion = gram_charlier_expansion(x, lognorm_skew, lognorm_kurt)
 t_expansion = gram_charlier_expansion(x, t_skew, t_kurt)
+nct_expansion = gram_charlier_expansion(x, nct_skew, nct_kurt)
 
 # Plotting
-# plt.figure(figsize=(15, 10))
+plt.figure(figsize=(8, 7))
 
 # Plot Normal distribution and its expansion
-plt.subplot(3, 1, 1)
+plt.subplot(4, 1, 1)
 plt.plot(x, norm.pdf(x), 'r--', label='Normal PDF')
 plt.plot(x, normal_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
 plt.title('Normal Distribution and Positivity Gram-Charlier Expansion')
 plt.legend()
 
 # Plot Skewed distribution and its expansion
-plt.subplot(3, 1, 2)
+plt.subplot(4, 1, 2)
 plt.plot(x, lognorm.pdf(x, 0.5), 'r--', label='Log-Normal PDF')
 plt.plot(x, lognorm_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
 plt.title('Log-Normal Distribution and Positivity Gram-Charlier Expansion')
 plt.legend()
 
 # Plot Heavy-tailed distribution and its expansion
-plt.subplot(3, 1, 3)
+plt.subplot(4, 1, 3)
 plt.plot(x, t.pdf(x, 5), 'r--', label='t PDF')
 plt.plot(x, t_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
 plt.title('t Distribution and Positivity Gram-Charlier Expansion')
+plt.legend()
+
+# Plot Non-central t distribution and its expansion
+plt.subplot(4, 1, 4)
+plt.plot(x, nct.pdf(x, 5, 0.5), 'r--', label='NCT PDF')
+plt.plot(x, nct_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
+plt.title('Non-central t Distribution and Positivity Gram-Charlier Expansion')
 plt.legend()
 
 plt.tight_layout()
