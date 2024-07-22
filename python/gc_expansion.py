@@ -10,6 +10,14 @@ def hermite_polynomial(n, x):
     else:
         return x * hermite_polynomial(n-1, x) - (n-1) * hermite_polynomial(n-2, x)
 
+# plot hermite polynomials
+x = np.linspace(-4, 6, 1000)
+for i in range(6):
+    plt.plot(x, [hermite_polynomial(i, xi) for xi in x], label=f'Hermite {i}')
+plt.legend()
+plt.ylim(-10, 20)
+plt.show()
+
 # Function to generate Gram-Charlier expansion
 def gram_charlier_expansion(x, skewness, kurtosis):
     return norm.pdf(x) * (1 + skewness/6 * hermite_polynomial(3, x) + kurtosis/24 * hermite_polynomial(4, x))
