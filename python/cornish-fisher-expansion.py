@@ -28,20 +28,20 @@ def cornish_fisher_expansion(x, skew, kurt):
 
 # Calculate skewness and kurtosis
 normal_skew, normal_kurt = norm.stats(moments='sk')
-skewed_skew, skewed_kurt = lognorm.stats(0.5, moments = 'sk')
-heavy_tailed_skew, heavy_tailed_kurt = t.stats(5, moments = 'sk')
+lognorm_skew, lognorm_kurt = lognorm.stats(0.5, moments = 'sk')
+t_skew, t_kurt = t.stats(5, moments = 'sk')
 
 print(normal_skew, normal_kurt)
-print(skewed_skew, skewed_kurt)
-print(heavy_tailed_skew, heavy_tailed_kurt)
+print(lognorm_skew, lognorm_kurt)
+print(t_skew, t_kurt)
 
 # Define x range for plotting
 x = np.linspace(-5, 5, 1000)
 
 # Apply Gram-Charlier expansion
 normal_expansion = cornish_fisher_expansion(x, normal_skew, normal_kurt)
-skewed_expansion = cornish_fisher_expansion(x, skewed_skew, skewed_kurt)
-heavy_tailed_expansion = cornish_fisher_expansion(x, heavy_tailed_skew, heavy_tailed_kurt)
+lognorm_expansion = cornish_fisher_expansion(x, lognorm_skew, lognorm_kurt)
+t_expansion = cornish_fisher_expansion(x, t_skew, t_kurt)
 
 # Plotting
 # plt.figure(figsize=(15, 10))
@@ -56,14 +56,14 @@ plt.legend()
 # Plot Skewed distribution and its expansion
 plt.subplot(3, 1, 2)
 plt.plot(x, lognorm.pdf(x, 0.5), 'r--', label='Log-Normal PDF')
-plt.plot(x, skewed_expansion, 'b-', label='Cornish-Fisher Expansion')
+plt.plot(x, lognorm_expansion, 'b-', label='Cornish-Fisher Expansion')
 plt.title('Log-Normal Distribution and Cornish-Fisher Expansion')
 plt.legend()
 
 # Plot Heavy-tailed distribution and its expansion
 plt.subplot(3, 1, 3)
 plt.plot(x, t.pdf(x, 5), 'r--', label='t PDF')
-plt.plot(x, heavy_tailed_expansion, 'b-', label='Cornish-Fisher Expansion')
+plt.plot(x, t_expansion, 'b-', label='Cornish-Fisher Expansion')
 plt.title('t Distribution and Cornish-Fisher Expansion')
 plt.legend()
 
