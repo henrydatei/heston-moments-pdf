@@ -2,15 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, t, nct
 
-def cornish_fisher_expansion(x, skew, kurt):
+def cornish_fisher_expansion(x, mean, var, skew, kurt):
     """Returns the Cornish-Fisher expansion of a random variable x with skewness skew and kurtosis kurt.
-    Source: "Option Pricing Under Skewness and Kurtosis Using a Cornish–Fisher Expansion"
+    Source: "Option Pricing Under Skewness and Kurtosis Using a Cornish-Fisher Expansion"
 
     Args:
         x (float): The value of the random variable.
+        mean (float): The mean of the random variable.
+        var (float): The variance of the random variable.
         skew (float): The skewness of the random variable.
         kurt (float): The kurtosis of the random variable.
     """
+    x = (x - mean) / np.sqrt(var)
     a = (-skew)/(kurt/8 - (skew**2)/3)
     b = kurt/24 - (skew**2)/18
     p = (1 - kurt/8 + 5*(skew**2)/36)/(kurt/24 - (skew**2)/18) - 1/3 * ((skew**2)/36)/((kurt/24 - (skew**2)/18)**2)
@@ -27,10 +30,10 @@ def cornish_fisher_expansion(x, skew, kurt):
 # print(cornish_fisher_expansion(0.5, 0.5, 2))
 
 # Calculate skewness and kurtosis
-normal_skew, normal_kurt = norm.stats(moments='sk')
-lognorm_skew, lognorm_kurt = lognorm.stats(0.5, moments = 'sk')
-t_skew, t_kurt = t.stats(5, moments = 'sk')
-nct_skew, nct_kurt = nct.stats(5, 0.5, moments = 'sk')
+normal_mean, normal_var, normal_skew, normal_kurt = norm.stats(moments='mvsk')
+lognorm_mean, lognorm_var, lognorm_skew, lognorm_kurt = lognorm.stats(0.5, moments = 'mvsk')
+t_mean, t_var, t_skew, t_kurt = t.stats(5, moments = 'mvsk')
+nct_mean, nct_var, nct_skew, nct_kurt = nct.stats(5, 0.5, moments = 'mvsk')
 
 print(normal_skew, normal_kurt)
 print(lognorm_skew, lognorm_kurt)
@@ -41,10 +44,10 @@ print(nct_skew, nct_kurt)
 x = np.linspace(-5, 5, 1000)
 
 # Apply Gram-Charlier expansion
-normal_expansion = cornish_fisher_expansion(x, normal_skew, normal_kurt)
-lognorm_expansion = cornish_fisher_expansion(x, lognorm_skew, lognorm_kurt)
-t_expansion = cornish_fisher_expansion(x, t_skew, t_kurt)
-nct_expansion = cornish_fisher_expansion(x, nct_skew, nct_kurt)
+normal_expansion = cornish_fisher_expansion(x, normal_mean, normal_var, normal_skew, normal_kurt)
+lognorm_expansion = cornish_fisher_expansion(x, lognorm_mean, lognorm_var,lognorm_skew, lognorm_kurt)
+t_expansion = cornish_fisher_expansion(x, t_mean, t_var, t_skew, t_kurt)
+nct_expansion = cornish_fisher_expansion(x, nct_mean, nct_var, nct_skew, nct_kurt)
 
 # Plotting
 plt.figure(figsize=(8, 7))

@@ -35,7 +35,7 @@ Transforms skewness and kurtosis to
 - nct: 0.024892965655198204 3.9970717567756724
 
 ![alt text](gc_positivity_expansion.png)
-- fit is not good
+- fit is not good, but better
 - alt least no negativity
 
 ![alt text](gc_positivity_boundary.png)
@@ -44,4 +44,4 @@ Transforms skewness and kurtosis to
 
 ![alt text](cf_expansion.png)
 - fit is not good
-- skewness has wrong sign (?), GC expansion seems to suffer from the same problem, middle of distribution is on the wrong side
+- for lognormal, main mass of pdf is on wrong side
