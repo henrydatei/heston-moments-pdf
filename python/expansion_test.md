@@ -58,3 +58,10 @@ Transforms skewness and kurtosis to
 ![alt text](cf_expansion.png)
 - fit is not good
 - for lognormal, main mass of pdf is on wrong side
+
+## Edgeworth Expansion
+
+![alt text](ew_expansion.png)
+- fit is not good
+- fit seems to be pretty similar to GC expansion, but worse for  log-normal distribution
+- gets negative, not a density
