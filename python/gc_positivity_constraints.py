@@ -36,6 +36,8 @@ def logistic_map(x, a,b):
     return a + (b-a)/(1+np.exp(-x))
 
 def transform_skew_kurt_into_positivity_region(skew, kurt, intersections):
+    skew_sign = np.sign(skew)
+    skew = abs(skew)
     new_kurt = logistic_map(kurt, 0, 4)
 
     if new_kurt == 4:
@@ -55,6 +57,7 @@ def transform_skew_kurt_into_positivity_region(skew, kurt, intersections):
     # print(i, k_i, s_i, k_i2, s_i2, a_i, b_i, s_u, s_l)
 
     new_skew = logistic_map(skew, s_l, s_u)
+    new_skew = skew_sign * new_skew
 
     return new_skew, new_kurt
 
