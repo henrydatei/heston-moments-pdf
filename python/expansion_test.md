@@ -1,5 +1,5 @@
 # Expansion Method Tests
-How good does the Gram-Charlier, GC with positivity constraints and Cornish-Fisher Expansion work for known distributions with known skewness and kurtosis?
+How good does the Gram-Charlier, GC with positivity constraints, Cornish-Fisher Expansion, Edgeworth Expansion and Saddlepoint Approximation work for known distributions with known skewness and kurtosis?
 
 Three distributions:
 - standard normal
@@ -89,3 +89,23 @@ k &= \frac{12z-4z^3}{z^4-6z^2+3}s -\frac{24}{z^4-6z^2+3}
 - fit is not good
 - fit seems to be pretty similar to GC expansion, but worse for  log-normal distribution
 - gets negative, not a density
+
+## Saddlepoint Approximation
+
+Approximation of cumulant generating function $K$:
+$$K(t) \approx \kappa_1t + \frac{\kappa_2t^2}{2} + \frac{\kappa_3t^3}{6} + \frac{\kappa_4t^4}{24}$$
+Derivatives:
+$$\begin{align}
+K'(t) &= \kappa_1 + \kappa_2t + \frac{\kappa_3t^2}{2} + \frac{\kappa_4t^3}{6} \\
+K''(t) &= \kappa_2 + \kappa_3t + \frac{\kappa_4t^2}{2}
+\end{align}$$
+Solving $K'(t)=z$ for $t$ gives saddlepoint $t$:
+- if $\kappa_4=0$, $\kappa_3=0$, $\kappa_2=0$ and $\kappa_1\neq 0$: no solution exists
+- if $\kappa_4=0$, $\kappa_3=0$ and $\kappa_2\neq 0$: $t = \frac{z-\kappa_1}{\kappa_2}$
+- if $\kappa_4=0$ and $\kappa_3\neq 0$: $t = \frac{\pm\sqrt{-2\kappa_1\kappa_3 + 2\kappa_3 z + \kappa_2^2} - \kappa_2}{\kappa_3}$ *can this ever happen? i havn't found a distribution with excess kurtosis $=0$ and skewness $\neq 0$*
+- if $\kappa_4\neq 0$ then 3 solutions exist, 2 of them are complex, 1 is real: ![alt text](wolframalpha_solution_saddlepoint.jpeg) with $\kappa_1=m$, $\kappa_2=v$, $\kappa_3=s$, $\kappa_4=k$
+- from WolframAlpha: $t=\frac{1}{3\sqrt[3]{2}\kappa_4}\left[\left(\sqrt{(-162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3)^2 + 4(18\kappa_4\kappa_2 - 9\kappa_3^2)^3} - 162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3\right)^{1/3}\right] - \frac{\sqrt[3]{2}(18\kappa_4\kappa_2 - 9\kappa_3^2)}{3\kappa_4\left(\sqrt{(-162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3)^2 + 4(18\kappa_4\kappa_2 - 9\kappa_3^2)^3} - 162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3\right)^{1/3}} - \frac{\kappa_3}{\kappa_4}$
+
+![alt text](saddle_approximation.png)
+- fit is quite good for t distributions, but not for lognormal
+- seems to be always positive
