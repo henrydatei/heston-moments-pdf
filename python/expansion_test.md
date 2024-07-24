@@ -109,3 +109,7 @@ Solving $K'(t)=z$ for $t$ gives saddlepoint $t$:
 ![alt text](saddle_approximation.png)
 - fit is quite good for t distributions, but not for lognormal
 - seems to be always positive
+
+## TODO:
+- plots for how good approximated cgf of saddlepoint approximation is
+- derivation of analytical solutions for saddlepoint approximation when $\kappa_4=0$
