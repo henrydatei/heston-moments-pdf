@@ -64,7 +64,7 @@ Simulation of the process with discretisation gives realised moments (Haozhen wo
 Realised Moments + Expansion Method $\to$ pdf/cdf $\to$ compare to theoretical distribution
 - which expansion method works best?
 
-Gram-Charlier-Expansion Type A ("Gram-Charlier densities", original paper: "Ueber die Entwickelung reeller Functionen in Reihen mittelst der Methode der kleinsten Quadrate.")
+**Gram-Charlier-Expansion Type A** ("Gram-Charlier densities", original paper: "Ueber die Entwickelung reeller Functionen in Reihen mittelst der Methode der kleinsten Quadrate.")
 $$f(x) = p_n(x)\cdot \phi(x)$$
 with
 - $\phi(x)$ pdf of standardized normal distribution (zero mean, unit variance)
@@ -74,7 +74,7 @@ with
 - $He_3(x) = x^3-3x$
 - $He_4(x) = x^4-6x^2+3$
 
-Edgeworth-Expansion ("Gram-Charlier densities", original paper: "On the Representation of Statistical Frequency by a Series")
+**Edgeworth-Expansion** ("Gram-Charlier densities", original paper: "On the Representation of Statistical Frequency by a Series")
 $$f(x) = p_n(x)\cdot \phi(x)$$
 with
 - $\phi(x)$ pdf of standardized normal distribution (zero mean, unit variance)
@@ -90,7 +90,7 @@ There might be problems with positivity of $f(x)$ with certain $\gamma_1$ and $\
 - only in region $AM_1BM_2A$ Gram-Charlier-Expansion is positive for every $x$
 - validity of the Cornish–Fisher case is much wider than in the Gram–Charlier case ("Option Pricing Under Skewness and Kurtosis Using a Cornish–Fisher Expansion")
 
-Cornish-Fisher-Expansion (original paper: "Moments and Cumulants in the Specification of Distributions"): Transformation to random variable $Z$ ("A User's Guide to the Cornish Fisher Expansion"):
+**Cornish-Fisher-Expansion** (original paper: "Moments and Cumulants in the Specification of Distributions"): Transformation to random variable $Z$ ("A User's Guide to the Cornish Fisher Expansion"):
 $$Z \approx z + (z^2-1)\cdot\frac{s}{6} + (z^3-3z)\cdot\frac{k}{24} - (2z^3-5z)\cdot\frac{s^2}{36}$$
 with
 - $z\sim N(0,1)$
@@ -99,6 +99,21 @@ with
 
 gives pdf of $Z$ ("Option Pricing Under Skewness and Kurtosis Using a Cornish–Fisher Expansion"):
 ![alt text](pdf_cornish_fisher_expansion.png)
+
+**Saddlepoint Approximation** (original paper: "Saddlepoint Approximations in Statistics", "Saddlepoint Approximations with Applications")
+$$f(x) \approx\frac{1}{\sqrt{2\pi K''(s)}}\exp(K(s)-sx)$$
+with
+- $K(\cdot)$ cumulant generating function
+- $K''(\cdot)$ second derivative of $K(\cdot)$
+- $s$ saddlepoint, solution of $K'(s)=x$
+
+To get the cumulant generating function, we do a taylor expansion of $K$ at 0. The first four cumulants are the first four derivatives of $K$ at 0:
+$$K(t) \approx \kappa_1t + \frac{\kappa_2t^2}{2} + \frac{\kappa_3t^3}{6} + \frac{\kappa_4t^4}{24}$$
+with
+- $\kappa_1$ mean
+- $\kappa_2$ variance
+- $\kappa_3$ skewness
+- $\kappa_4$ excess kurtosis
 
 ---
 
