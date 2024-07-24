@@ -53,6 +53,30 @@ Transforms skewness and kurtosis to
 
 ![alt text](gc_positivity_boundary.png)
 
+How to find this boundary?
+- Solve $1 + \frac{s}{6}He_3(z) + \frac{k}{24}He_4(z)=0$ for $s$ and $k$
+$$\begin{align}
+1 + \frac{s}{6}He_3(z) + \frac{k}{24}He_4(z)&=0 \\
+\frac{s}{6}He_3(z) &= -1 - \frac{k}{24}He_4(z) \\
+s\cdot He_3(z) &= -6 - \frac{k}{4}He_4(z) \\
+s &= -\frac{6}{He_3(z)} - \frac{He_4(z)}{4\cdot He_3(z)}k \\
+s &= \frac{z^4-6z^2+3}{12z-4z^3}\cdot k + \frac{24}{12z-4z^3}
+\end{align}$$
+This works as long as $z\neq\pm\sqrt{3}$
+
+(actually we don't need the following)
+$$\begin{align}
+1 + \frac{s}{6}He_3(z) + \frac{k}{24}He_4(z)&=0 \\
+\frac{k}{24}He_4(z) &= -1 - \frac{s}{6}He_3(z) \\
+k\cdot He_4(z) &= -24 - 4s\cdot He_3(z) \\
+k &= -\frac{24}{He_4(z)} - \frac{4\cdot He_3(z)}{He_4(z)}s \\
+k &= \frac{12z-4z^3}{z^4-6z^2+3}s -\frac{24}{z^4-6z^2+3}
+\end{align}$$
+- These lines have the form $s = a(z)\cdot k + b(z)$. For two $z$, $z_1$ and $z_2$, we get two lines $s = a(z_1)\cdot k + b(z_1)$ and $s = a(z_2)\cdot k + b(z_2)$. The intersection of this lines is one point of the boundary. 
+- Two lines $f(x) = a+bx$ and $g(x) = cx+d$ intersect at $x = \frac{d-b}{a-c}$ and $y = \frac{ad-bc}{a-c}$
+- Iterating from $z_1=-10$ to $z_{1000}=-\sqrt{3}$ for 1000 steps (stepsize $\Delta z$), calculating $a(z_i)$, $b(z_i)$, $a(z_i+\Delta z)$ and $b(z_i+\Delta z)$, find intersection gives a point $(k_i,s_i)$ of the boundary
+- for completeness adding to more points $(4,0)$ and $(0,0)$
+
 ## Cornish-Fisher Expansion
 
 ![alt text](cf_expansion.png)
