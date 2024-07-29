@@ -30,24 +30,24 @@ def cornish_fisher_expansion(x, mean, var, skew, kurt):
 # print(cornish_fisher_expansion(0.5, 0.5, 2))
 
 # Calculate skewness and kurtosis
-normal_mean, normal_var, normal_skew, normal_kurt = norm.stats(moments='mvsk')
-lognorm_mean, lognorm_var, lognorm_skew, lognorm_kurt = lognorm.stats(0.5, moments = 'mvsk')
-t_mean, t_var, t_skew, t_kurt = t.stats(5, moments = 'mvsk')
-nct_mean, nct_var, nct_skew, nct_kurt = nct.stats(5, 0.5, moments = 'mvsk')
+normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')
+lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt = lognorm.stats(0.5, moments = 'mvsk')
+t_mean, t_var, t_skew, t_exkurt = t.stats(5, moments = 'mvsk')
+nct_mean, nct_var, nct_skew, nct_exkurt = nct.stats(5, 0.5, moments = 'mvsk')
 
-print(normal_skew, normal_kurt)
-print(lognorm_skew, lognorm_kurt)
-print(t_skew, t_kurt)
-print(nct_skew, nct_kurt)
+print(normal_skew, normal_exkurt)
+print(lognorm_skew, lognorm_exkurt)
+print(t_skew, t_exkurt)
+print(nct_skew, nct_exkurt)
 
 # Define x range for plotting
 x = np.linspace(-5, 5, 1000)
 
-# Apply Gram-Charlier expansion
-normal_expansion = cornish_fisher_expansion(x, normal_mean, normal_var, normal_skew, normal_kurt)
-lognorm_expansion = cornish_fisher_expansion(x, lognorm_mean, lognorm_var,lognorm_skew, lognorm_kurt)
-t_expansion = cornish_fisher_expansion(x, t_mean, t_var, t_skew, t_kurt)
-nct_expansion = cornish_fisher_expansion(x, nct_mean, nct_var, nct_skew, nct_kurt)
+# Apply Cornish-Fisher expansion
+normal_expansion = cornish_fisher_expansion(x, normal_mean, normal_var, normal_skew, normal_exkurt)
+lognorm_expansion = cornish_fisher_expansion(x, lognorm_mean, lognorm_var,lognorm_skew, lognorm_exkurt)
+t_expansion = cornish_fisher_expansion(x, t_mean, t_var, t_skew, t_exkurt)
+nct_expansion = cornish_fisher_expansion(x, nct_mean, nct_var, nct_skew, nct_exkurt)
 
 # Plotting
 plt.figure(figsize=(8, 7))

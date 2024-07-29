@@ -2,6 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, t, nct
 
+def scipy_moments_to_cumulants(mean, variance, skewness, excess_kurtosis):
+    return mean, variance, skewness*variance**1.5, excess_kurtosis*variance**2
+
 def cgf(x, mean, variance, skewness, kurtosis):
     return mean*x + 0.5*variance*x**2 + skewness*x**3/6 + kurtosis*x**4/24
 
@@ -37,24 +40,24 @@ def saddlepoint_approximation(x, mean, variance, skewness, kurtosis):
     return 1/np.sqrt(2*np.pi*second_derivative_cgf(s, mean, variance, skewness, kurtosis)) * np.exp(cgf(s, mean, variance, skewness, kurtosis) - s*x)
 
 # Calculate skewness and kurtosis
-normal_mean, normal_var, normal_skew, normal_kurt = norm.stats(moments='mvsk')
-lognorm_mean, lognorm_var, lognorm_skew, lognorm_kurt = lognorm.stats(0.5, moments = 'mvsk')
-t_mean, t_var, t_skew, t_kurt = t.stats(5, moments = 'mvsk')
-nct_mean, nct_var, nct_skew, nct_kurt = nct.stats(5, 0.5, moments = 'mvsk')
+normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')
+lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt = lognorm.stats(0.5, moments = 'mvsk')
+t_mean, t_var, t_skew, t_exkurt = t.stats(5, moments = 'mvsk')
+nct_mean, nct_var, nct_skew, nct_exkurt = nct.stats(5, 0.5, moments = 'mvsk')
 
-print(normal_skew, normal_kurt)
-print(lognorm_skew, lognorm_kurt)
-print(t_skew, t_kurt)
-print(nct_skew, nct_kurt)
+print(normal_skew, normal_exkurt)
+print(lognorm_skew, lognorm_exkurt)
+print(t_skew, t_exkurt)
+print(nct_skew, nct_exkurt)
 
 # Define x range for plotting
 x = np.linspace(-5, 5, 1000)
 
 # Apply Saddlepoint Approximation
-normal_approximation = saddlepoint_approximation(x, normal_mean, normal_var, normal_skew, normal_kurt)
-lognorm_approximation = saddlepoint_approximation(x, lognorm_mean, lognorm_var, lognorm_skew, lognorm_kurt)
-t_approximation = saddlepoint_approximation(x, t_mean, t_var, t_skew, t_kurt)
-nct_approximation = saddlepoint_approximation(x, nct_mean, nct_var, nct_skew, nct_kurt)
+normal_approximation = saddlepoint_approximation(x, *scipy_moments_to_cumulants(normal_mean, normal_var, normal_skew, normal_exkurt))
+lognorm_approximation = saddlepoint_approximation(x, *scipy_moments_to_cumulants(lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt))
+t_approximation = saddlepoint_approximation(x, *scipy_moments_to_cumulants(t_mean, t_var, t_skew, t_exkurt))
+nct_approximation = saddlepoint_approximation(x, *scipy_moments_to_cumulants(nct_mean, nct_var, nct_skew, nct_exkurt))
 
 # Plotting
 plt.figure(figsize=(8, 7))
