@@ -106,10 +106,25 @@ Solving $K'(t)=z$ for $t$ gives saddlepoint $t$:
 - if $\kappa_4\neq 0$ then 3 solutions exist, 2 of them are complex, 1 is real: ![alt text](wolframalpha_solution1_saddlepoint.png) ![alt text](wolframalpha_solution2_saddlepoint.png) ![alt text](wolframalpha_solution3_saddlepoint.png) with $\kappa_1=m$, $\kappa_2=v$, $\kappa_3=s$, $\kappa_4=k$
 - from WolframAlpha: $t=\frac{1}{3\sqrt[3]{2}\kappa_4}\left[\left(\sqrt{(-162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3)^2 + 4(18\kappa_4\kappa_2 - 9\kappa_3^2)^3} - 162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3\right)^{1/3}\right] - \frac{\sqrt[3]{2}(18\kappa_4\kappa_2 - 9\kappa_3^2)}{3\kappa_4\left(\sqrt{(-162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3)^2 + 4(18\kappa_4\kappa_2 - 9\kappa_3^2)^3} - 162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3\right)^{1/3}} - \frac{\kappa_3}{\kappa_4}$
 
+Derivation of solutions for $\kappa_4=0$:
+$$\begin{align}
+z &= \kappa_1 + \kappa_2t \\
+t &= \frac{z-\kappa_1}{\kappa_2}
+\end{align}$$
+$$\begin{align}
+z &= \kappa_1 + \kappa_2t + \frac{\kappa_3t^2}{2} \\
+\frac{2z}{\kappa_3} &= \frac{2\kappa_1}{\kappa_3} + \frac{2\kappa_2t}{\kappa_3} + t^2 \\
+\frac{2z}{\kappa_3} - \frac{2\kappa_1}{\kappa_3} &= \frac{2\kappa_2t}{\kappa_3} + t^2 \\
+\frac{2z}{\kappa_3} - \frac{2\kappa_1}{\kappa_3} + \frac{\kappa_2^2}{\kappa_3^2} &= \frac{2\kappa_2t}{\kappa_3} + t^2 + \frac{\kappa_2^2}{\kappa_3^2} \\
+\frac{2z}{\kappa_3} - \frac{2\kappa_1}{\kappa_3} + \frac{\kappa_2^2}{\kappa_3^2} &= \left(t+\frac{\kappa_2}{\kappa_3}\right)^2 \\
+\pm\sqrt{\frac{2z}{\kappa_3} - \frac{2\kappa_1}{\kappa_3} + \frac{\kappa_2^2}{\kappa_3^2}} &= t+\frac{\kappa_2}{\kappa_3} \\
+t &= \pm\sqrt{\frac{2z\kappa_3}{\kappa_3^2} - \frac{2\kappa_1\kappa_3}{\kappa_3^2} + \frac{\kappa_2^2}{\kappa_3^2}} - \frac{\kappa_2}{\kappa_3} \\
+t &= \frac{\pm\sqrt{-2\kappa_1\kappa_3 + 2\kappa_3 z + \kappa_2^2} - \kappa_2}{\kappa_3}
+\end{align}$$
+
 ![alt text](saddle_approximation.png)
 - fit is quite good for t distributions, but not for lognormal
 - seems to be always positive
 
 ## TODO:
 - plots for how good approximated cgf of saddlepoint approximation is
-- derivation of analytical solutions for saddlepoint approximation when $\kappa_4=0$
