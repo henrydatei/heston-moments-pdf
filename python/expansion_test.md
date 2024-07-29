@@ -127,4 +127,3 @@ t &= \frac{\pm\sqrt{-2\kappa_1\kappa_3 + 2\kappa_3 z + \kappa_2^2} - \kappa_2}{\
 - seems to be always positive
 
 ## TODO:
-- plots for how good approximated cgf of saddlepoint approximation is
