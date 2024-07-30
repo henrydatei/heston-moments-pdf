@@ -1,7 +1,7 @@
 from sympy import symbols, Eq, solve
 
-# Definiere die Variablen
-s, k, a, b = symbols('s k a b')
+# Definiere die Variablen als reelle Zahlen
+s, k, a, b = symbols('s k a b', real=True)
 
 # Definiere die Funktionen M_2, M_3 und M_4
 M2 = 1 + 1/(96*k**2) + (25/(1296))*s**4 - (1/36)*k*s**2
@@ -13,7 +13,7 @@ eq1 = Eq(M3 / M2**1.5, a)
 eq2 = Eq(M4 / M2**2 - 3, b)
 
 # Löse die Gleichungen symbolisch nach s und k
-lsg = solve((eq1, eq2), (s, k))
+solutions = solve((eq1, eq2), (s, k))
 
 # Ergebnisse anzeigen
-lsg
+solutions
