@@ -127,4 +127,8 @@ t &= \frac{\pm\sqrt{-2\kappa_1\kappa_3 + 2\kappa_3 z + \kappa_2^2} - \kappa_2}{\
 - seems to be always positive
 
 ## TODO:
-- find $s$ and $k$ for CF Expansion when $s^*$ and $k^*$ are given with computed moments
+- find $s$ and $k$ for CF Expansion when $s^*$ and $k^*$ are given with computed moments, if not analytically do it numerically
+- think again about positivity constraints, Rockinger said something with ML, Haozhe thinks we have data points and with ML we fit GC-Expansion (2 parameters here are skewness and excess kurtosis), after finding these we can plug them in GC-Expansion and get densitiy. Somewhere we need to ensure positivity, this must be in the ML part
+- do the same for Edgeworth expansion
+- fix CF Expansion
+- are $\kappa_1$, ..., $\kappa_4$ really mean, ..., excess kurtosis in Saddlepoint Approximation? Check if we do everything right here
