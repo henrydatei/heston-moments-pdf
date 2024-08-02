@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, t, nct
+from scipy.optimize import minimize, differential_evolution
 
 STEPS = 1000
 Z_START = -10
@@ -74,45 +75,106 @@ def gram_charlier_expansion(x, mean, variance, skewness, excess_kurtosis):
     z = (x - mean) / np.sqrt(variance)
     return norm.pdf(z) * (1 + skewness/6 * hermite_polynomial(3, z) + excess_kurtosis/24 * hermite_polynomial(4, z))
 
+def log_likelihood(params, data):
+    mu, variance, s, k = params
+    s, k = transform_skew_kurt_into_positivity_region(s, k, intersections)
+    likelihoods = gram_charlier_expansion(data, mu, variance, s, k)
+    return -np.sum(np.log(likelihoods))
+
+def log_likelihood_differential_evolution(params, *data):
+    mu, variance, s, k = params
+    s, k = transform_skew_kurt_into_positivity_region(s, k, intersections)
+    data = np.array(data).flatten()
+    likelihoods = gram_charlier_expansion(data, mu, variance, s, k)
+    return -np.sum(np.log(likelihoods))
+
 # Calculate skewness and kurtosis
 normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')
 lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt = lognorm.stats(0.5, moments = 'mvsk')
 t_mean, t_var, t_skew, t_exkurt = t.stats(5, moments = 'mvsk')
 nct_mean, nct_var, nct_skew, nct_exkurt = nct.stats(5, 0.5, moments = 'mvsk')
 
-print(normal_skew, normal_exkurt)
-print(lognorm_skew, lognorm_exkurt)
-print(t_skew, t_exkurt)
-print(nct_skew, nct_exkurt)
-
-lognorm_skew, lognorm_exkurt = transform_skew_kurt_into_positivity_region(lognorm_skew, lognorm_exkurt, intersections)
-t_skew, t_exkurt = transform_skew_kurt_into_positivity_region(t_skew, t_exkurt, intersections)
-nct_skew, nct_exkurt = transform_skew_kurt_into_positivity_region(nct_skew, nct_exkurt, intersections)
-print(lognorm_skew, lognorm_exkurt)
-print(t_skew, t_exkurt)
-print(nct_skew, nct_exkurt)
+print(normal_mean, normal_var, normal_skew, normal_exkurt)
+print(lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt)
+print(t_mean, t_var, t_skew, t_exkurt)
+print(nct_mean, nct_var, nct_skew, nct_exkurt)
 
 # plot the positivity boundary
-plt.plot([x[0] for x in intersections], [x[1] for x in intersections], linestyle = 'None', marker = 'o', markersize = 2, color = 'r')
-plt.plot([lognorm_exkurt], [lognorm_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'b')
-plt.plot([t_exkurt], [t_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'g')
-plt.plot([nct_exkurt], [nct_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'y')
-plt.title('Positivity Boundary of Gram-Charlier Density Function')
-plt.xlabel('Kurtosis')
-plt.ylabel('Skewness')
-plt.legend(['Positivity Boundary', 'Log-Normal', 't', 'NCT'])
-plt.tight_layout()
-plt.show()
+# plt.plot([x[0] for x in intersections], [x[1] for x in intersections], linestyle = 'None', marker = 'o', markersize = 2, color = 'r')
+# plt.plot([lognorm_exkurt], [lognorm_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'b')
+# plt.plot([t_exkurt], [t_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'g')
+# plt.plot([nct_exkurt], [nct_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'y')
+# plt.title('Positivity Boundary of Gram-Charlier Density Function')
+# plt.xlabel('Kurtosis')
+# plt.ylabel('Skewness')
+# plt.legend(['Positivity Boundary', 'Log-Normal', 't', 'NCT'])
+# plt.tight_layout()
+# plt.show()
 
 # Define x range for plotting
 x = np.linspace(-5, 5, 1000)
 
-# Apply Gram-Charlier expansion
-normal_expansion = gram_charlier_expansion(x, normal_mean, normal_var, normal_skew, normal_exkurt)
-lognorm_expansion = gram_charlier_expansion(x, lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt)
-t_expansion = gram_charlier_expansion(x, t_mean, t_var, t_skew, t_exkurt)
-nct_expansion = gram_charlier_expansion(x, nct_mean, nct_var, nct_skew, nct_exkurt)
+# Apply Gram-Charlier expansion with MLE
+normal_data = norm.rvs(size=1000)
+lognorm_data = lognorm.rvs(0.5, size=1000)
+t_data = t.rvs(5, size=1000)
+nct_data = nct.rvs(5, 0.5, size=1000)
 
+normal_initial_params = [normal_mean, normal_var, normal_skew, normal_exkurt]
+lognorm_initial_params = [lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt]
+t_initial_params = [t_mean, t_var, t_skew, t_exkurt]
+nct_initial_params = [nct_mean, nct_var, nct_skew, nct_exkurt]
+
+normal_bounds = [(min(normal_data)-1, max(normal_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
+lognorm_bounds = [(min(lognorm_data)-1, max(lognorm_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
+t_bounds = [(min(t_data)-1, max(t_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
+nct_bounds = [(min(nct_data)-1, max(nct_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
+
+normal_result = minimize(log_likelihood, normal_initial_params, args=(normal_data), method='L-BFGS-B', bounds=normal_bounds)
+lognorm_result = minimize(log_likelihood, lognorm_initial_params, args=(lognorm_data), method='L-BFGS-B', bounds=lognorm_bounds)
+t_result = minimize(log_likelihood, t_initial_params, args=(t_data), method='L-BFGS-B', bounds=t_bounds)
+nct_result = minimize(log_likelihood, nct_initial_params, args=(nct_data), method='L-BFGS-B', bounds=nct_bounds)
+
+# normal_result = differential_evolution(log_likelihood_differential_evolution, normal_bounds, args=(normal_data), strategy='best1bin', maxiter=1000)
+if normal_result.success:
+    mu, sigma2, skew, exkurt = normal_result.x
+    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
+    print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
+    normal_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
+else:
+    print("Optimization failed.")
+    normal_expansion = [0] * len(x)
+    
+# lognorm_result = differential_evolution(log_likelihood_differential_evolution, lognorm_bounds, args=(lognorm_data), strategy='best1bin', maxiter=1000)
+if lognorm_result.success:
+    mu, sigma2, skew, exkurt = lognorm_result.x
+    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
+    print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
+    lognorm_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
+else:
+    print("Optimization failed.")
+    lognorm_expansion = [0] * len(x)
+
+# t_result = differential_evolution(log_likelihood_differential_evolution, t_bounds, args=(t_data), strategy='best1bin', maxiter=1000)
+if t_result.success:
+    mu, sigma2, skew, exkurt = t_result.x
+    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
+    print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
+    t_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
+else:
+    print("Optimization failed.")
+    t_expansion = [0] * len(x)
+
+# nct_result = differential_evolution(log_likelihood_differential_evolution, nct_bounds, args=(nct_data), strategy='best1bin', maxiter=1000)
+if nct_result.success:
+    mu, sigma2, skew, exkurt = nct_result.x
+    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
+    print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
+    nct_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
+else:
+    print("Optimization failed.")
+    nct_expansion = [0] * len(x)
+    
 # Plotting
 plt.figure(figsize=(8, 7))
 
