@@ -21,7 +21,7 @@ def hermite_polynomial(n, x):
 # Function to generate Gram-Charlier expansion
 def gram_charlier_expansion(x, mean, variance, skewness, excess_kurtosis):
     z = (x - mean) / np.sqrt(variance)
-    return norm.pdf(z) * (1 + skewness/6 * hermite_polynomial(3, z) + excess_kurtosis/24 * hermite_polynomial(4, z))
+    return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + skewness/6 * hermite_polynomial(3, z) + excess_kurtosis/24 * hermite_polynomial(4, z))
 
 # Calculate skewness and kurtosis
 normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')

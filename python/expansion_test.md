@@ -53,7 +53,7 @@ Transforms skewness and kurtosis to
 
 ![alt text](gc_positivity_boundary.png)
 
-How to find this boundary?
+### How to find this boundary?
 - Solve $1 + \frac{s}{6}He_3(z) + \frac{k}{24}He_4(z)=0$ for $s$ and $k$
 $$\begin{align}
 1 + \frac{s}{6}He_3(z) + \frac{k}{24}He_4(z)&=0 \\
@@ -76,6 +76,78 @@ k &= \frac{12z-4z^3}{z^4-6z^2+3}s -\frac{24}{z^4-6z^2+3}
 - Two lines $f(x) = a+bx$ and $g(x) = cx+d$ intersect at $x = \frac{d-b}{a-c}$ and $y = \frac{ad-bc}{a-c}$
 - Iterating from $z_1=-10$ to $z_{1000}=-\sqrt{3}$ for 1000 steps (stepsize $\Delta z$), calculating $a(z_i)$, $b(z_i)$, $a(z_i+\Delta z)$ and $b(z_i+\Delta z)$, find intersection gives a point $(k_i,s_i)$ of the boundary
 - for completeness adding to more points $(4,0)$ and $(0,0)$
+
+### Finding the analytic boundary (Try 1)
+- We notice that for every $z$ the line defined by the parametric equation $1 + \frac{s}{6}He_3(z) + \frac{k}{24}He_4(z)=0$ is a tangent to the positivity boundary ![alt text](michaels_boundary.png)
+- So the boundary is the envelope of these lines
+- [Wikipedia](https://en.wikipedia.org/wiki/Envelope_(mathematics)) describes a method on how to find the envelope of a family of curves:
+    - Start with parametric equaion $F(k, s, z)=0$: $$F(k, s, z) = 1 + \frac{s}{6}(z^3-3z) + \frac{k}{24}(z^4-6z^2+3) = 0$$
+    - Calculate derivative $\frac{\partial F}{\partial z}$ and set it to zero: $$\frac{\partial F}{\partial z} = \frac{1}{6}(kz(z^2-3) + 3s(z^2-1))\overset{!}{=}0$$
+    - Solve for $z$ (2 complex solutions, 1 real solution): ![alt text](wolframalpha_envelope.png)
+    - Plug $z$ back into $F(k, s, z)=0$ to get envelope. Done with Sympy (`symbolic_computation/gcd_simplify_z.py`):
+    ```
+    k*((-s/k - (-9*k**2 - 9*s**2)/(9*k*(-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333) + (-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333/k)**4 - 6*(-s/k - (-9*k**2 - 9*s**2)/(9*k*(-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333) + (-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333/k)**2 + 3)/24 + s*((-s/k - (-9*k**2 - 9*s**2)/(9*k*(-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333) + (-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333/k)**3 + 3*s/k + (-9*k**2 - 9*s**2)/(3*k*(-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333) - 3*(-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333/k)/6 + 1
+    ```
+    - Bring it to the form $s = f(k)$ with Sympy (`symbolic_computation/gcd_solve_for_s.py`):
+    ```
+    computation takes time
+    ```
+
+### Finding the analytic boundary (Try 2)
+- The boundary consists out of points which are intersections from two lines $1 + \frac{s}{6}(z^3-3z) + \frac{k}{24}(z^4-6z^2+3) = 0$ for two different $z$. We found the equations for this lines in the previous section: $s = a(z)\cdot k + b(z)$ with 
+$$\begin{align}a(z) &= \frac{z^4-6z^2+3}{12z-4z^3} \\
+b(z) &= \frac{24}{12z-4z^3}\end{align}$$
+- For two neighboring $z$ and $z+\Delta z$ the intersection $(k,s)$ is
+$$\begin{align}
+a(z)\cdot k + b(z) &= a(z+\Delta z)\cdot k + b(z+\Delta z) \\
+a(z)\cdot k - a(z+\Delta z)\cdot k &= b(z+\Delta z) - b(z) \\
+k &= \frac{b(z+\Delta z) - b(z)}{a(z) - a(z+\Delta z)} \\
+\end{align}$$
+- Let $\Delta z\to 0$ and we get
+$$\begin{align}
+k &= \frac{\frac{\mathrm{d}b}{\mathrm{d}z}}{\frac{\mathrm{d}a}{\mathrm{d}z}} \\
+\frac{\mathrm{d}b}{\mathrm{d}z} &= \frac{18(z^2-1)}{z^2(z^2-3)^2} \\
+\frac{\mathrm{d}a}{\mathrm{d}z} &= -\frac{z^6-3z^4+9z^2+9}{4z^2(z^2-3)^2} \\
+k &= \frac{72-72z^2}{z^6-3z^4+9z^2+9}
+\end{align}$$
+- If we want to plug this in into $s = a(z)\cdot k + b(z)$, we need to bring $k(z)$ in the form $z(k)$ (Sympy, `symbolic_computation/gcd_solve_for_zk.py`)
+ ```
+computation takes time
+```
+
+### Doing MLE numerically as Michael/Haozhe suggested
+- Maximum-Likelihood-Estimation: $\max F(s, k, ...)$ where $(s,k)$ are in positivity region $\mathcal{D}$ (constraint optimization)
+- unconstraint optimisation: $\max F(s, k, ...)$ where $(\tilde{s},\tilde{k})$ are in $\mathbb{R}^2$, but we have a transformation
+  ```python
+  s, k = transform_skew_kurt_into_positivity_region(s, k, boundary)
+  ```
+  where `transform_skew_kurt_into_positivity_region` takes points of the `boundary` and applies the logistic map suggested in Michaels paper.
+  ```python
+  def neg_log_likelihood(params, data):
+      mu, variance, s, k = params
+      s, k = transform_skew_kurt_into_positivity_region(s, k, intersections)
+      likelihoods = gram_charlier_expansion(data, mu, variance, s, k)
+      return -np.sum(np.log(likelihoods))
+  ```
+  is the function we want to minimze with `scipy.optimize.minimize` and let it find mean, variance, skewness and excess kurtosis for some `data` (data is generated from normal, lognormal, t or nct distribution). The optimizer is L-BFGS-B. The boundary conditions are:
+    - $\min(data)-1 \le \mu\le \max(data)+1$
+    - $0.1 \le \sigma^2 \le 10$
+    - $-10 \le s \le 10$
+    - $-10 \le k \le 10$
+- The inital guess are the theoretical mean, variance, skewness and excess-kurtosis of the distribution from where the `data` was sampled.
+![alt text](gc_positivity_expansion_mle.png)
+- Fitted constraint parameters:
+
+| Distribution | $\mu$ | $\sigma^2$ | $s$ | $k$ | Log-Likelihood (fitted) | Log-Likelihood (theoretical) |
+|--------------|-------|------------|-----|-----|--------------------------|-------------------------------|
+| Normal       | 0.0541 | 0.9089      | 0.0001 | 0.0002 | -1424.2286 | -1417.6717 |
+| Lognormal    | 1.1228 | 0.3089      | 0.9246 | 1.5193 | -871.9635 | -987.9103 |
+| t            | 0.0729 | 2.7953      | -0.0361 | 2.4557 | -1713.7889 | -1878.5055 |
+| nct          | 0.5461 | 1.5507      | 0.3015 | 1.3551 | -1650.4428 | -1804.9255 |
+
+- Surprisingly good fit for all distributions, Log-Likelihood is for fitted values better than for theoretical values (theoretical values are not always inside the boundary and need to undergo a huge transformation, e.g. t distribution has theoretical excess kurtosis of 6, this gets transformed into 3.99), only for normal distribution the theoretical values are better than the fitted values, here the theoretical values are already inside the boundary
+- Did a test, if any optimizer is bad, but all optimizers give roughly the same results, initial guess was here $\mu=1$, $\sigma^2=1$, $s=1$, $k=1$ for the standard normal distribution without boundarys. Every optimizer from `scipy.optimize.minimize` was used which didn't require a Jacobian.
+![alt text](gc_positivity_optimizer_test.png)
 
 ## Cornish-Fisher Expansion
 
@@ -128,7 +200,6 @@ t &= \frac{\pm\sqrt{-2\kappa_1\kappa_3 + 2\kappa_3 z + \kappa_2^2} - \kappa_2}{\
 
 ## TODO:
 - find $s$ and $k$ for CF Expansion when $s^*$ and $k^*$ are given with computed moments, if not analytically do it numerically
-- think again about positivity constraints, Rockinger said something with ML, Haozhe thinks we have data points and with ML we fit GC-Expansion (2 parameters here are skewness and excess kurtosis), after finding these we can plug them in GC-Expansion and get densitiy. Somewhere we need to ensure positivity, this must be in the ML part
 - do the same for Edgeworth expansion
 - fix CF Expansion
 - are $\kappa_1$, ..., $\kappa_4$ really mean, ..., excess kurtosis in Saddlepoint Approximation? Check if we do everything right here
