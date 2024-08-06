@@ -75,7 +75,7 @@ def gram_charlier_expansion(x, mean, variance, skewness, excess_kurtosis):
     z = (x - mean) / np.sqrt(variance)
     return norm.pdf(z) * (1 + skewness/6 * hermite_polynomial(3, z) + excess_kurtosis/24 * hermite_polynomial(4, z))
 
-def log_likelihood(params, data):
+def neg_log_likelihood(params, data):
     mu, variance, s, k = params
     s, k = transform_skew_kurt_into_positivity_region(s, k, intersections)
     likelihoods = gram_charlier_expansion(data, mu, variance, s, k)
@@ -130,28 +130,28 @@ lognorm_bounds = [(min(lognorm_data)-1, max(lognorm_data)+1), (0.1, 10), (-10, 1
 t_bounds = [(min(t_data)-1, max(t_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
 nct_bounds = [(min(nct_data)-1, max(nct_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
 
-normal_result = minimize(log_likelihood, normal_initial_params, args=(normal_data), method='L-BFGS-B', bounds=normal_bounds)
-lognorm_result = minimize(log_likelihood, lognorm_initial_params, args=(lognorm_data), method='L-BFGS-B', bounds=lognorm_bounds)
-t_result = minimize(log_likelihood, t_initial_params, args=(t_data), method='L-BFGS-B', bounds=t_bounds)
-nct_result = minimize(log_likelihood, nct_initial_params, args=(nct_data), method='L-BFGS-B', bounds=nct_bounds)
+normal_result = minimize(neg_log_likelihood, normal_initial_params, args=(normal_data), method='L-BFGS-B', bounds=normal_bounds)
+lognorm_result = minimize(neg_log_likelihood, lognorm_initial_params, args=(lognorm_data), method='L-BFGS-B', bounds=lognorm_bounds)
+t_result = minimize(neg_log_likelihood, t_initial_params, args=(t_data), method='L-BFGS-B', bounds=t_bounds)
+nct_result = minimize(neg_log_likelihood, nct_initial_params, args=(nct_data), method='L-BFGS-B', bounds=nct_bounds)
 
 # normal_result = differential_evolution(log_likelihood_differential_evolution, normal_bounds, args=(normal_data), strategy='best1bin', maxiter=1000)
 if normal_result.success:
     mu, sigma2, skew, exkurt = normal_result.x
     skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
     print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
-    print(f"Log-likelihood fitted: {log_likelihood([mu, sigma2, skew, exkurt], normal_data)}, Log-likelihood initial: {log_likelihood([normal_mean, normal_var, normal_skew, normal_exkurt], normal_data)}")
-    normal_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
+    print(f"Log-likelihood fitted: {neg_log_likelihood([mu, sigma2, skew, exkurt], normal_data)}, Log-likelihood initial: {neg_log_likelihood([normal_mean, normal_var, normal_skew, normal_exkurt], normal_data)}")
+    initial_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
 else:
     print("Optimization failed.")
-    normal_expansion = [0] * len(x)
+    initial_expansion = [0] * len(x)
     
 # lognorm_result = differential_evolution(log_likelihood_differential_evolution, lognorm_bounds, args=(lognorm_data), strategy='best1bin', maxiter=1000)
 if lognorm_result.success:
     mu, sigma2, skew, exkurt = lognorm_result.x
     skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
     print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
-    print(f"Log-likelihood fitted: {log_likelihood([mu, sigma2, skew, exkurt], lognorm_data)}, Log-likelihood initial: {log_likelihood([lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt], lognorm_data)}")
+    print(f"Log-likelihood fitted: {neg_log_likelihood([mu, sigma2, skew, exkurt], lognorm_data)}, Log-likelihood initial: {neg_log_likelihood([lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt], lognorm_data)}")
     lognorm_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
 else:
     print("Optimization failed.")
@@ -162,7 +162,7 @@ if t_result.success:
     mu, sigma2, skew, exkurt = t_result.x
     skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
     print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
-    print(f"Log-likelihood fitted: {log_likelihood([mu, sigma2, skew, exkurt], t_data)}, Log-likelihood initial: {log_likelihood([t_mean, t_var, t_skew, t_exkurt], t_data)}")
+    print(f"Log-likelihood fitted: {neg_log_likelihood([mu, sigma2, skew, exkurt], t_data)}, Log-likelihood initial: {neg_log_likelihood([t_mean, t_var, t_skew, t_exkurt], t_data)}")
     t_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
 else:
     print("Optimization failed.")
@@ -173,7 +173,7 @@ if nct_result.success:
     mu, sigma2, skew, exkurt = nct_result.x
     skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
     print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
-    print(f"Log-likelihood fitted: {log_likelihood([mu, sigma2, skew, exkurt], nct_data)}, Log-likelihood initial: {log_likelihood([nct_mean, nct_var, nct_skew, nct_exkurt], nct_data)}")
+    print(f"Log-likelihood fitted: {neg_log_likelihood([mu, sigma2, skew, exkurt], nct_data)}, Log-likelihood initial: {neg_log_likelihood([nct_mean, nct_var, nct_skew, nct_exkurt], nct_data)}")
     nct_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
 else:
     print("Optimization failed.")
@@ -185,7 +185,7 @@ plt.figure(figsize=(8, 7))
 # Plot Normal distribution and its expansion
 plt.subplot(4, 1, 1)
 plt.plot(x, norm.pdf(x), 'r--', label='Normal PDF')
-plt.plot(x, normal_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
+plt.plot(x, initial_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
 plt.title('Normal Distribution and Positivity Gram-Charlier Expansion')
 plt.legend()
 
@@ -210,5 +210,38 @@ plt.plot(x, nct_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
 plt.title('Non-central t Distribution and Positivity Gram-Charlier Expansion')
 plt.legend()
 
+plt.tight_layout()
+plt.show()
+
+# Solver Test
+initial_params = [1,1,1,1]
+print(f'Log-likelihood initial: {-neg_log_likelihood(initial_params, normal_data)}')
+plt.plot(x, gram_charlier_expansion(x, *initial_params), 'r--', label='Initial')
+plt.plot(x, gram_charlier_expansion(x, normal_mean, normal_var, normal_skew, normal_exkurt), 'g--', label='True')
+
+for method in [
+    'Nelder-Mead', 
+    'Powell', 
+    'CG', 
+    'BFGS', 
+    # 'Newton-CG', # Jacobian is required for Newton-CG method
+    'L-BFGS-B', 
+    'TNC', 
+    'COBYLA',  
+    'SLSQP', 
+    'trust-constr', 
+    # 'dogleg', # Jacobian is required for Newton-CG method
+    # 'trust-ncg', # Jacobian is required for Newton-CG method
+    # 'trust-exact', # Jacobian is required for Newton-CG method
+    # 'trust-krylov'# # Jacobian is required for Newton-CG method
+    ]:
+    res = minimize(neg_log_likelihood, initial_params, args=(normal_data), method=method)
+    mu, sigma2, skew, exkurt = res.x
+    # print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
+    print(f"{method}: Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], normal_data)}")
+    plt.plot(x, gram_charlier_expansion(x, mu, sigma2, skew, exkurt), label=method)
+
+plt.yscale('log')    
+plt.legend()
 plt.tight_layout()
 plt.show()
