@@ -81,12 +81,12 @@ def log_likelihood(params, data):
     likelihoods = gram_charlier_expansion(data, mu, variance, s, k)
     return -np.sum(np.log(likelihoods))
 
-def log_likelihood_differential_evolution(params, *data):
-    mu, variance, s, k = params
-    s, k = transform_skew_kurt_into_positivity_region(s, k, intersections)
-    data = np.array(data).flatten()
-    likelihoods = gram_charlier_expansion(data, mu, variance, s, k)
-    return -np.sum(np.log(likelihoods))
+# def log_likelihood_differential_evolution(params, *data):
+#     mu, variance, s, k = params
+#     s, k = transform_skew_kurt_into_positivity_region(s, k, intersections)
+#     data = np.array(data).flatten()
+#     likelihoods = gram_charlier_expansion(data, mu, variance, s, k)
+#     return -np.sum(np.log(likelihoods))
 
 # Calculate skewness and kurtosis
 normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')
@@ -140,6 +140,7 @@ if normal_result.success:
     mu, sigma2, skew, exkurt = normal_result.x
     skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
     print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
+    print(f"Log-likelihood fitted: {log_likelihood([mu, sigma2, skew, exkurt], normal_data)}, Log-likelihood initial: {log_likelihood([normal_mean, normal_var, normal_skew, normal_exkurt], normal_data)}")
     normal_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
 else:
     print("Optimization failed.")
@@ -150,6 +151,7 @@ if lognorm_result.success:
     mu, sigma2, skew, exkurt = lognorm_result.x
     skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
     print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
+    print(f"Log-likelihood fitted: {log_likelihood([mu, sigma2, skew, exkurt], lognorm_data)}, Log-likelihood initial: {log_likelihood([lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt], lognorm_data)}")
     lognorm_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
 else:
     print("Optimization failed.")
@@ -160,6 +162,7 @@ if t_result.success:
     mu, sigma2, skew, exkurt = t_result.x
     skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
     print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
+    print(f"Log-likelihood fitted: {log_likelihood([mu, sigma2, skew, exkurt], t_data)}, Log-likelihood initial: {log_likelihood([t_mean, t_var, t_skew, t_exkurt], t_data)}")
     t_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
 else:
     print("Optimization failed.")
@@ -170,6 +173,7 @@ if nct_result.success:
     mu, sigma2, skew, exkurt = nct_result.x
     skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
     print(f"Fitted parameters: mu = {mu}, sigma^2 = {sigma2}, s = {skew}, k = {exkurt}")
+    print(f"Log-likelihood fitted: {log_likelihood([mu, sigma2, skew, exkurt], nct_data)}, Log-likelihood initial: {log_likelihood([nct_mean, nct_var, nct_skew, nct_exkurt], nct_data)}")
     nct_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
 else:
     print("Optimization failed.")
