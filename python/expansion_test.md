@@ -88,10 +88,7 @@ k &= \frac{12z-4z^3}{z^4-6z^2+3}s -\frac{24}{z^4-6z^2+3}
     ```
     k*((-s/k - (-9*k**2 - 9*s**2)/(9*k*(-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333) + (-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333/k)**4 - 6*(-s/k - (-9*k**2 - 9*s**2)/(9*k*(-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333) + (-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333/k)**2 + 3)/24 + s*((-s/k - (-9*k**2 - 9*s**2)/(9*k*(-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333) + (-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333/k)**3 + 3*s/k + (-9*k**2 - 9*s**2)/(3*k*(-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333) - 3*(-s**3 + sqrt(-k**6 - 3*k**4*s**2 - 3*k**2*s**4))**0.333333333333333/k)/6 + 1
     ```
-    - Bring it to the form $s = f(k)$ with Sympy (`symbolic_computation/gcd_solve_for_s.py`):
-    ```
-    computation takes time
-    ```
+    - Bring it to the form $s = f(k)$ with Sympy (`symbolic_computation/gcd_solve_for_s.py`): The computation fails because multiple generators are not implemented in Sympy which indicates a equation with no closed-form solution
 
 ### Finding the analytic boundary (Try 2)
 - The boundary consists out of points which are intersections from two lines $1 + \frac{s}{6}(z^3-3z) + \frac{k}{24}(z^4-6z^2+3) = 0$ for two different $z$. We found the equations for this lines in the previous section: $s = a(z)\cdot k + b(z)$ with 
