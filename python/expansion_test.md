@@ -42,14 +42,14 @@ Why is the difference at $x=0$ so big?
 
 ## Gram-Charlier Expansion with Positivity Constraints
 
-Transforms skewness and kurtosis to
+Transforms theoretical skewness and kurtosis to
 - lognormal: 0.10234746774707859 3.989055204819389
 - t: 0.0 3.9901095073734614
 - nct: 0.024892965655198204 3.9970717567756724
 
-![alt text](gc_positivity_expansion.png)
+<!-- ![alt text](gc_positivity_expansion.png)
 - fit is not good, but better
-- alt least no negativity
+- alt least no negativity -->
 
 ![alt text](gc_positivity_boundary.png)
 
