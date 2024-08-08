@@ -159,6 +159,30 @@ computation takes time
 - fit seems to be pretty similar to GC expansion, but worse for  log-normal distribution
 - gets negative, not a density
 
+### Finding the positivity boundary for Edgeworth expansion
+- similar procedure as for GC expansion
+- Solve $1 + \frac{s}{6}He_3(z) + \frac{k}{24}He_4(z) + \frac{s^2}{72}He_6(z)=0$ for $s$:
+$$\begin{align}
+0&= 1+\frac{s}{6}He_3(z) + \frac{k}{24}He_4(z) + \frac{s^2}{72}He_6(z) \\
+0 &= \frac{72}{He_6(z)} + 12s\frac{He_3(z)}{He_6(z)} + 3k\frac{He_4(z)}{He_6(z)} + s^2 \\
+-\frac{72}{He_6(z)} - 3k\frac{He_4(z)}{He_6(z)} &=  12s\frac{He_3(z)}{He_6(z)} + s^2 \\
+-\frac{72}{He_6(z)} - 3k\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2} &=  12s\frac{He_3(z)}{He_6(z)} + s^2 + 36\frac{He_3(z)^2}{He_6(z)^2} \\
+-\frac{72}{He_6(z)} - 3k\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2} &= \left(s+6\frac{He_3(z)}{He_6(z)}\right)^2 \\
+s &= \pm\sqrt{-\frac{72}{He_6(z)} - 3k\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2}} - 6\frac{He_3(z)}{He_6(z)}
+\end{align}$$
+- This holds as longs as $He_6(z)\neq 0$ which has 6 solutions:
+$$\begin{align}
+z_{1/2} &= \pm \sqrt{5-\frac{5^{2/3}\left(1+i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1-i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 0.6167\\
+z_{3/4} &= \pm \sqrt{5-\frac{5^{2/3}\left(1-i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1+i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 1.8892 \\
+z_{5/6} &= \pm \sqrt{5+\frac{10^{2/3}}{\sqrt[3]{2+i\sqrt{6}}} + \sqrt[3]{10\left(2+i\sqrt{6}\right)}} = \pm 3.3243 \\
+\end{align}$$
+- Plot the lines $s(k,z)$ for many values of $z$ and skipping over the 6 singularities, we get ![alt text](edgeworth_positivity_boundary_lines.png), much smaller than the GC boundary, for skewness = 3 excess kurtosis can be between 0 and 4. This is the same as for GC boundary because when skewness is 0, GC and Edgeworth expansion are the same
+- For $z$ in different ranges determined by the singularities, the boundary is as follows: ![alt text](edgeworth_positivity_boundary_lines_2.png), there is no range of $z$ where the boundary is smaller than for any other range
+- As for GC expansion, the boundary is the envelope of the lines $s(k,z)$, we get it by calculating the intersection of the two parabolas $s(k, z)$ and $s(k, z+\Delta z)$. This is done with Sympy (`symbolic_computation/ewcd_parabolic_form.py`):
+```
+computation takes time
+```
+
 ## Saddlepoint Approximation
 
 Approximation of cumulant generating function $K$:
