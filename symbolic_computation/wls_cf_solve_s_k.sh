@@ -5,7 +5,7 @@
 #SBATCH --mem-per-cpu=9000
 #SBATCH --nodes=1
 #SBATCH --time=24:00:00
-#SBATCH -J symbolic_computation
+#SBATCH -J cf_solve_s_k
 #SBATCH --error="/home/s4307678/.out/myjob-%J.out"
 #SBATCH --output="/home/s4307678/.out/myjob-%J.out"
 
@@ -23,8 +23,6 @@ fi
 
 ml purge 
 
-ml release/24.04 GCCcore/13.2.0 Python/3.11.5
+ml release/24.04 Mathematica/13.0.1
 
-pip install sympy
-
-srun python /home/s4307678/cf_solve_s_k.py
+srun math -run /home/s4307678/cf_solve_s_k.wls
