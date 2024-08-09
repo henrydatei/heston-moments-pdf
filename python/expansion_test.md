@@ -182,6 +182,41 @@ z_{5/6} &= \pm \sqrt{5+\frac{10^{2/3}}{\sqrt[3]{2+i\sqrt{6}}} + \sqrt[3]{10\left
 ```
 computation takes time
 ```
+- The lines $s(k, z)$ are parabolas and have the form $s = \sqrt{a(z) + b(z)\cdot k} + c(z)$. For two different $z$, the parabolas $s_1 = \sqrt{a+bk}+c$ and $s_2=\sqrt{d+ek}+f$ have the two intersections (`symbolic_computation/ewcd_intersection_parabolas.py`):
+```
+Intersection 1:
+  k = (2*(b - e)**2*(-c + f)*sqrt(-a*b*e + a*e**2 + b**2*d + b*c**2*e - 2*b*c*e*f - b*d*e + b*e*f**2) + (b**2 - 2*b*e + e**2)*(-a*b + a*e + b*c**2 - 2*b*c*f + b*d + b*f**2 + c**2*e - 2*c*e*f - d*e + e*f**2))/((b - e)**2*(b**2 - 2*b*e + e**2))
+  y = c + sqrt(a + b*(2*(b - e)**2*(-c + f)*sqrt(-a*b*e + a*e**2 + b**2*d + b*c**2*e - 2*b*c*e*f - b*d*e + b*e*f**2) + (b**2 - 2*b*e + e**2)*(-a*b + a*e + b*c**2 - 2*b*c*f + b*d + b*f**2 + c**2*e - 2*c*e*f - d*e + e*f**2))/((b - e)**2*(b**2 - 2*b*e + e**2)))
+Intersection 2:
+  k = (2*(b - e)**2*(c - f)*sqrt(-a*b*e + a*e**2 + b**2*d + b*c**2*e - 2*b*c*e*f - b*d*e + b*e*f**2) + (b**2 - 2*b*e + e**2)*(-a*b + a*e + b*c**2 - 2*b*c*f + b*d + b*f**2 + c**2*e - 2*c*e*f - d*e + e*f**2))/((b - e)**2*(b**2 - 2*b*e + e**2))
+  y = c + sqrt(a + b*(2*(b - e)**2*(c - f)*sqrt(-a*b*e + a*e**2 + b**2*d + b*c**2*e - 2*b*c*e*f - b*d*e + b*e*f**2) + (b**2 - 2*b*e + e**2)*(-a*b + a*e + b*c**2 - 2*b*c*f + b*d + b*f**2 + c**2*e - 2*c*e*f - d*e + e*f**2))/((b - e)**2*(b**2 - 2*b*e + e**2)))
+```
+Intersection 1:
+$$
+\begin{align}
+k &= \frac{2(b - e)^2(-c + f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)} \\
+y &= c + \sqrt{a + b \cdot \left(\frac{2(b - e)^2(-c + f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)}\right)}
+\end{align}
+$$
+Intersection 2:
+$$
+\begin{align}
+k &= \frac{2(b - e)^2(c - f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)} \\
+y &= c + \sqrt{a + b \cdot \left(\frac{2(b - e)^2(c - f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)}\right)}
+\end{align}
+$$
+- Plot of intersections (red dot is intersection 1, blue is intersection 2): ![alt text](edgeworth_positivity_boundary_intersections_1.png), boundary gets described mostly by red dots, so ignore second intersection. The envelope is symmetric around the $x$-axis and since we have for the boundary lines a second solution of the form $s=-\sqrt{a(z)+b(z)\cdot k}+c(z)$ which have the same intersection $k$ and $-s$, we can take the absolute of $s$ for the red intersections and later mirror it around the $x$-axis. ![alt text](edgeworth_positivity_boundary_intersections_2.png)
+- If we zoom out, we see many more intersection points which are not part of the boundary (notice the axis!) ![alt text](edgeworth_positivity_boundary_intersections_3.png)
+- We know from the previous images that $x$ is somewhat between 0 and 4 and $y$ between -1 and 1, so we restrict the intersection points to have $x\in (-0.1,4.1)$ and $\vert y\vert \in [0,1)$ ![alt text](edgeworth_positivity_boundary_intersections_4.png)
+- The amount of points around $x=0$ and going up too $y=1$ are from intersections from boundary lines where $z$ is smaller than the negative third singularity, so leaving this out ![alt text](edgeworth_positivity_boundary_intersections_5.png)
+- The points around $x=4$ are hard to filter out, they come from $\vert z\vert$ around 1.8 and 1.67 and I filtered them out by removing all $z$ where $z\in (1.8-0.035, 1.8+0.035)$ or $z\in (1.67-0.015,1.67+0.015)$ ![alt text](edgeworth_positivity_boundary_intersections_6.png)
+- I don't know what is happening there, I noticed that the boundary lines are extremly steep at this points, almost vertical and I get rounding errors, even when I use Python's float datatype which maps to IEEE-754 double precision with 64 bits where 52 bits are used for the fraction which equals about 16 decimal digits (Source: Python Docs and Stackoverflow answer).
+- In general I am worried about computational accuracy since some points are at $x>4$, ie. one point is at $(4.01, 0.222)$, but if I try to solve the following equation 
+$$
+1 + \frac{0.222}{6}He_3(z) + \frac{4.01}{24}He_4(z) + \frac{0.222^2}{72}He_6(z)<0
+$$
+I find a solution: $-1.84611<z<-1.75826$. So my boundary points suggest that there should be no solution, the Edgeworth expansion gives a density, this is not the case. So to be on the safe side, I remove every intersection point that has not $x\in [0,4]$. ![alt text](edgeworth_positivity_boundary_intersections_7.png)
+- I added (0,0) and (4,0) to the boundary points, the next and second last bondary points are (3.7795e-06, 0.1378) and (3.9775, 0.3009). A linear interpolation between these points gives the boundary.
 
 ## Saddlepoint Approximation
 
