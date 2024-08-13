@@ -261,5 +261,4 @@ t &= \frac{\pm\sqrt{-2\kappa_1\kappa_3 + 2\kappa_3 z + \kappa_2^2} - \kappa_2}{\
 
 ## TODO:
 - find $s$ and $k$ for CF Expansion when $s^*$ and $k^*$ are given with computed moments, if not analytically do it numerically
-- do the same for Edgeworth expansion
 - fix CF Expansion
