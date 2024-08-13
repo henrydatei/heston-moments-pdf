@@ -109,7 +109,7 @@ k &= \frac{72-72z^2}{z^6-3z^4+9z^2+9}
 \end{align}$$
 - If we want to plug this in into $s = a(z)\cdot k + b(z)$, we need to bring $k(z)$ in the form $z(k)$ (Sympy, `symbolic_computation/gcd_solve_for_zk.py`)
  ```
-computation takes time
+can't solve in 24 hours
 ```
 
 ### Doing MLE numerically as Michael/Haozhe suggested
@@ -180,7 +180,7 @@ z_{5/6} &= \pm \sqrt{5+\frac{10^{2/3}}{\sqrt[3]{2+i\sqrt{6}}} + \sqrt[3]{10\left
 - For $z$ in different ranges determined by the singularities, the boundary is as follows: ![alt text](edgeworth_positivity_boundary_lines_2.png), there is no range of $z$ where the boundary is smaller than for any other range
 - As for GC expansion, the boundary is the envelope of the lines $s(k,z)$, we get it by calculating the intersection of the two parabolas $s(k, z)$ and $s(k, z+\Delta z)$. This is done with Sympy (`symbolic_computation/ewcd_parabolic_form.py`):
 ```
-computation takes time
+this yields a solution which can be found in the file
 ```
 - The lines $s(k, z)$ are parabolas and have the form $s = \sqrt{a(z) + b(z)\cdot k} + c(z)$. For two different $z$, the parabolas $s_1 = \sqrt{a+bk}+c$ and $s_2=\sqrt{d+ek}+f$ have the two intersections (`symbolic_computation/ewcd_intersection_parabolas.py`):
 ```
