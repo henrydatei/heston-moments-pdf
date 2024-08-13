@@ -218,6 +218,11 @@ $$
 I find a solution: $-1.84611<z<-1.75826$. So my boundary points suggest that there should be no solution, the Edgeworth expansion gives a density, this is not the case. So to be on the safe side, I remove every intersection point that has not $x\in [0,4]$. ![alt text](edgeworth_positivity_boundary_intersections_7.png)
 - I added (0,0) and (4,0) to the boundary points, the next and second last bondary points are (3.7795e-06, 0.1378) and (3.9775, 0.3009). A linear interpolation between these points gives the boundary.
 
+### MLE for Edgeworth expansion
+- Doing the same as for GC expansion, but with Edgeworth expansion
+![alt text](edgeworth_positivity_constraints_expansion.png)
+- Optimization failed with most optimizers, only Powell gave these results
+
 ## Saddlepoint Approximation
 
 Approximation of cumulant generating function $K$:
