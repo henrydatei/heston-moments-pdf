@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, t, nct
-from scipy.optimize import minimize, differential_evolution
+from scipy.optimize import minimize
 
 STEPS = 1000
 Z_START = -10
@@ -107,11 +107,15 @@ print(nct_mean, nct_var, nct_skew, nct_exkurt)
 # Define x range for plotting
 x = np.linspace(-5, 5, 1000)
 
+# scipy set seed
+np.random.seed(0)
+
 # Apply Gram-Charlier expansion with MLE
-normal_data = norm.rvs(size=1000)
-lognorm_data = lognorm.rvs(0.5, size=1000)
-t_data = t.rvs(5, size=1000)
-nct_data = nct.rvs(5, 0.5, size=1000)
+N_SAMPLES = 1000000
+normal_data = norm.rvs(size=N_SAMPLES)
+lognorm_data = lognorm.rvs(0.5, size=N_SAMPLES)
+t_data = t.rvs(5, size=N_SAMPLES)
+nct_data = nct.rvs(5, 0.5, size=N_SAMPLES)
 
 normal_initial_params = [normal_mean, normal_var, normal_skew, normal_exkurt]
 lognorm_initial_params = [lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt]
@@ -123,10 +127,10 @@ lognorm_bounds = [(min(lognorm_data)-1, max(lognorm_data)+1), (0.1, 10), (-10, 1
 t_bounds = [(min(t_data)-1, max(t_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
 nct_bounds = [(min(nct_data)-1, max(nct_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
 
-normal_result = minimize(neg_log_likelihood, normal_initial_params, args=(normal_data), method='L-BFGS-B', bounds=normal_bounds)
-lognorm_result = minimize(neg_log_likelihood, lognorm_initial_params, args=(lognorm_data), method='L-BFGS-B', bounds=lognorm_bounds)
-t_result = minimize(neg_log_likelihood, t_initial_params, args=(t_data), method='L-BFGS-B', bounds=t_bounds)
-nct_result = minimize(neg_log_likelihood, nct_initial_params, args=(nct_data), method='L-BFGS-B', bounds=nct_bounds)
+normal_result = minimize(neg_log_likelihood, normal_initial_params, args=(normal_data), method='Powell', bounds=normal_bounds)
+lognorm_result = minimize(neg_log_likelihood, lognorm_initial_params, args=(lognorm_data), method='Powell', bounds=lognorm_bounds)
+t_result = minimize(neg_log_likelihood, t_initial_params, args=(t_data), method='Powell', bounds=t_bounds)
+nct_result = minimize(neg_log_likelihood, nct_initial_params, args=(nct_data), method='Powell', bounds=nct_bounds)
 
 if normal_result.success:
     mu, sigma2, skew, exkurt = normal_result.x
@@ -175,28 +179,28 @@ plt.figure(figsize=(8, 7))
 plt.subplot(4, 1, 1)
 plt.plot(x, norm.pdf(x), 'r--', label='Normal PDF')
 plt.plot(x, normal_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
-plt.title('Normal Distribution and Positivity Gram-Charlier Expansion')
+plt.title(f'Normal Distribution and Positivity Gram-Charlier Expansion (n = {N_SAMPLES})')
 plt.legend()
 
 # Plot Skewed distribution and its expansion
 plt.subplot(4, 1, 2)
 plt.plot(x, lognorm.pdf(x, 0.5), 'r--', label='Log-Normal PDF')
 plt.plot(x, lognorm_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
-plt.title('Log-Normal Distribution and Positivity Gram-Charlier Expansion')
+plt.title(f'Log-Normal Distribution and Positivity Gram-Charlier Expansion (n = {N_SAMPLES})')
 plt.legend()
 
 # Plot Heavy-tailed distribution and its expansion
 plt.subplot(4, 1, 3)
 plt.plot(x, t.pdf(x, 5), 'r--', label='t PDF')
 plt.plot(x, t_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
-plt.title('t Distribution and Positivity Gram-Charlier Expansion')
+plt.title(f't Distribution and Positivity Gram-Charlier Expansion (n = {N_SAMPLES})')
 plt.legend()
 
 # Plot Non-central t distribution and its expansion
 plt.subplot(4, 1, 4)
 plt.plot(x, nct.pdf(x, 5, 0.5), 'r--', label='NCT PDF')
 plt.plot(x, nct_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
-plt.title('Non-central t Distribution and Positivity Gram-Charlier Expansion')
+plt.title(f'Non-central t Distribution and Positivity Gram-Charlier Expansion (n = {N_SAMPLES})')
 plt.legend()
 
 plt.tight_layout()

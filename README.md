@@ -90,6 +90,7 @@ There might be problems with positivity of $f(x)$ with certain $\gamma_1$ and $\
 - only in region $AM_1BM_2A$ Gram-Charlier-Expansion is positive for every $x$
 - validity of the Cornish–Fisher case is much wider than in the Gram–Charlier case ("Option Pricing Under Skewness and Kurtosis Using a Cornish–Fisher Expansion")
 
+<!---
 **Cornish-Fisher-Expansion** (original paper: Cornish & Fisher 1938): Transformation from standard normal distribution $z$ to $Z$ (Mailard 2018, Barra 2006):
 $$Z \approx z + (z^2-1)\cdot\frac{s}{6} + (z^3-3z)\cdot\frac{k}{24} - (2z^3-5z)\cdot\frac{s^2}{36}$$
 with
@@ -105,6 +106,7 @@ gives pdf of $Z$ (Aboura & Mailard 2016):
 ![alt text](pdf_cornish_fisher_expansion.png)
 
 Given $s^*$ and $k^*$ we can find many solutions for $s$ and $k$. We need to filter out solutions where $k<-3$ as excess kurtosis can't be smaller than -3. We can also filter out solutions where $M_2<0$ as the variance of the Cornish-Fisher distribution can't be negative.
+-->
 
 **Saddlepoint Approximation** (original paper: "Saddlepoint Approximations in Statistics", "Saddlepoint Approximations with Applications")
 $$f(x) \approx\frac{1}{\sqrt{2\pi K''(s)}}\exp(K(s)-sx)$$

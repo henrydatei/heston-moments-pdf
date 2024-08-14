@@ -146,11 +146,21 @@ can't solve in 24 hours
 - Did a test, if any optimizer is bad, but all optimizers give roughly the same results, initial guess was here $\mu=1$, $\sigma^2=1$, $s=1$, $k=1$ for the standard normal distribution without boundarys. Every optimizer from `scipy.optimize.minimize` was used which didn't require a Jacobian.
 ![alt text](gc_positivity_optimizer_test.png)
 
+### Convergence of MLE method
+- 10 samples from distribution ![alt text](gc_positivity_expansion_mle_10.png)
+- 100 samples from distribution ![alt text](gc_positivity_expansion_mle_100.png)
+- 1000 samples from distribution ![alt text](gc_positivity_expansion_mle_1000.png)
+- 1000000 samples from distribution ![alt text](gc_positivity_expansion_mle_1000000.png)
+- I would say, there is not really a convergence, or if, then it is really slow
+
+<!---
 ## Cornish-Fisher Expansion
 
 ![alt text](cf_expansion.png)
 - fit is not good
 - for lognormal, main mass of pdf is on wrong side
+-->
+
 
 ## Edgeworth Expansion
 
