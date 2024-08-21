@@ -10,8 +10,6 @@ def get_rt(prices: pd.Series, m: float = 0) -> pd.Series:
     return np.log(prices / prices.shift(1)) - m
 
 def get_R(prices: pd.Series, T: int, t: int, m: float = 0) -> float:
-    if np.isnan(np.log(prices[t] / prices[t - T])):
-        print(T, t, np.log(prices[t] / prices[t - T]))
     return np.log(prices[t] / prices[t - T]) - m * T
 
 def x_1(r: pd.Series) -> pd.Series:
@@ -96,6 +94,9 @@ def kurt_monthly(r: pd.Series, T: int) -> float:
 data = yf.download('^GSPC', start='2010-01-01', end='2020-12-31')
 data["log_returns"] = get_rt(data["Close"])
 
-print(f'variance daily: {var_L_daily(data["log_returns"])}, variance monthly: {var_monthly(data["log_returns"], 25)}')
-print(f'skewness daily: {skew_daily(data["log_returns"])}, skewness monthly: {skew_monthly(data["log_returns"], 25)}')
-# print(f'kurtosis daily: {kurt_daily(data["log_returns"])}, kurtosis monthly: {kurt_monthly(data["log_returns"], 25)}')
+# delete the first row
+data = data.iloc[1:]
+
+print(f'variance of log returns daily: {var_L_daily(data["log_returns"])}, monthly: {var_monthly(data["log_returns"], 25)}')
+print(f'skewness of log returns daily: {skew_daily(data["log_returns"])}, monthly: {skew_monthly(data["log_returns"], 25)}')
+print(f'kurtosis of log returns daily: {kurt_daily(data["log_returns"])}, monthly: {kurt_monthly(data["log_returns"], 25)}')

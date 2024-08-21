@@ -270,3 +270,15 @@ def rMomNP_return(hf, nM):
         result = pd.concat([result if not result.empty else None, apply_realized_estimators_NP_return(x)])
     
     return result
+
+
+### Test
+import yfinance as yf
+data = yf.download('^GSPC', start='2010-01-01', end='2020-12-31')
+data['log_return'] = np.log(data['Close'] / data['Close'].shift(1))
+
+data = data.iloc[1:]
+
+print(rMomNP_return(data["log_return"], 25))
+
+# print(rMomACJV(data["log_return"], 1))
