@@ -57,14 +57,14 @@ def rMomACJV(hf, nM):
     return rolling_means.dropna()
 
 # Function to compute realized moments as in Choe and Lee (2014) for one interval
-def rMomCL_l(hf):
+def rMomCL_l(hf: pd.Series):
     R = hf.cumsum()
     diff_R = R.diff().dropna()
     diff_R_sq = (R**2).diff().dropna()
     return np.array([0, (diff_R**2).sum(), 1.5 * np.sum(diff_R * diff_R_sq), 1.5 * (diff_R_sq**2).sum()]) 
 
 # Function to compute realized moments as in Choe and Lee (2014) averaged over nD days
-def rMomCL(hf, nM):
+def rMomCL(hf: pd.Series, nM: int):
     monthly_moments = hf.resample('M').apply(rMomCL_l)
     rolling_means = monthly_moments.rolling(window=nM).mean()
     return rolling_means.dropna()
