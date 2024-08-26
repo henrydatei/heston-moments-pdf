@@ -19,9 +19,12 @@ def hermite_polynomial(n, x):
 # plt.show()
 
 # Function to generate Edgeworth expansion
-def edgeworth_expansion(x, mean, variance, skewness, kurtosis):
+def edgeworth_expansion(x, mean, variance, third_cumulant, fourth_cumulant):
     z = (x - mean) / np.sqrt(variance)
-    return norm.pdf(z) * (1 + skewness/6 * hermite_polynomial(3, z) + kurtosis/24 * hermite_polynomial(4, z) + skewness**2/72 * hermite_polynomial(6, z))
+    return norm.pdf(z) * (1 + third_cumulant/6 * hermite_polynomial(3, z) + fourth_cumulant/24 * hermite_polynomial(4, z) + third_cumulant**2/72 * hermite_polynomial(6, z))
+
+def scipy_moments_to_cumulants(mean, variance, skewness, excess_kurtosis):
+    return mean, variance, skewness*variance**1.5, excess_kurtosis*variance**2
 
 # Calculate skewness and kurtosis
 normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')
@@ -38,10 +41,10 @@ print(nct_skew, nct_exkurt)
 x = np.linspace(-5, 5, 1000)
 
 # Apply Edgeworth expansion
-normal_expansion = edgeworth_expansion(x, normal_mean, normal_var, normal_skew, normal_exkurt)
-lognorm_expansion = edgeworth_expansion(x, lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt)
-t_expansion = edgeworth_expansion(x, t_mean, t_var, t_skew, t_exkurt)
-nct_expansion = edgeworth_expansion(x, nct_mean, nct_var, nct_skew, nct_exkurt)
+normal_expansion = edgeworth_expansion(x, *scipy_moments_to_cumulants(normal_mean, normal_var, normal_skew, normal_exkurt))
+lognorm_expansion = edgeworth_expansion(x, *scipy_moments_to_cumulants(lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt))
+t_expansion = edgeworth_expansion(x, *scipy_moments_to_cumulants(t_mean, t_var, t_skew, t_exkurt))
+nct_expansion = edgeworth_expansion(x, *scipy_moments_to_cumulants(nct_mean, nct_var, nct_skew, nct_exkurt))
 
 # Plotting
 plt.figure(figsize=(8, 7))

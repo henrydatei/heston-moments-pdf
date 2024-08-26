@@ -18,10 +18,13 @@ def hermite_polynomial(n, x):
 # plt.ylim(-10, 20)
 # plt.show()
 
+def scipy_moments_to_cumulants(mean, variance, skewness, excess_kurtosis):
+    return mean, variance, skewness*variance**1.5, excess_kurtosis*variance**2
+
 # Function to generate Gram-Charlier expansion
-def gram_charlier_expansion(x, mean, variance, skewness, excess_kurtosis):
+def gram_charlier_expansion(x, mean, variance, third_cumulant, fourth_cumulant):
     z = (x - mean) / np.sqrt(variance)
-    return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + skewness/6 * hermite_polynomial(3, z) + excess_kurtosis/24 * hermite_polynomial(4, z))
+    return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + third_cumulant/6 * hermite_polynomial(3, z) + fourth_cumulant/24 * hermite_polynomial(4, z))
 
 # Calculate skewness and kurtosis
 normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')
@@ -38,10 +41,10 @@ print(nct_skew, nct_exkurt)
 x = np.linspace(-5, 5, 1000)
 
 # Apply Gram-Charlier expansion
-normal_expansion = gram_charlier_expansion(x, normal_mean, normal_var, normal_skew, normal_exkurt)
-lognorm_expansion = gram_charlier_expansion(x, lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt)
-t_expansion = gram_charlier_expansion(x, t_mean, t_var, t_skew, t_exkurt)
-nct_expansion = gram_charlier_expansion(x, nct_mean, nct_var, nct_skew, nct_exkurt)
+normal_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(normal_mean, normal_var, normal_skew, normal_exkurt))
+lognorm_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt))
+t_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(t_mean, t_var, t_skew, t_exkurt))
+nct_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(nct_mean, nct_var, nct_skew, nct_exkurt))
 
 # Plotting
 plt.figure(figsize=(8, 7))
