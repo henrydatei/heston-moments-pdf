@@ -44,39 +44,42 @@ def moms2skkurt(moms, m1zero=True):
     return outcome
 
 # Function to compute realized moments as in Amaya et al (2015) for one interval
-def rMomACJV_l(hf):
+def rMomACJV_l(hf: pd.Series):
     m1 = hf.resample('D').sum()  # Daily sum of hf
     m2 = (hf**2).resample('D').sum()  # Daily sum of hf^2
     m3 = (hf**3).resample('D').sum()  # Daily sum of hf^3
     m4 = (hf**4).resample('D').sum()  # Daily sum of hf^4
-    return np.column_stack((m1, m2, m3, m4))
+    return pd.DataFrame({'m1': m1, 'm2': m2, 'm3': m3, 'm4': m4})
 
 # Function to compute realized moments as in Amaya et al (2015) averaged over nD days
-def rMomACJV(hf, nD):
+def rMomACJV(hf: pd.Series, nD: int):
     rolling_sums = rMomACJV_l(hf).rolling(window=nD).sum()
-    return rolling_sums.dropna()
+    avg_over_days = rolling_sums.dropna().mean()
+    return pd.DataFrame([avg_over_days], index=[hf.index[-1]])
 
 # Function to compute realized moments as in Choe and Lee (2014) for one interval
-def rMomCL_l(hf):
+def rMomCL_l(hf: pd.Series):
     R = hf.cumsum()
     diff_R = R.diff().dropna()
     diff_R_sq = (R**2).diff().dropna()
     return np.array([0, (diff_R**2).sum(), 1.5 * np.sum(diff_R * diff_R_sq), 1.5 * (diff_R_sq**2).sum()]) 
 
 # Function to compute realized moments as in Choe and Lee (2014) averaged over nD days
-def rMomCL(hf, nD):
+def rMomCL(hf: pd.Series, nD: int):
     daily_moments = hf.resample('D').apply(rMomCL_l)
-    rolling_sums = daily_moments.rolling(window=nD).sum()
-    return rolling_sums.dropna()
+    df_expanded = pd.DataFrame(daily_moments.tolist(), index=daily_moments.index, columns=['m1', 'm2', 'm3', 'm4'])
+    rolling_sums = df_expanded.rolling(window=nD).sum()
+    avg_over_days = rolling_sums.dropna().mean()
+    return pd.DataFrame([avg_over_days], index=[hf.index[-1]])
 
 # Function to compute realized moments Neuberger and Payne (2018)
-def endpoints(df, freq):
+def endpoints(df: pd.Series, freq: str):
     return df.groupby(df.index.to_period(freq)).apply(lambda x: x.index[-1])                # df.resample(freq).apply(lambda x: x.index[-1])
 
-def startpoints(df, freq):
+def startpoints(df: pd.Series, freq):
     return df.groupby(df.index.to_period(freq)).apply(lambda x: x.index[0]) 
 
-def rMomNP(hf, nD):
+def rMomNP(hf: pd.Series, nD: int):
     ep = endpoints(hf, 'D')  # define the endpoints of the data with respect to selected frequency
     ep = ep.to_numpy()  # Convert index to numpy array
 
@@ -176,6 +179,7 @@ def rMoments_nc(hfData, method, days_aggregate=22):
     else:
         print("This method for computing moments is not implemented")
         moments = None
+    # print(moments)
     return moments
 
 # Function to compute daily returns and realized moments
