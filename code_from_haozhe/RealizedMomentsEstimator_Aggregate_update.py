@@ -45,10 +45,10 @@ def moms2skkurt(moms, m1zero=True):
 
 # Function to compute realized moments as in Amaya et al (2015) for one interval
 def rMomACJV_l(hf: pd.Series):
-    m1 = hf.resample('D').sum()  # Daily sum of hf
-    m2 = (hf**2).resample('D').sum()  # Daily sum of hf^2
-    m3 = (hf**3).resample('D').sum()  # Daily sum of hf^3
-    m4 = (hf**4).resample('D').sum()  # Daily sum of hf^4
+    m1 = hf.resample('D').sum(min_count=1).dropna()  # Daily sum of hf
+    m2 = (hf**2).resample('D').sum(min_count=1).dropna()  # Daily sum of hf^2
+    m3 = (hf**3).resample('D').sum(min_count=1).dropna()  # Daily sum of hf^3
+    m4 = (hf**4).resample('D').sum(min_count=1).dropna()  # Daily sum of hf^4
     return pd.DataFrame({'m1': m1, 'm2': m2, 'm3': m3, 'm4': m4})
 
 # Function to compute realized moments as in Amaya et al (2015) averaged over nD days
