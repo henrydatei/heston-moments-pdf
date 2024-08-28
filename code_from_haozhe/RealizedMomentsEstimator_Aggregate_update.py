@@ -43,6 +43,20 @@ def moms2skkurt(moms, m1zero=True):
     outcome = pd.DataFrame(outcome, columns=['rMean', 'rVar', 'rSkew', 'rKurt'], index=[set_index.index])
     return outcome
 
+def cumus2skkurt(cumus):
+    set_index = cumus
+    if not isinstance(cumus, np.ndarray):
+        cumus = np.array(cumus).reshape(-1, 4) # -1 means the unknown dimension which will be figured out by np
+
+    Mean = cumus[:, 0]
+    VaT = cumus[:, 1] 
+    SkT = cumus[:, 2] / ((cumus[:, 1])**(3/2))
+    KuT = cumus[:, 3] / ((cumus[:, 1])**2)
+    #return np.column_stack((Mean, VaT, SkT, KuT))
+    outcome = np.column_stack((Mean, VaT, SkT, KuT))
+    outcome = pd.DataFrame(outcome, columns=['rMean', 'rVar', 'rSkew', 'rKurt'], index=[set_index.index])
+    return outcome
+
 # Function to compute realized moments as in Amaya et al (2015) for one interval
 def rMomACJV_l(hf: pd.Series):
     m1 = hf.resample('D').sum(min_count=1).dropna()  # Daily sum of hf
@@ -67,7 +81,10 @@ def rMomCL_l(hf: pd.Series):
 # Function to compute realized moments as in Choe and Lee (2014) averaged over nD days
 def rMomCL(hf: pd.Series, nD: int):
     daily_moments = hf.resample('D').apply(rMomCL_l)
+    # remove weekends
+    daily_moments = daily_moments[daily_moments.index.weekday < 5]
     df_expanded = pd.DataFrame(daily_moments.tolist(), index=daily_moments.index, columns=['m1', 'm2', 'm3', 'm4'])
+    # print(df_expanded)
     rolling_sums = df_expanded.rolling(window=nD).sum()
     avg_over_days = rolling_sums.dropna().mean()
     return pd.DataFrame([avg_over_days], index=[hf.index[-1]])
@@ -187,7 +204,8 @@ def rMoments(hfData, method, days_aggregate=22, m1zero=True, Sk_out=15, Ku_out=2
     #dret = hfData.resample('D').sum()
     moments = rMoments_nc(hfData, method, days_aggregate)
     
-    rSkKu = moms2skkurt(moments, m1zero)    # output centered var, skewness and kurtosis
+    # rSkKu = moms2skkurt(moments, m1zero) # output centered var, skewness and kurtosis
+    rSkKu = cumus2skkurt(moments) # output centered var, skewness and kurtosis
     rr = np.array(rSkKu)                         
     
     # Eliminating outliers in skewness
