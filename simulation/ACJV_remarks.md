@@ -60,3 +60,62 @@ Which approach is now correct? Or should I use them all and later compare how we
 
 Thanks and best wishes
 Henry
+
+---
+
+Hi Henry,
+
+Regarding the first point, since we aggregate the high-frequency data instead of averaging them, there should be no impact, right?
+
+For the 2nd point, I agree.
+
+For the 3rd point, based on the formula, I believe both formulas should lead to the same result. Would you agree on it? Basically, I would suggest to aggregate them first and then compute the skewness and kurtosis. The reason is that we can better benchmark the result against each other to see whether we get the identical outcomes.
+
+Happy to discuss further^^
+
+Best,
+Haozhe
+
+---
+
+Hi Haozhe,
+
+Well, there is an impact if the aggregation is the average. ACJV take the mean over the HF data to get lower frequencies. In their paper to get the estimate on weekly basis they average daily estimates. We extend this to average the last 22 days to get a monthly estimate but if we have weekends in the last 22 days (which we didn’t had in the HF data from the Heston process, but .resample(‚D‘) added) we get a wrong estimate. I fixed this by removing the weekends added by .resample(‚D‘) but another way would be to modify the .mean() function in such a way that it ignores weekends.
+
+Both formulas lead to different results because skewness is not a linear function. I wrote a small example that demonstrates this issue:
+```python
+import pandas as pd
+
+def skewness(x3, var):
+   return x3 + var # a dummy implementation, linear
+   # return x3 / var**(3/2) # a real implementation, non-linear
+
+r = pd.DataFrame(range(1,5), columns=['r‘])
+
+# daily variance
+r['var'] = r['r']**2
+
+# daily third moment
+r['x^3'] = r['r']**3
+
+# daily skewness
+r['skew'] = skewness(r['x^3'], r['var‘])
+
+print(r)
+
+# 2nd + 3rd aggregated moment
+second_moment = r['var'].rolling(4).sum().dropna().mean()
+third_moment = r['x^3'].rolling(4).sum().dropna().mean()
+
+# skewness
+skewness_1 = skewness(third_moment, second_moment)
+
+# skewness aggregation
+skewness_2 = r['skew'].rolling(4).sum().dropna().mean()
+print(skewness_1, skewness_2)
+```
+If we use the linear „skewness“ both implementations give in the same result of 130. If we use the real implementation skewness_1 has a value 
+of 0.6086 and skewness_2 has a value of 4.
+
+Best wishes
+Henry
