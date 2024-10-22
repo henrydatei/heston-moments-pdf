@@ -19,7 +19,7 @@ T = 3
 S0 = 100
 paths = 1
 
-QE_process = Heston_QE(S0=S0, v0=0.19, kappa=3, theta=0.19, sigma=0.4, mu=0, rho=-0.7, T=T, n=time_points, M=paths) # the first point is lnS0
+QE_process = Heston_QE(S0=S0, v0=0.19, kappa=3, theta=0.19, sigma=0.4, mu=0, rho=-0.7, T=T, N=time_points, n_paths=paths) # the first point is lnS0
 QE_process_transform = QE_process[:,1:].T # need to transform it to set the index
 
 # Create a DatetimeIndex for every 5 minutes during trading hours

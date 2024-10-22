@@ -1,16 +1,16 @@
 import numpy as np
 from scipy.stats import norm
 
-def Heston_QE(S0, v0, kappa, theta, sigma, mu, rho, T, n, M, v=None, Z_v=None):
+def Heston_QE(S0, v0, kappa, theta, sigma, mu, rho, T, N, n_paths, v=None, Z_v=None):
 
     # Define compulsory placeholders
-    lnSt = np.zeros((M, n + 1))
+    lnSt = np.zeros((n_paths, N + 1))
     lnSt[:, 0] = np.log(S0)
     
     # Define some constants
-    Delta = T / n
+    Delta = T / N
     
-    U = np.round(np.random.uniform(low=0, high=1, size=(M,n)), 10)  # use round to 10 digits to include the upper bound 1
+    U = np.round(np.random.uniform(low=0, high=1, size=(n_paths,N)), 10)  # use round to 10 digits to include the upper bound 1
     
     psic = 1.5
     
@@ -31,13 +31,13 @@ def Heston_QE(S0, v0, kappa, theta, sigma, mu, rho, T, n, M, v=None, Z_v=None):
     K4 = gam2 * Kc
 
     if Z_v is None:
-        Z_v = np.random.randn(M, n)
+        Z_v = np.random.randn(n_paths, N)
     # If necessary, simulate CIR process. Do so by QE.
     if v is None:
-        v   = np.zeros((M, n + 1))
+        v   = np.zeros((n_paths, N + 1))
         v[:, 0]= v0
 
-        for i in range(n):
+        for i in range(N):
       
             s2  = v[:, i] * c1 + c2
             m   = v[:, i] * emkt + theta * (1 - emkt)
@@ -50,8 +50,8 @@ def Heston_QE(S0, v0, kappa, theta, sigma, mu, rho, T, n, M, v=None, Z_v=None):
             )
 
     # do the simulations for log-price
-    Z_x = np.random.randn(M, n)
-    for i in range(n):
+    Z_x = np.random.randn(n_paths, N)
+    for i in range(N):
         lnSt[:, i + 1] = lnSt[:, i] + mu * Delta + K0 + K1 * v[:, i] + K2 * v[:, i+1] + np.sqrt(K3 * v[:, i] + K4 * v[:, i+1]) * Z_x[:, i]
 
     return lnSt
