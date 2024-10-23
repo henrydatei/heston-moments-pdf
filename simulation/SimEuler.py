@@ -1,20 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Heston model parameters
-S0 = 100.0  # Initial stock price
-v0 = 0.04   # Initial variance (volatility squared)
-mu = 0.05   # Drift (expected return)
-kappa = 2.0 # Rate of mean reversion
-theta = 0.04 # Long-term variance
-sigma = 0.5  # Volatility of volatility
-rho = -0.7  # Correlation between two Brownian motions
-T = 1.0     # Time horizon
-N = 1000    # Number of time steps
-n_paths = 10  # Number of simulated paths
+# # Heston model parameters
+# S0 = 100.0  # Initial stock price
+# v0 = 0.04   # Initial variance (volatility squared)
+# mu = 0.05   # Drift (expected return)
+# kappa = 2.0 # Rate of mean reversion
+# theta = 0.04 # Long-term variance
+# sigma = 0.5  # Volatility of volatility
+# rho = -0.7  # Correlation between two Brownian motions
+# T = 1.0     # Time horizon
+# N = 1000    # Number of time steps
+# n_paths = 10  # Number of simulated paths
 
-# Seed for reproducibility
-np.random.seed(42)
+# # Seed for reproducibility
+# np.random.seed(42)
 
 def heston_euler(S0, v0, mu, kappa, theta, sigma, rho, T, N, n_paths):
     dt = T / N # Time step size
@@ -42,14 +42,14 @@ def heston_euler(S0, v0, mu, kappa, theta, sigma, rho, T, N, n_paths):
     
     return S_paths
 
-S_paths = heston_euler(S0, v0, mu, kappa, theta, sigma, rho, T, N, n_paths)
+# S_paths = heston_euler(S0, v0, mu, kappa, theta, sigma, rho, T, N, n_paths)
 
-# Plot some sample paths for stock prices
-plt.figure(figsize=(10, 6))
-for i in range(n_paths):
-    plt.plot(np.linspace(0, T, N + 1), S_paths[i, :], lw=1.5)
-plt.title("Simulated Asset Price Paths under the Heston Model")
-plt.xlabel("Time")
-plt.ylabel("Asset Price")
-plt.grid(True)
-plt.show()
+# # Plot some sample paths for stock prices
+# plt.figure(figsize=(10, 6))
+# for i in range(n_paths):
+#     plt.plot(np.linspace(0, T, N + 1), S_paths[i, :], lw=1.5)
+# plt.title("Simulated Asset Price Paths under the Heston Model")
+# plt.xlabel("Time")
+# plt.ylabel("Asset Price")
+# plt.grid(True)
+# plt.show()
