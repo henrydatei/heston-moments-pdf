@@ -63,11 +63,15 @@ def skew(r: pd.Series) -> float:
 def kurt(r: pd.Series) -> float:
     return np.mean(x_4(r)) / var_L(r)**2
 
-def D_for_returns(returns: pd.Series, subscript: int, argument: int) -> float:
+def D_for_returns(log_returns: pd.Series, subscript: int, argument: int) -> float:
     '''
-    In the paper they use R, but I used R already for monthly returns
+    In the paper they use R, but I used R already for monthly returns. I have no idea what R is supposed to be, I assumed it is the same as D in Prop 1.
     '''
-    return returns[subscript] - returns[subscript - argument]
+    # return log_returns[subscript] - log_returns[subscript - argument]
+    
+    # make prices from log returns
+    p = prices[1:]
+    return np.log(p[subscript] / p[subscript - argument])
 
 def y_1_t(r: pd.Series, t: int, T: int):
     if t <= T:
