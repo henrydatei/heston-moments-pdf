@@ -7,7 +7,7 @@ import numpy as np
 import scipy
 import scipy.stats
 
-number_of_months = 2
+number_of_months = 1000
 T = 20 # number of days per month
 
 # Generate a month's worth of prices with random fluctuations
@@ -30,6 +30,9 @@ daily_changes = np.diff(prices)
 monthly_changes = [prices[i*T+T] - prices[i*T] for i in range(number_of_months)]
 
 def y_1_star_t(prices, t, T):
+    if t <= T:
+        # we yesterdays return with the return of the last month (last T days)
+        return 0
     sum = 0
     for u in range(1,T+1):
         sum += prices[t-1] - prices[t-u]
@@ -39,6 +42,9 @@ def D(prices, subscript, argument):
     return prices[subscript] - prices[subscript - argument]
 
 def y_1_star_t_2(prices, t, T):
+    if t <= T:
+        # we yesterdays return with the return of the last month (last T days)
+        return 0
     sum = 0
     for u in range(1,T):
         sum += D(prices, t-1, u)
@@ -57,6 +63,9 @@ def y_1_star_2(prices, T):
     return array[1:]
 
 def y_2_star_t(prices, t, T):
+    if t <= T:
+        # we yesterdays return with the return of the last month (last T days)
+        return 0
     sum = 0
     for u in range(1,T+1):
         sum += (prices[t-1] - prices[t-u])**2
@@ -99,6 +108,6 @@ print(skew_d, skew_D_T, (skew_d + 3*(np.cov(y_1star, daily_changes**2)[1,0])/(va
 
 print(kurt_d, kurt_D_T, (kurt_d + 4*(np.cov(y_1star, daily_changes**3)[1,0])/(var_d**2) + 6*(np.cov(y_2star, daily_changes**2)[1,0])/(var_d**2))/T)
 
-print(y_1star)
-print(y_1star_2)
-print(y_1star == y_1star_2)
+# print(y_1star)
+# print(y_1star_2)
+# print(y_1star == y_1star_2)
