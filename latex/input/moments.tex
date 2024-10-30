@@ -1,1 +1,77 @@
 \section{The First 4 Moments}
+
+\subsection{Moments and central moments}
+- für eine Zufallsvariable $X$ kann man den Erwartungswert bestimmen, man nennt ihn auch ersten Moment:
+\begin{align}
+    \mu = \mathbb{E}(X)\notag
+\end{align}
+- diesen schätzt man mit dem Mittelwert der realisierten Ereignisse $x$:
+\begin{align}
+    \hat{\mu} = \bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_i\notag
+\end{align}
+- die Varianz als Maß für die Streuung der Zufallsvariable $X$, wenn $\mu=0$ ist:
+\begin{align}
+    \sigma^2 = \mathbb{E}(X^2)\notag
+\end{acronym}
+- wird auch zweiter Moment genannt. Wenn $\mu\neq 0$ ist, dann ist die Varianz:
+\begin{align}
+    \sigma^2 = \mathbb{E}((X-\mu)^2)\notag
+\end{align}
+und wird zentrierter zweiter Moment genannt. Die Schätzung der Varianz ist:
+\begin{align}
+    \hat{\sigma}^2 = \frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2\notag
+\end{align}
+- das $n-1$ im Nenner ist der Bessel-Korrekturterm, der die Schätzung der Varianz verbessert (Quelle).
+- analog kann man den $r$-ten Moment bestimmen:
+\begin{align}
+    \mathbb{E}(X^r)\notag
+\end{align}
+bzw den zentrierten $r$-ten Moment:
+\begin{align}
+    \mathbb{E}((X-\mu)^r)\notag
+\end{align}
+- Die Skewness ist ein Maß für die Schiefe einer Verteilung und wird als standardisierter dritter Moment definiert:
+\begin{align}
+    \gamma_1 = \frac{\mathbb{E}((X-\mu)^3)}{\sigma^3}\notag
+\end{align}
+- die Schätzung der Schiefe kann auf verschiedene Weisen erfolgen, z.B. (Joanes & Gill, 1998):
+\begin{align}
+    b_1 &= \frac{\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^3}{\left[\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2\right]^{3/2}} \notag \\
+    g_1 &= \frac{\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^3}{\left[\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^2\right]^{3/2}} \notag \\
+    G_1 &= \frac{n^2}{(n-1)(n-2)}b_1 = \frac{\sqrt{n(n-1)}}{n-2}g_1 \notag
+    \hat{\gamma}_1 &= \frac{n}{(n-1)(n-2)}\sum_{i=1}^n \left(\frac{x_i-\bar{x}}{\hat{\sigma}}\right)^3 \notag
+\end{align}
+wobei $b_1$ und $g_1$ Schätzer für die Schiefe einer Population sind, $G_1$ und $\hat{\gamma_1}$ ein Schätzer für die Schiefe einer Stichprobe. $G_1$ ist unter anderem in Excel, SAS und SPS implementiert (Doane & Seward 2011).
+- die Kurtosis ist ein Maß für die Wölbung einer Verteilung und wird als standardisierter vierter Moment definiert:
+\begin{align}
+    \gamma_2 = \frac{\mathbb{E}((X-\mu)^4)}{\sigma^4}\notag
+\end{align}
+- die Schätzung der Kurtosis ist mit entsprechendem Korrekturterm (Quelle):
+\begin{align}
+    \hat{\gamma}_2 = \frac{n(n+1)}{(n-1)(n-2)(n-3)}\sum_{i=1}^n \left(\frac{x_i-\bar{x}}{\hat{\sigma}}\right)^4 \notag
+\end{align}
+- häufig wird die Exzess-Kurtosis verwendet, die den Wert 3 subtrahiert:
+\begin{align}
+    \gamma_2^* = \gamma_2 - 3\notag
+\end{align}
+- Grund: Wenn $X$ standardnormalverteilt ist, dann ist $\gamma_2 = 3$ und $\gamma_2^* = 0$.
+- allgemein gilt, dass durch die hohen Potenzen bei Skewness und Kurtosis die Schätzungen sehr anfällig für Ausreißer sind.
+
+\subsection{Cumulants}
+
+- im Verlauf der Arbeit wird auch der Begriff des Cumulants verwendet, der eine alternative Darstellung der Momente ist.
+- der $r$-te Cumulant ist definiert als the coefficient of $t^r$ in the logarithm of the moment generating function of $X$. The moment generating function of $X$ is defined as
+\begin{align}
+    M_X(t) = \mathbb{E}(e^{tX})\notag
+\end{align}
+The cumulant generating function of $X$ is defined as
+\begin{align}
+    K_X(t) = \log(M_X(t))\notag
+\end{align} 
+- damit sind die ersten vier Cumulants:
+\begin{align}
+    \kappa_1 &= \mu\notag\\
+    \kappa_2 &= \sigma^2\notag\\
+    \kappa_3 &= \gamma_1\sigma^3\notag\\
+    \kappa_4 &= \gamma_2^*\sigma^4\notag
+\end{align}
