@@ -1,0 +1,102 @@
+\documentclass[a4paper, titlepage, twoside, openright, appendixprefix, numbers=noendperiod]{scrreport}
+
+% % % % % % % % % % % % % % % % %
+% WICHTIG!
+% Das Dokument ist zweiseitig formatiert, es MUSS beidseitig gedruckt werden.
+% Neue Kapitel beginnen immer rechts (Option openright)
+% wird "numbers=noendperiod" gelöscht, reagiert das KOMASkript Dudenkonform: bei Überschriftennummerierung keine Endpunkte ohne Anhang; mit Endpunkten, wenn es einen Anhang gibt 
+% % % % % % % % % % % % % % % % %
+
+% Laden der Zusatzpakete (aus dem Ordner "input") 
+\input{input/packages}
+
+% Laden weiterer Einstellungen
+\input{input/customizations}
+
+% Parameter für das Titelblatt und die Selbstständigkeitserklärung
+\input{input/titlepage}
+
+
+\addbibresource{library.bib}
+
+% % % % % % % % % % % % % % % %
+% Beginn der document-Umgebung
+% % % % % % % % % % % % % % % %
+\begin{document}
+
+% Erstellen des Titelblatts
+\maketitle
+
+\cleardoublepage
+
+% Umstellung der Seitennummerierung auf römische Ziffern
+\pagenumbering{roman}
+
+% Zusammenfassung, wenn nicht benötigt, auskommentieren!
+% \selectlanguage{ngerman}
+
+% \begin{abstract}
+% \noindent
+% \lipsum[20-21]
+% \end{abstract}
+
+% FALLS BENÖTIGT: Englische Zusammenfassung (in der Regel nicht in Seminararbeiten gefordert!)
+%\selectlanguage{english}
+%\begin{abstract}
+%\noindent
+%\lipsum[20-23]
+%\end{abstract}
+%\selectlanguage{ngerman}
+
+% \cleardoublepage
+
+% Erstellen des Inhalts-, Abbildungs- und Tabellenverzeichnisses
+\tableofcontents
+\cleardoublepage
+  
+\phantomsection\addcontentsline{toc}{chapter}{List of Figures} 
+\listoffigures
+\cleardoublepage
+
+\phantomsection\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+\cleardoublepage
+
+% Einfügen des Abkürzungsverzeichnisses
+% Bitte die Datei listofabbreviations.tex im Order um die eigenen Abkürzungen ergänzen.
+% \input{input/listofabbreviations}
+% \cleardoublepage
+
+% Umstellung der Seitennummerierung auf wieder auf arabische Ziffern 
+\pagenumbering{arabic}
+
+% Hier beginnen die Kapitel und der eigentliche Inhalt.
+% Es empfiehlt sich, den Inhalt einzelner Kapitel in separaten Dateien zu halten und diese hier mit \input{file} einzubinden.
+
+%Einleitungskapitel, hier sind derzeit noch nachfolgende Kapitel drin, diese besser in eigene Dateien trennen
+% \input{input/introduction}
+
+%Anhang
+% \appendix
+% \phantomsection\addcontentsline{toc}{chapter}{Appendices}
+% \input{input/appendices}
+
+% Festlegen des Bibliografie-Stils, in diesem Fall die deutsche Variante des Standard-Stils plain
+% Für Bachelor- und Masterarbeiten sollte biblatex oder natbib verwendet werden. Eine kurze Suche bei Google führt auf die Paketdokumentationen,
+% aus der sich alles Weitere ergibt.
+% \bibliographystyle{gerplain}
+
+% Einbinden der Bibliothek
+\printbibliography
+\thispagestyle{empty}
+
+% Befehl zum Erstellen der Selbstständigkeitserklärung. Achtung: Es werden die Namen der Autoren, die in titlepage.tex festgelegt wurden, herangezogen und das Datum in \date{} verwendet.
+% Befehl steht nur zur Verfügung, wenn das Paket VOSStatement eingebunden ist.
+\cleardoublepage
+
+\makestatement
+
+% % % % % % % % % % % % % % % %
+% Ende der document-Umgebung
+% % % % % % % % % % % % % % % %
+\end{document}

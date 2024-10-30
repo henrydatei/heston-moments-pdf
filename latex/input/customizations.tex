@@ -1,0 +1,21 @@
+% einige andere Einstellungen oder Ergänzungen
+
+% Festlegen des Titel-Stils der abstract-Umgebung
+\renewcommand{\abstitlestyle}[1]{{\Large\bfseries\sffamily\noindent #1}\hfill}
+
+% Änderung der Nummerierung der Formeln	
+\numberwithin{equation}{section} 
+
+% anderthalbfacher Zeilenabstand 
+\onehalfspacing
+
+% Globaler Seitenstil
+
+\pagestyle{headings}
+\fancyhf{} %
+\pagestyle{fancy} %
+\fancyfoot[LE,RO]{\thepage} %
+\fancyhead[LO]{\nouppercase\rightmark} %
+\fancyhead[RE]{\nouppercase\leftmark}%
+
+

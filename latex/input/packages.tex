@@ -1,0 +1,65 @@
+% Paket für Input Encoding
+% wenn utf8 nicht funktioniert, bitte ansinew (Windows) oder applemac (Mac) benutzen.
+\usepackage[utf8]{inputenc}
+
+% Font Encoding, u.A. für die korrekte Ausgabe in PDF-Dokumenten
+\usepackage[T1]{fontenc}
+
+% Anpassung der Sprache, in diesem Fall: Deutsch in neuer Rechtschreibung
+\usepackage[english]{babel}
+
+% Einstellung der Geometry des Layouts
+\usepackage[textwidth=145mm,textheight=235mm,left=35mm,top=25mm,headsep=5mm]{geometry}
+
+% optimierte Schrift für PDF-Dokumente
+\usepackage{lmodern}
+
+% Zum einfachen Einfügen von Grafiken
+\usepackage{graphicx}
+
+% Für lang Tabellen
+\usepackage{longtable}
+
+% Erweiternde Pakete für den Formelsatz
+\usepackage{amsmath, amssymb, amsthm, amsfonts}
+
+% Erstellt Verweise in PDF-Dokumenten. Die Verweise haben die Farbe schwarz, sind also nicht extra gekennzeichnet.
+\usepackage[colorlinks,linkcolor=black,citecolor=black]{hyperref} 
+
+% Paket für Aufzählungen. Zu verwenden wie itemize.
+\usepackage{enumerate}
+
+% Anführungszeichen
+\usepackage[style=german]{csquotes} 
+
+% "schöne" Tabellen
+\usepackage{booktabs}
+
+% Deckblatt für die Seminararbeit. Metadaten in titlepage.tex anpassen.
+\usepackage{VOSTitle}
+
+% Paket für die Selbstständigkeitserklärung, nutzt die Metadaten in titlepage.tex
+\usepackage{VOSStatement}
+
+% Für Zeilenabstände
+\usepackage{setspace}
+
+% Blindtext
+\usepackage{lipsum}
+
+% Paket für das Abkürzungsverzeichnis
+\usepackage{acronym}
+
+% Paket für die Zusammenfassung nach dem Titelblatt
+\usepackage[style]{abstract}
+
+% Paket für angepasste Bibliografie-Stile
+\usepackage{bibgerm}
+
+\usepackage{fancyhdr}
+% Optional: Gleitobjekte nicht in andere Abschnitte fließen lassen 
+%(Doku:http://mirror.informatik.uni-mannheim.de/pub/mirrors/tex-archive/macros/latex/contrib/placeins/placeins-doc.pdf) 
+%\usepackage{placeins}
+
+\usepackage[style=apa]{biblatex}
+\usepackage{parskip}

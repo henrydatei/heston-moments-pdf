@@ -1,0 +1,130 @@
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % Hier bitte nichts verändern.  % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\def\filename{VOSTitle}
+\def\fileversion{1.5}
+\def\filedate{2015/21/05}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{\filename}[\filedate \fileversion Titelblatt VOS-Seminar]
+
+\RequirePackage{ifthen}
+\RequirePackage{graphicx}
+ 
+
+% Statische Texte:
+% ----------------
+\newcommand{\@uni}{Technische Universit\"at Dresden}
+\newcommand{\@institut}{Institut f\"ur Wirtschaft und Verkehr}
+\newcommand{\@betreuertext}{Supervised by}
+\newcommand{\@ort}{Dresden}
+
+% Dynamische Texteingaben
+% Dieser Befehl wird nicht verwendet. Der Wert muss für den maketitle-Befehl dennoch belegt werden. Wir belegen ihn einfach mit "nichts"
+\renewcommand{\@author}{\relax}
+
+% 1) Belegen der Metadaten mit "nichts"
+\newcommand{\@fak}{\relax}
+\newcommand{\@professur}{\relax}
+
+\newcommand{\@authorOne}{\relax}
+\newcommand{\@authorTwo}{\relax}
+\newcommand{\@authorThree}{\relax}
+\newcommand{\@authorFour}{\relax}
+
+\newcommand{\@matrikelAuthorOne}{\relax}
+\newcommand{\@matrikelAuthorTwo}{\relax}
+\newcommand{\@matrikelAuthorThree}{\relax}
+\newcommand{\@matrikelAuthorFour}{\relax}
+
+% 2) Befehle für die Metadaten mit richtigen Werten belegen
+\newcommand{\fak}[1]{\gdef\@fak{#1}}
+\newcommand{\professur}[1]{\gdef\@professur{#1}}
+
+\newcommand{\authorOne}[1]{\gdef\@authorOne{#1}}
+\newcommand{\authorTwo}[1]{\gdef\@authorTwo{#1}}
+\newcommand{\authorThree}[1]{\gdef\@authorThree{#1}}
+\newcommand{\authorFour}[1]{\gdef\@authorFour{#1}}
+
+\newcommand{\matrikelAuthorOne}[1]{\gdef\@matrikelAuthorOne{#1}}
+\newcommand{\matrikelAuthorTwo}[1]{\gdef\@matrikelAuthorTwo{#1}}
+\newcommand{\matrikelAuthorThree}[1]{\gdef\@matrikelAuthorThree{#1}}
+\newcommand{\matrikelAuthorFour}[1]{\gdef\@matrikelAuthorFour{#1}}
+
+% Hier sind 1. und 2. zusammen
+\renewcommand{\@title}{\relax}
+\renewcommand{\title}[1]{\gdef\@title{#1}}
+
+\newcommand{\@betreuer}{\relax}
+\newcommand{\betreuer}[1]{\gdef\@betreuer{#1}}
+
+\newcommand{\@thesistype}{\relax}
+\newcommand{\thesistype}[1]{\gdef\@thesistype{#1}}
+
+\renewcommand{\@date}{\today}
+\renewcommand{\date}[1]{\gdef\@date{#1}}
+
+% Umdefinieren des maketitle-Befehls
+\renewcommand{\maketitle}{
+	\begin{titlepage}
+		\addtolength{\oddsidemargin}{-3.5cm}
+		\begin{flushleft}
+	
+		\hspace{0.8cm}
+		\includegraphics[height=1.57cm]{img/TU_Logo_SW} 
+		\hfill 
+		
+		\vspace{0.4em}
+		
+		\rule{\paperwidth}{0.5pt}\vspace*{-0.22cm}
+		\mbox{\hspace{2.72cm}\sffamily \small {\bfseries\@fak}\ifthenelse{\equal{\@fak}{}}{\hspace{-1ex}}{, } \@professur}\vspace*{-0.42cm}
+		\rule{\paperwidth}{0.5pt}
+
+		\vspace*{22mm}
+
+		\mbox{
+		\parbox{2.45cm}{~}
+		\begin{minipage}[b][0.75\textheight][s]{\textwidth}
+		\sffamily\LARGE
+							 
+				\@thesistype{}\\[\baselineskip]	
+				{\bfseries\huge{\@title}}\\[0.5\baselineskip]
+				
+				\@authorOne\\[-0.6em]
+				{\normalsize Student number: \@matrikelAuthorOne}
+				
+				\bigskip
+				
+				\ifthenelse{\equal{\@authorTwo}{}}{
+				}{ %
+				\@authorTwo\\[-0.6em]
+				{\normalsize Student number: \@matrikelAuthorTwo}
+				}
+
+				\bigskip
+				
+				\ifthenelse{\equal{\@authorThree}{}}{
+				}{
+				\@authorThree\\[-0.6em]
+				{\normalsize Student number: \@matrikelAuthorThree}
+				}
+				
+				\bigskip
+				
+				\ifthenelse{\equal{\@authorFour}{}}{
+				}{
+				\@authorFour\\[-0.6em]
+				{\normalsize Student number: \@matrikelAuthorFour}
+				}
+				
+				\vfill
+				
+				{\Large\@betreuertext}\\
+				\@betreuer
+				
+				\vfill
+				{\large\@ort, \@date}
+		\end{minipage}}
+		
+	\end{flushleft}
+	\end{titlepage}
+}

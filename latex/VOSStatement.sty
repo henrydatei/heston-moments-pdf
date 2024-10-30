@@ -1,0 +1,85 @@
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% % % Hier bitte nichts verändern.
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\def\filename{VOSStatement}
+\def\fileversion{1.3}
+\def\filedate{2015/28/05}
+
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{\filename}[\filedate \fileversion Selbstständigkeitserklärung VOS]
+
+\RequirePackage{ifthen}
+
+\newcommand{\makestatement}{
+	\newpage
+	\thispagestyle{empty}
+	\begin{minipage}[c][\textheight]{13cm}
+	\textbf{{\sffamily\huge Declaration of independence}}
+	
+	\vspace{5mm}
+	\ifthenelse{\equal{\@authorTwo}{}\and\equal{\@authorThree}{}\and\equal{\@authorFour}{}}{ %
+	I hereby declare that this thesis was written independently and without the use of any other resources than those stated. Any ideas taken literally or analogously from other sources are identified as such. I further declare that I have not submitted or will not submit this thesis as an examination paper to any other institution.
+		
+	\vspace{5mm}
+	
+	Dresden, \@date
+		
+	\vspace{10mm}
+	
+	\begin{minipage}[t]{4cm}
+	\includegraphics[scale=0.5]{img/Unterschrift.png}
+	\line(1,0){100}
+	
+	\@authorOne
+	\end{minipage}
+	
+	}{ %
+	We hereby declare that the present work was prepared independently and without the use of any aids other than those specified. Any ideas taken verbatim or analogously from external sources are identified as such. We further declare that we have not submitted or will not submit this thesis as an examination paper to any other institution.
+	
+	\vspace{5mm}
+
+	Dresden, \@date
+	
+	\vspace{10mm}
+
+	\ifthenelse{\equal{\@authorFour}{}}{ %
+		\begin{minipage}[t]{4cm}
+			\line(1,0){100}
+			
+			\@authorOne
+			\end{minipage}
+			\begin{minipage}[t]{4cm}
+			\line(1,0){100}
+		
+			\@authorTwo
+			\end{minipage}
+			\ifthenelse{\equal{\@authorThree}{}}{}{ %
+					\begin{minipage}[t]{4cm}
+					\line(1,0){100}
+					
+					\@authorThree
+					\end{minipage}}
+	}{ %
+		\line(1,0){100}
+		
+		\@authorOne
+		
+		\vspace{2em}
+		\line(1,0){100}
+		
+		\@authorTwo
+
+		\vspace{2em}
+		\line(1,0){100}
+		
+		\@authorThree
+				
+		\vspace{2em}
+		\line(1,0){100}
+		
+		\@authorFour
+	}}
+\end{minipage}
+}
