@@ -59,6 +59,7 @@ wobei $g_2$ ein Schätzer für die Wölbung einer Population ist und $G_2$ ein S
 \end{align}
 - Grund: Wenn $X$ standardnormalverteilt ist, dann ist $\gamma_2 = 3$ und $\gamma_2^* = 0$.
 - allgemein gilt, dass durch die hohen Potenzen bei Skewness und Kurtosis die Schätzungen sehr anfällig für Ausreißer sind.
+- Ich werde im folgenden öfter von Momenten sprechen, meine damit aber auch die dazugehörigen Maße wie Varianz, Schiefe und Wölbung.
 
 \subsection{Cumulants}
 
@@ -78,3 +79,50 @@ The cumulant generating function of $X$ is defined as
     \kappa_3 &= \gamma_1\sigma^3\notag\\
     \kappa_4 &= \gamma_2^*\sigma^4\notag
 \end{align}
+
+\subsection{Estimating the Moments of Low-Frequency Data using High-Frequency Data}
+- für die Bepreisung von Finanzderivaten ist es wichtig, die Momente der Renditen zu kennen, insbesondere die Momente von monatlichen oder quartalsweisen Renditen (Barro 2006).
+- die Schätzung der Momente von monatlichen oder quartalsweisen Renditen kann jedoch schwierig sein, da die Anzahl der Beobachtungen gering ist (Neuberger & Payne 2021).
+- Börsen handeln heute ständig, sodass man ohne Probleme auf tägliche oder sogar minütliche Renditen zurückgreifen kann. Der Deutsche Leitindex DAX wird z.B. jede Sekunde berechnet (Börse Frankfurt ohne Datum)
+- Es gibt mehere Möglichkeiten, die Momente von monatlichen oder quartalsweisen Renditen aus den Momente von täglichen Renditen zu schätzen, eine davon ist die Methode von Amaya et al (2015). Dabei werden die i-ten Interday log returns $r_{t,i}$ für den Tag $t$ folgendermaßen berechnet:
+\begin{align}
+    r_{t,i} = \log(P_{t,i/N}) - \log(P_{t,(i-1)/N})\notag
+\end{align}
+where $p$ is the natural logarithm of the price and $N$ is the number of return observations in a trading day. The opening log-price on day $t$ is $p_{t,0}$ and the closing logprice on day t is $p_{t,1}$. We use five-minute returns so that in 6.5 trading hours we have $N = 78$. Daraus wird dann die täglich realisierte Varianz berechnet:
+\begin{align}
+    \hat{\sigma}^2_t = \sum_{i=1}^{N}r_{t,i}^2\notag
+\end{align}
+Die Idee ist nicht neu, sie taucht das erste mal bei Andersen & Bollerslev (1998) auf. Basierend auf diesem Ansatz lässt sich die täglich realisierte Skewness und Kurtosis berechnen:
+\begin{align}
+    \hat{\gamma}_1 = \frac{\sqrt{N}\cdot \sum_{i=1}^{N}r_{t,i}^3}{\hat{\sigma}_t^3}\notag\\
+    \hat{\gamma}_2 = \frac{N\cdot \sum_{i=1}^{N}r_{t,i}^4}{\hat{\sigma}_t^4}\notag
+\end{align}
+Um von den täglich realisierten Momenten auf wöchentliche oder monatliche Momente zu kommen, wird ein Moving Average verwendet.
+- Choe und Lee (2014) nutzen für ihre Schätzung der low-frequency Momente Variationsprozesse, konkret die quadratische Variation eines semi-martingales $X$
+\begin{align}
+    \label{eq:quadratic_variation}
+    [X]_t = X_t^2 - 2\int_0^tX_u\,\mathrm{d}X_u
+\end{align}
+und den quadratischen Kovariationsprozess der semi-martingale $X$ und $Y$
+\begin{align}
+    \label{eq:quadratic_covariation}
+    [X,Y]_t = X_tY_t - \int_0^tX_u\,\mathrm{d}Y_u - \int_0^tY_u\,\mathrm{d}X_u
+\end{align}
+Für den log-return prozess $R_t$
+\begin{align}
+    R_t = \log(P_t) - \log(P_0)\notag
+\end{align}
+lassen sich dann \eqref{eq:quadratic_variation} und \eqref{eq:quadratic_covariation} approximieren durch
+\begin{align}
+    [R]_T &\approx \sum_{i=1}^N (R_i - R_{i-1})^2\notag\\
+    [R,R^2]_T &\approx \sum_{i=1}^N (R_i - R_{i-1})(R_i^2 - R_{i-1}^2)\notag \\
+    [R^2]_T &\approx \sum_{i=1}^N (R_i^2 - R_{i-1}^2)^2\notag
+\end{align}
+Daraus folgenden dann die Momente:
+\begin{align}
+    \mathbb{E}(R_T^3) = \frac{3}{2}\mathbb{E}([R,R^2]_T)\notag\\
+    \mathbb{E}(R_T^4) = \frac{3}{2}\mathbb{E}([R^2]_T)\notag
+\end{align}
+Die Schätzung der low-frequency Varianz ist dann wieder analog zu Andersen & Bollerslev (1998) und Amaya et al (2015).
+
+\subsection{The First 4 Moments of the Heston Model}
