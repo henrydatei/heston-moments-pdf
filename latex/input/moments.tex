@@ -124,5 +124,33 @@ Daraus folgenden dann die Momente:
     \mathbb{E}(R_T^4) = \frac{3}{2}\mathbb{E}([R^2]_T)\notag
 \end{align}
 Die Schätzung der low-frequency Varianz ist dann wieder analog zu Andersen & Bollerslev (1998) und Amaya et al (2015).
+- Neuberger & Payne (2021) schlagen eine neue Methode vor, die als einzige Voraussetzung hat, dass log prices martingales und stationär sind, es also keinen drift gibt. Unter diesen Voraussetzungen definieren sie neue Momente, die die Standarddefinitionen approximieren:
+\begin{align}
+    var^L(r) &= \mathbb{E}(x^{(2L)}(r))\text{, where } x^{(2L)}(r) = 2(e^r-1-r) \notag \\
+    var^E(r) &= \mathbb{E}(x^{(2E)}(r))\text{, where } x^{(2E)}(r) = 2(re^r-e^r+1) \notag \\
+    skew(r) &= \frac{\mathbb{E}(x^{(3)}(r))}{var^L(r)^{3/2}}\text{, where } x^{(3)}(r) = 6((e^r+1)r - 2(e^r-1)) \notag \\
+    kurt(r) &= \frac{\mathbb{E}(x^{(4)}(r))}{var^L(r)^2}\text{, where } x^{(4)}(r) = 12(r^2 + 2(e^r+2)r - 6(e^r-1)) \notag
+\end{align}
+wobei $r$ der log-return process ist:
+\begin{align}
+    r_t = \ln\left(\frac{P_t}{P_{t-1}}\right) \notag
+\end{align}
+Der long-horizon returns process $R$ is defined by
+\begin{align}
+    R_t(T) &= \ln\left(\frac{P_t}{P_{t-T}}\right) \notag
+\end{align}
+Damit wird ein Zusammenhang zwischen den low-frequency Momenten und den high-frequency log returns hergestellt:
+\begin{align}
+    var^L(R(T)) &= T\cdot var^L(r) \notag \\
+    skew(R(T)) &= \left(skew(r) + 3\frac{cov(y^{(1)}, x^{(2E)}(r))}{var^L(r)^{3/2}}\right)T^{-1/2} \notag \\
+    kurt(R(T)) &= \left(kurt(r) + 4\frac{cov(y^{(1)}, x^{(3)}(r))}{var^L(r)^2} + 6\frac{cov(y^{(2L)}, x^{(2L)}(r))}{var^L(r)^2}\right)T^{-1} \notag
+\end{align}
+wobei
+\begin{align}
+    y_t^{(j)} &= \sum_{u=1}^T \frac{x^{(j)}(R_{t-1}(u))}{T} \quad\text{for } j = 1,2L\notag \\
+    \label{eq:x1}
+    x^{(1)} &= e^r-1
+\end{align}
+where \ref{eq:x1} comes from Neuberger (2012).
 
 \subsection{The First 4 Moments of the Heston Model}
