@@ -7,7 +7,7 @@ import numpy as np
 import scipy
 import scipy.stats
 
-number_of_months = 1000
+number_of_months = 10000
 T = 20 # number of days per month
 
 # Generate a month's worth of prices with random fluctuations
@@ -27,7 +27,11 @@ for daily_return in daily_returns:
 daily_changes = np.diff(prices)
 
 # Monthly total changes (D(T)) for each month
-monthly_changes = [prices[i*T+T] - prices[i*T] for i in range(number_of_months)]
+# monthly_changes = [prices[i*T+T] - prices[i*T] for i in range(number_of_months)]
+# monthly_changes = np.array(monthly_changes)
+
+# monthly changes as price differences from T days ago
+monthly_changes = np.array([prices[i] - prices[i-T] for i in range(T, total_days)])
 
 def y_1_star_t(prices, t, T):
     if t <= T:
@@ -41,6 +45,7 @@ def y_1_star_t(prices, t, T):
 def D(prices, subscript, argument):
     return prices[subscript] - prices[subscript - argument]
 
+# A different implementation of y_1_star_t, which is equivalent to the one above
 def y_1_star_t_2(prices, t, T):
     if t <= T:
         # we yesterdays return with the return of the last month (last T days)
@@ -56,6 +61,7 @@ def y_1_star(prices, T):
         array.append(y_1_star_t(prices, t, T))
     return array[1:]
 
+# A different implementation of y_1_star, which is equivalent to the one above
 def y_1_star_2(prices, T):
     array = []
     for t in range(len(prices)):
@@ -95,19 +101,84 @@ prices_df = pd.DataFrame({
 })
 
 y_1star = y_1_star(prices, T)
-y_1star_2 = y_1_star_2(prices, T)
+# y_1star_2 = y_1_star_2(prices, T)
 y_2star = y_2_star(prices, T)
 
 # print(prices_df)
 
 # print(monthly_changes)
 
+print("Test Prop 1")
 print(var_d, var_D_T, T * var_d)
-
 print(skew_d, skew_D_T, (skew_d + 3*(np.cov(y_1star, daily_changes**2)[1,0])/(var_d**1.5))/np.sqrt(T))
-
 print(kurt_d, kurt_D_T, (kurt_d + 4*(np.cov(y_1star, daily_changes**3)[1,0])/(var_d**2) + 6*(np.cov(y_2star, daily_changes**2)[1,0])/(var_d**2))/T)
 
-# print(y_1star)
-# print(y_1star_2)
-# print(y_1star == y_1star_2)
+# print(y_1star == y_1star_2) # they are equal
+
+# we find in the appendix of the paper 
+# E(D^2) = T * E(d^2) and
+# E(D^3) = T * (E(d^3) + 3*cov(y_1_star, d^2)) and 
+# E(D^4) - 3E(D^2)^2 = T * (E(d^4) - 3E(d^2)^2 + 4*cov(y_1_star, d^3) + 6*cov(y_2_star, d^2))
+
+print("Final equations from proof from Prop 1 (A5)")
+print(np.mean(monthly_changes**2), T * np.mean(daily_changes**2))
+print(np.mean(monthly_changes**3), T * (np.mean(daily_changes**3) + 3*np.cov(y_1star, daily_changes**2)[1,0]))
+print(np.mean(monthly_changes**4) - 3*np.mean(monthly_changes**2)**2, T * (np.mean(daily_changes**4) - 3*np.mean(daily_changes**2)**2 + 4*np.cov(y_1star, daily_changes**3)[1,0] + 6*np.cov(y_2star, daily_changes**2)[1,0]))
+
+print("Test expectations from y_1_star and y_2_star (A4)")
+print(np.mean(y_1star), 0)
+print(np.mean(y_2star), 0.5*(T-1)*np.mean(daily_changes**2))
+
+print("Test unconditional expectations (A3)")
+print(np.mean(monthly_changes**2), T * np.mean(daily_changes**2))
+print(np.mean(monthly_changes**3), T * np.mean(daily_changes**3) + 3*T*np.mean(daily_changes**2 * y_1star))
+print(np.mean(monthly_changes**4), T*np.mean(daily_changes**4) + 4*T*np.mean(daily_changes**3 * y_1star) + 6*T*np.mean(daily_changes**2 * y_2star))
+
+print("Test decomposition of monthly price change (A1)")
+print("difference in decomposition of D_t^2")
+decomposed_D2_t = []
+for t in range(T, total_days):
+    sum1 = 0
+    sum2 = 0
+    for u in range(0, T):
+        sum1 += daily_changes[t-u]**2
+        sum2 += (prices[t-u-1] - prices[t-T]) * daily_changes[t-u]
+    decomposed_D2_t.append(sum1 + 2*sum2)
+# print(decomposed_D2_t)
+# print(monthly_changes**2)
+# print(decomposed_D2_t - monthly_changes**2)
+print(all(decomposed_D2_t == monthly_changes**2))
+
+print("difference in decomposition of D_t^3")
+decomposed_D3_t = []
+for t in range(T, total_days):
+    sum1 = 0
+    sum2 = 0
+    sum3 = 0
+    for u in range(0, T):
+        sum1 += daily_changes[t-u]**3
+        sum2 += (prices[t-u-1] - prices[t-T]) * daily_changes[t-u]**2
+        sum3 += (prices[t-u-1] - prices[t-T])**2 * daily_changes[t-u]
+    decomposed_D3_t.append(sum1 + 3*sum2 + 3*sum3)
+# print(decomposed_D3_t)
+# print(monthly_changes**3)
+# print(decomposed_D3_t - monthly_changes**3)
+print(all(decomposed_D3_t == monthly_changes**3))
+
+print("difference in decomposition of D_t^4")
+decomposed_D4_t = []
+for t in range(T, total_days):
+    sum1 = 0
+    sum2 = 0
+    sum3 = 0
+    sum4 = 0
+    for u in range(0, T):
+        sum1 += daily_changes[t-u]**4
+        sum2 += (prices[t-u-1] - prices[t-T]) * daily_changes[t-u]**3
+        sum3 += (prices[t-u-1] - prices[t-T])**2 * daily_changes[t-u]**2
+        sum4 += (prices[t-u-1] - prices[t-T])**3 * daily_changes[t-u]
+    decomposed_D4_t.append(sum1 + 4*sum2 + 6*sum3 + 4*sum4)
+# print(decomposed_D4_t)
+# print(monthly_changes**4)
+# print(decomposed_D4_t - monthly_changes**4)
+print(all(decomposed_D4_t == monthly_changes**4))
