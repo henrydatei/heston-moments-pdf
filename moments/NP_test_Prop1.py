@@ -146,7 +146,7 @@ for t in range(T, total_days):
     decomposed_D2_t.append(sum1 + 2*sum2)
 # print(decomposed_D2_t)
 # print(monthly_changes**2)
-# print(decomposed_D2_t - monthly_changes**2)
+print(decomposed_D2_t - monthly_changes**2)
 print(all(decomposed_D2_t == monthly_changes**2))
 
 print("difference in decomposition of D_t^3")
@@ -162,7 +162,7 @@ for t in range(T, total_days):
     decomposed_D3_t.append(sum1 + 3*sum2 + 3*sum3)
 # print(decomposed_D3_t)
 # print(monthly_changes**3)
-# print(decomposed_D3_t - monthly_changes**3)
+print(decomposed_D3_t - monthly_changes**3)
 print(all(decomposed_D3_t == monthly_changes**3))
 
 print("difference in decomposition of D_t^4")
@@ -180,5 +180,5 @@ for t in range(T, total_days):
     decomposed_D4_t.append(sum1 + 4*sum2 + 6*sum3 + 4*sum4)
 # print(decomposed_D4_t)
 # print(monthly_changes**4)
-# print(decomposed_D4_t - monthly_changes**4)
+print(decomposed_D4_t - monthly_changes**4)
 print(all(decomposed_D4_t == monthly_changes**4))
