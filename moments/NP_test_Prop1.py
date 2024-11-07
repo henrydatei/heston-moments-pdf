@@ -16,7 +16,8 @@ initial_price = 100  # Starting price
 
 # Generate prices
 total_days = number_of_months * T
-daily_returns = np.random.normal(0, 1, total_days)  # Daily returns with mean 0 and std 1
+# daily_returns = np.random.normal(0, 1, total_days)  # Daily returns with mean 0 and std 1
+daily_returns = np.random.standard_t(10, total_days)
 
 # Generate prices based on daily returns
 prices = [initial_price]
