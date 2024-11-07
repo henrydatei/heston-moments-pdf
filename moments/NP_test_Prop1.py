@@ -26,6 +26,10 @@ for daily_return in daily_returns:
 # Calculate daily differences (price changes)
 daily_changes = np.diff(prices)
 
+# shift daily changes by 1 day and add a zero at the beginning
+daily_changes = np.insert(daily_changes, 0, 0)
+daily_changes = np.roll(daily_changes, 1)[1:]
+
 # Monthly total changes (D(T)) for each month
 # monthly_changes = [prices[i*T+T] - prices[i*T] for i in range(number_of_months)]
 # monthly_changes = np.array(monthly_changes)
@@ -42,6 +46,7 @@ def y_1_star_t(prices, t, T):
         sum += prices[t-1] - prices[t-u]
     return sum / T
 
+# A different implementation of y_1_star_t, which is equivalent to the one above
 def D(prices, subscript, argument):
     return prices[subscript] - prices[subscript - argument]
 
