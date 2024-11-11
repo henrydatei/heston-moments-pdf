@@ -159,13 +159,13 @@ where \ref{eq:x1} comes from Neuberger (2012).
 - Fortunately moments for returns and other measures have been found, from Okhrin et al (2022) for the log-return $r_t = \log(S_t) - \log(S_0)$ the unconditional noncentral moments are:
 \begin{align}
     \mu_1 &= \left(\mu - \frac{\theta}{2}\right)t\notag \\
-    \mu_2 &= \frac{1}{4\kappa^3}\left(\exp(-\kappa t)\left[\exp(\kappa t)\left\lbrace\kappa^3 t(t(\theta-2\mu)^2 + 4\theta) - 4\kappa^2\rho\sigma t\theta + \kappa\rho\sigma(4\rho + \sigma t) - \sigma^2\theta\right\rbrace + \sigma\theta(\sigma-4\kappa\rho)\right]\right) \notag
+    \mu_2 &= \frac{1}{4\kappa^3}\left(\exp(-\kappa t)\left[\exp(\kappa t)\left\lbrace\kappa^3 t(t(\theta-2\mu)^2 + 4\theta) - 4\kappa^2\rho\sigma t\theta + \kappa\sigma\theta(4\rho + \sigma t) - \sigma^2\theta\right\rbrace + \sigma\theta(\sigma-4\kappa\rho)\right]\right) \notag
 \end{align}
 The expressions for $\mu_3$ and $\mu_4$ are too long to be included here, but they can be found in Okhrin et al (2022). The unconditional central moments are then:
 \begin{align}
     \zeta_1 &= \mu_1\notag \\
     \zeta_2 &= \mathbb{E}\left[(r_t-\mu_1)^2\right] \notag \\
-    &= \frac{\theta[-4\kappa^2\rho\sigma t + 4\kappa^3 t + \sigma\exp(-\kappa t)(\sigma - 4\kappa\rho) + 4\kappa\sigma\rho + \kappa\rho\sigma^2 - \sigma^2]}{4\kappa^3} \notag \\
+    &= \frac{\theta[-4\kappa^2\rho\sigma t + 4\kappa^3 t + \sigma\exp(-\kappa t)(\sigma - 4\kappa\rho) + 4\kappa\sigma\rho + \kappa\sigma^2 t - \sigma^2]}{4\kappa^3} \notag \\
     \zeta_3 &= \mathbb{E}\left[\left(\frac{r_t-\mu_1}{\zeta_1^{1/2}}\right)^3\right] \notag \\
     &= \frac{3\kappa\sigma\theta\exp(\kappa t/2)(\sigma - 2\kappa\rho)}{\zeta_2^{3/2}}[4\kappa^2\{\exp(\kappa t)(\rho\sigma t+1) + \rho\sigma t - 1\} - 4\kappa^3 t\exp(\kappa t) - \kappa\sigma\{\exp(\kappa t)(8\rho + \sigma t) - 8\rho + \sigma t\} + 2\sigma^2(\exp(\kappa t)-1)] \notag \\
     \zeta_4 &= \mathbb{E}\left[\left(\frac{r_t-\mu_1}{\zeta_1^{1/2}}\right)^4\right] \notag
