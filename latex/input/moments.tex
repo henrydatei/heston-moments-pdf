@@ -195,3 +195,10 @@ wobei $X_T$ und $Y_T$ wie folgt definiert sind
     Y_T &= \int_t^T (v_s - \mathbb{E}_t(v_s))\,\mathrm{d}s = \sigma\int_t^T\frac{1-\exp(-\kappa(T-s))}{\kappa}\sqrt{v_s}\,\mathrm{d}B_s^v \notag
 \end{align}
 $B^S$ und $B^v$ sind die Brownian motions für den Preis und die Volatilität.
+- Dunn et al (2014) haben die unconditional noncentral Momente für den return $Q_{t+1}=\frac{S_{t+1}}{S_t}$ ermittelt:
+\begin{align}
+    \mathbb{E}(Q_{t+1}) &= \mu_1 = 1+\mu  \notag \\
+    \mathbb{E}(Q_{t+1}^2) &= \mu_2 = (\mu +1)^2+\theta \notag \\
+    \mathbb{E}(Q_{t+1}^3) &= \mu_3 = (\mu +1)^3+3\theta+3\mu\theta \notag \\
+    \mathbb{E}(Q_{t+1}^4) &= \mu_4 = \frac{1}{\kappa (\kappa -2)}(\kappa^2\mu^4 + 4\kappa^2\mu^3 + 6\kappa^2\mu^2\theta - 2\kappa\mu^4 + 6\kappa^2\mu^2 + 12\kappa^2\mu\theta + 3\kappa^2\theta^2 - 8\kappa\mu^3 - 12\kappa\mu^2\theta + 4\kappa^2\mu + 6\kappa^2\theta - 12\kappa\mu^2 - 24\kappa\mu\theta - 6\kappa\theta^2 - 3\sigma^2\theta + \kappa^2 - 8\kappa\mu - 12\kappa\theta - 2\kappa) \notag
+\end{align}
