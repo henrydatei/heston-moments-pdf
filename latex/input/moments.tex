@@ -15,7 +15,9 @@
 \end{acronym}
 - wird auch zweiter Moment genannt. Wenn $\mu\neq 0$ ist, dann ist die Varianz:
 \begin{align}
-    \sigma^2 = \mathbb{E}((X-\mu)^2)\notag
+    \label{eq:definition_variance}
+    \sigma^2 &= \mathbb{E}((X-\mu)^2) \\
+    &= \mathbb{E}(X^2) - \mathbb{E}(X)^2 \notag
 \end{align}
 und wird zentrierter zweiter Moment genannt. Die Schätzung der Varianz ist:
 \begin{align}
@@ -32,7 +34,9 @@ bzw den zentrierten $r$-ten Moment:
 \end{align}
 - Die Skewness ist ein Maß für die Schiefe einer Verteilung und wird als standardisierter dritter Moment definiert:
 \begin{align}
-    \gamma_1 = \frac{\mathbb{E}((X-\mu)^3)}{\sigma^3}\notag
+    \label{eq:definition_skewness}
+    \gamma_1 &= \frac{\mathbb{E}((X-\mu)^3)}{\sigma^3} \\
+    &= \frac{\mathbb{E}(X^3) - 3\mathbb{E}(X)\mathbb{E}(X^2) + 2\mathbb{E}(X)^3}{\sigma^3} \notag
 \end{align}
 - die Schätzung der Schiefe kann auf verschiedene Weisen erfolgen, z.B. (Joanes & Gill, 1998):
 \begin{align}
@@ -44,7 +48,9 @@ bzw den zentrierten $r$-ten Moment:
 wobei $b_1$ und $g_1$ Schätzer für die Schiefe einer Population sind, $G_1$ und $\hat{\gamma_1}$ ein Schätzer für die Schiefe einer Stichprobe. $G_1$ ist unter anderem in Excel, SAS und SPSS implementiert (Doane & Seward 2011).
 - die Kurtosis ist ein Maß für die Wölbung einer Verteilung und wird als standardisierter vierter Moment definiert:
 \begin{align}
-    \gamma_2 = \frac{\mathbb{E}((X-\mu)^4)}{\sigma^4}\notag
+    \label{eq:definition_kurtosis}
+    \gamma_2 = \frac{\mathbb{E}((X-\mu)^4)}{\sigma^4} \\
+    &= \frac{\mathbb{E}(X^4) - 4\mathbb{E}(X^3)\mathbb{E}(X) + 6\mathbb{E}(X^2)\mathbb{E}(X)^2 - 3\mathbb{E}(X)^4}{\sigma^4} \notag
 \end{align}
 - die Schätzung der Kurtosis kann auch auf verschiedene Weisen erfolgen, z.B. (Joanes & Gill, 1998):
 \begin{align}
@@ -156,12 +162,13 @@ where \ref{eq:x1} comes from Neuberger (2012).
 \subsection{The First 4 Moments of the Heston Model}
 
 - A lot of work has been done to find the moments of prices or returns of the Heston model, but as Zhang et al (2017) states: "Unfortunately, a closed-form formula for the skewness has never been presented". Same can be said for the kurtosis.
+- Man muss aufpassen mit den Formelzeichen, in den vorherigen Abschnitten standen z.B. $\mu$ und $\sigma$ für den Mittelwert und die Varianz, im nachfolgenden Kapital stehen sie für die Drift und die Volatilität des Heston-Modells, siehe Gleichungen \eqref{eq:heston_model_price} und \eqref{eq:heston_model_variance}. Die noncentral moments werden mit $\mu_1$ bis $\mu_4$ und die zentralen und standardisierten moments mit $\zeta_1$ bis $\zeta_4$ bezeichnet.
 - Fortunately moments for returns and other measures have been found, from Okhrin et al (2022) for the log-return $r_t = \log(S_t) - \log(S_0)$ the unconditional noncentral moments are:
 \begin{align}
     \mu_1 &= \left(\mu - \frac{\theta}{2}\right)t\notag \\
     \mu_2 &= \frac{1}{4\kappa^3}\left(\exp(-\kappa t)\left[\exp(\kappa t)\left\lbrace\kappa^3 t(t(\theta-2\mu)^2 + 4\theta) - 4\kappa^2\rho\sigma t\theta + \kappa\sigma\theta(4\rho + \sigma t) - \sigma^2\theta\right\rbrace + \sigma\theta(\sigma-4\kappa\rho)\right]\right) \notag
 \end{align}
-The expressions for $\mu_3$ and $\mu_4$ are too long to be included here, but they can be found in Okhrin et al (2022). The unconditional central moments are then:
+The expressions for $\mu_3$ and $\mu_4$ are too long to be included here, but they can be found in Okhrin et al (2022). The unconditional central und standardisierten moments are then:
 \begin{align}
     \zeta_1 &= \mu_1\notag \\
     \zeta_2 &= \mathbb{E}\left[(r_t-\mu_1)^2\right] \notag \\
@@ -170,7 +177,7 @@ The expressions for $\mu_3$ and $\mu_4$ are too long to be included here, but th
     &= \frac{3\kappa\sigma\theta\exp(\kappa t/2)(\sigma - 2\kappa\rho)}{\zeta_2^{3/2}}[4\kappa^2\{\exp(\kappa t)(\rho\sigma t+1) + \rho\sigma t - 1\} - 4\kappa^3 t\exp(\kappa t) - \kappa\sigma\{\exp(\kappa t)(8\rho + \sigma t) - 8\rho + \sigma t\} + 2\sigma^2(\exp(\kappa t)-1)] \notag \\
     \zeta_4 &= \mathbb{E}\left[\left(\frac{r_t-\mu_1}{\zeta_1^{1/2}}\right)^4\right] \notag
 \end{align}
-The expressions for $\zeta_4$ is too long to be included here, but it can be found in Okhrin et al (2022).
+The expression for $\zeta_4$ is too long to be included here, but it can be found in Okhrin et al (2022).
 - Die Paper Zhao et al (2013) und Zhang et al (2017) untersuchen Momente für den continousely compounded return $R_t^T = \ln\left(\frac{S_T}{S_t}\right)$ und finden die conditional central variance:
 \begin{align}
     \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^2 = \frac{1}{4}\text{Var}_t(\int_t ^T v_s\,\mathrm{d}s) + SW_{t,T} - \mathbb{E}_t(\int_t^T \sqrt{v_s}\,\mathrm{d}B_s(\int_t^T v_s\,\mathrm{d}s-\mathbb{E}_t(\int_t^T v_s\,\mathrm{d}s)))
@@ -201,4 +208,11 @@ $B^S$ und $B^v$ sind die Brownian motions für den Preis und die Volatilität.
     \mathbb{E}(Q_{t+1}^2) &= \mu_2 = (\mu +1)^2+\theta \notag \\
     \mathbb{E}(Q_{t+1}^3) &= \mu_3 = (\mu +1)^3+3\theta+3\mu\theta \notag \\
     \mathbb{E}(Q_{t+1}^4) &= \mu_4 = \frac{1}{\kappa (\kappa -2)}(\kappa^2\mu^4 + 4\kappa^2\mu^3 + 6\kappa^2\mu^2\theta - 2\kappa\mu^4 + 6\kappa^2\mu^2 + 12\kappa^2\mu\theta + 3\kappa^2\theta^2 - 8\kappa\mu^3 - 12\kappa\mu^2\theta + 4\kappa^2\mu + 6\kappa^2\theta - 12\kappa\mu^2 - 24\kappa\mu\theta - 6\kappa\theta^2 - 3\sigma^2\theta + \kappa^2 - 8\kappa\mu - 12\kappa\theta - 2\kappa) \notag
+\end{align}
+Benutzen der Gleichungen \eqref{eq:definition_variance}, \eqref{eq:definition_skewness} und \eqref{eq:definition_kurtosis} ergibt für die zentrierten und standardisierten Momente:
+\begin{align}
+    \zeta_1 &= 1+\mu \notag \\
+    \zeta_2 &= \theta \notag \\
+    \zeta_3 &= 0 \notag \\
+    \zeta_4 &= 3\frac{\kappa^2\theta - 2\kappa\theta - \sigma^2}{\kappa\theta(\kappa-2)} \notag
 \end{align}
