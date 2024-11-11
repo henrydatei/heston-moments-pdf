@@ -173,17 +173,17 @@ The expressions for $\mu_3$ and $\mu_4$ are too long to be included here, but th
 The expressions for $\zeta_4$ is too long to be included here, but it can be found in Okhrin et al (2022).
 - Die Paper Zhao et al (2013) und Zhang et al (2017) untersuchen Momente für den continousely compounded return $R_t^T = \ln\left(\frac{S_T}{S_t}\right)$ und finden die conditional central variance:
 \begin{align}
-    \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^2 = \frac{1}{4}\text{Var}_t(\int_t ^T v_sds) + SW_{t,T} - \mathbb{E}_t(\int_t^T \sqrt{v_s}dB_s(\int_t^T v_sds-\mathbb{E}_t(\int_t^T v_sds)))
+    \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^2 = \frac{1}{4}\text{Var}_t(\int_t ^T v_s\,\mathrm{d}s) + SW_{t,T} - \mathbb{E}_t(\int_t^T \sqrt{v_s}\,\mathrm{d}B_s(\int_t^T v_s\,\mathrm{d}s-\mathbb{E}_t(\int_t^T v_s\,\mathrm{d}s)))
 \end{align}
 where $v_t$ is the variance at time $t$, $SW$ (variance swap rate for a variance swap) is the expectation of the realisierte Varianz, $B_t$ is a Brownian motion. Zhang et al (2017) führen weiter aus:
 \begin{align}
-    \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^2 &= \int_t^T \mathbb{E}_t(v_s)ds - \rho\sigma\int_t^T \frac{1-\exp(-\kappa(T-s))}{\kappa}\mathbb{E}_t(v_s)ds + \frac{1}{4}\left(\sigma^2\int_t^T\frac{(1-\exp(-\kappa(T-s)))^2}{\kappa^2}\mathbb{E}_t(v_s) ds\right) \notag
+    \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^2 &= \int_t^T \mathbb{E}_t(v_s)\,\mathrm{d}s - \rho\sigma\int_t^T \frac{1-\exp(-\kappa(T-s))}{\kappa}\mathbb{E}_t(v_s)\,\mathrm{d}s + \frac{1}{4}\left(\sigma^2\int_t^T\frac{(1-\exp(-\kappa(T-s)))^2}{\kappa^2}\mathbb{E}_t(v_s) \,\mathrm{d}s\right) \notag
 \end{align}
 mittels der expected instantaneous variance $\mathbb{E}_t(v_s) = \theta + (v_t - \theta)\exp(-\kappa(s-t))$ ergibt sich durch den Einsatz von Mathematica:
 \begin{align}
-    \int_t^T\mathbb{E}_t(V_s)ds &= \frac{v_t - \theta + \exp(\kappa(t-T))(-v_t+\theta) - t \theta\kappa + T\theta\kappa}{\kappa} \notag \\
-    \rho\sigma\int_t^T \frac{1-\exp(-\kappa(T-s))}{\kappa}\mathbb{E}_t(v_s)ds &= \frac{\exp(-T\kappa)[\exp(t\kappa)(-v_t+2\theta+(t-T)(v_t-\theta)\kappa) + \exp(T\kappa)(v_t+\theta(-2-t\kappa + T\kappa))]\rho\sigma}{\kappa^2} \notag \\
-    \sigma^2\int_t^T\frac{(1-\exp(-\kappa(T-s)))^2}{\kappa^2}\mathbb{E}_t(v_s) ds &= \frac{\exp(-2T\kappa)(\exp(2t\kappa)(-2v_t+\theta) + 4\exp((t+T)\kappa)(\theta + (t-T)(v_t-\theta)\kappa) + \exp(2T\kappa)(2v_t + \theta(-5-2t\kappa + 2T\kappa)))\sigma^2}{2\kappa^3} \notag
+    \int_t^T\mathbb{E}_t(V_s)\,\mathrm{d}s &= \frac{v_t - \theta + \exp(\kappa(t-T))(-v_t+\theta) - t \theta\kappa + T\theta\kappa}{\kappa} \notag \\
+    \rho\sigma\int_t^T \frac{1-\exp(-\kappa(T-s))}{\kappa}\mathbb{E}_t(v_s)\,\mathrm{d}s &= \frac{\exp(-T\kappa)[\exp(t\kappa)(-v_t+2\theta+(t-T)(v_t-\theta)\kappa) + \exp(T\kappa)(v_t+\theta(-2-t\kappa + T\kappa))]\rho\sigma}{\kappa^2} \notag \\
+    \sigma^2\int_t^T\frac{(1-\exp(-\kappa(T-s)))^2}{\kappa^2}\mathbb{E}_t(v_s) \,\mathrm{d}s &= \frac{\exp(-2T\kappa)(\exp(2t\kappa)(-2v_t+\theta) + 4\exp((t+T)\kappa)(\theta + (t-T)(v_t-\theta)\kappa) + \exp(2T\kappa)(2v_t + \theta(-5-2t\kappa + 2T\kappa)))\sigma^2}{2\kappa^3} \notag
 \end{align}
 The third conditional central moment is:
 \begin{align}
