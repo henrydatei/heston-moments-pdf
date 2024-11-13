@@ -1,30 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, t, nct
+import os
+import sys
 
-def hermite_polynomial(n, x):
-    if n == 0:
-        return 1
-    elif n == 1:
-        return x
-    else:
-        return x * hermite_polynomial(n-1, x) - (n-1) * hermite_polynomial(n-2, x)
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# plot hermite polynomials
-# x = np.linspace(-4, 6, 1000)
-# for i in range(6):
-#     plt.plot(x, [hermite_polynomial(i, xi) for xi in x], label=f'Hermite {i}')
-# plt.legend()
-# plt.ylim(-10, 20)
-# plt.show()
-
-# Function to generate Edgeworth expansion
-def edgeworth_expansion(x, mean, variance, third_cumulant, fourth_cumulant):
-    z = (x - mean) / np.sqrt(variance)
-    return norm.pdf(z) * (1 + third_cumulant/6 * hermite_polynomial(3, z) + fourth_cumulant/24 * hermite_polynomial(4, z) + third_cumulant**2/72 * hermite_polynomial(6, z))
-
-def scipy_moments_to_cumulants(mean, variance, skewness, excess_kurtosis):
-    return mean, variance, skewness*variance**1.5, excess_kurtosis*variance**2
+from all_methods import scipy_moments_to_cumulants, edgeworth_expansion
 
 # Calculate skewness and kurtosis
 normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')

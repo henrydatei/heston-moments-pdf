@@ -2,95 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, t, nct
 from scipy.optimize import minimize
+import os
+import sys
 
-STEPS = 1000
-Z_START = -10
-Z_END = -np.sqrt(3)
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-def intersection_lines(a,b,c,d):
-    x = (d-b)/(a-c)
-    y = (a*d - c*b)/(a-c)
-    return x, y
-
-def get_positivity_boundary_lines(z):
-    """Returns the lines that define the positivity boundary of the GC density function in the form of skew = a*kurt + b and kurt = c*skew + d.
-
-    Args:
-        z (float): The value of z in the GC density function.
-    """
-    a = (z**4 - 6*z**2 + 3)/(12*z - 4*z**3)
-    b = 24/(12*z - 4*z**3)
-    c = (12*z - 4*z**3)/(z**4 - 6*z**2 + 3)
-    d = -24/(z**4 - 6*z**2 + 3)
-    return a, b, c, d
-
-all_z, stepsize = np.linspace(Z_START, Z_END, STEPS, retstep=True)
-intersections = [(4,0), (0,0)]
-
-for z in all_z:
-    skew_a1, skew_b1, _, _ = get_positivity_boundary_lines(z)
-    skew_a2, skew_b2, _, _ = get_positivity_boundary_lines(z+stepsize)
-    inter_x, inter_y = intersection_lines(skew_a1, skew_b1, skew_a2, skew_b2)
-    intersections.append((inter_x, inter_y))
-
-def logistic_map(x, a,b):
-    return a + (b-a)/(1+np.exp(-x))
-
-def transform_skew_kurt_into_positivity_region(skew, kurt, intersections):
-    skew_sign = np.sign(skew)
-    skew = abs(skew)
-    new_kurt = logistic_map(kurt, 0, 4)
-
-    if new_kurt == 4:
-        return 0, 4
-    
-    # find i such that intersections[i][0] < new_kurt <= intersections[i+1][0]
-    for i in range(len(intersections)-1):
-        if intersections[i][0] < new_kurt <= intersections[i+1][0]:
-            break
-
-    k_i, s_i = intersections[i]
-    k_i2, s_i2 = intersections[i+1]
-    a_i = (s_i * k_i2 - k_i * s_i2)/(k_i2 - k_i)
-    b_i = (s_i2 - s_i)/(k_i2 - k_i)
-    s_u = a_i + b_i * new_kurt
-    s_l = -s_u
-    # print(i, k_i, s_i, k_i2, s_i2, a_i, b_i, s_u, s_l)
-
-    new_skew = logistic_map(skew, s_l, s_u)
-    new_skew = skew_sign * new_skew
-
-    return new_skew, new_kurt
-
-def hermite_polynomial(n, x):
-    if n == 0:
-        return 1
-    elif n == 1:
-        return x
-    else:
-        return x * hermite_polynomial(n-1, x) - (n-1) * hermite_polynomial(n-2, x)
-
-# Function to generate Gram-Charlier expansion
-def gram_charlier_expansion(x, mean, variance, skewness, excess_kurtosis):
-    z = (x - mean) / np.sqrt(variance)
-    return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + skewness/6 * hermite_polynomial(3, z) + excess_kurtosis/24 * hermite_polynomial(4, z))
-
-def neg_log_likelihood(params, data):
-    mu, variance, s, k = params
-    s, k = transform_skew_kurt_into_positivity_region(s, k, intersections)
-    likelihoods = gram_charlier_expansion(data, mu, variance, s, k)
-    return -np.sum(np.log(likelihoods))
-
-# Calculate skewness and kurtosis
-normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')
-lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt = lognorm.stats(0.5, moments = 'mvsk')
-t_mean, t_var, t_skew, t_exkurt = t.stats(5, moments = 'mvsk')
-nct_mean, nct_var, nct_skew, nct_exkurt = nct.stats(5, 0.5, moments = 'mvsk')
-
-print(normal_mean, normal_var, normal_skew, normal_exkurt)
-print(lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt)
-print(t_mean, t_var, t_skew, t_exkurt)
-print(nct_mean, nct_var, nct_skew, nct_exkurt)
+from all_methods import neg_log_likelihood, get_intersections, transform_skew_kurt_into_positivity_region, gram_charlier_expansion_positivity_constraint, gram_charlier_expansion
 
 # plot the positivity boundary
 # plt.plot([x[0] for x in intersections], [x[1] for x in intersections], linestyle = 'None', marker = 'o', markersize = 2, color = 'r')
@@ -117,60 +34,10 @@ lognorm_data = lognorm.rvs(0.5, size=N_SAMPLES)
 t_data = t.rvs(5, size=N_SAMPLES)
 nct_data = nct.rvs(5, 0.5, size=N_SAMPLES)
 
-normal_initial_params = [normal_mean, normal_var, normal_skew, normal_exkurt]
-lognorm_initial_params = [lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt]
-t_initial_params = [t_mean, t_var, t_skew, t_exkurt]
-nct_initial_params = [nct_mean, nct_var, nct_skew, nct_exkurt]
-
-normal_bounds = [(min(normal_data)-1, max(normal_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
-lognorm_bounds = [(min(lognorm_data)-1, max(lognorm_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
-t_bounds = [(min(t_data)-1, max(t_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
-nct_bounds = [(min(nct_data)-1, max(nct_data)+1), (0.1, 10), (-10, 10), (-10, 10)]
-
-normal_result = minimize(neg_log_likelihood, normal_initial_params, args=(normal_data), method='Powell', bounds=normal_bounds)
-lognorm_result = minimize(neg_log_likelihood, lognorm_initial_params, args=(lognorm_data), method='Powell', bounds=lognorm_bounds)
-t_result = minimize(neg_log_likelihood, t_initial_params, args=(t_data), method='Powell', bounds=t_bounds)
-nct_result = minimize(neg_log_likelihood, nct_initial_params, args=(nct_data), method='Powell', bounds=nct_bounds)
-
-if normal_result.success:
-    mu, sigma2, skew, exkurt = normal_result.x
-    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
-    print(f"Fitted parameters: mu = {mu:.4f}, sigma^2 = {sigma2:.4f}, s = {skew:.4f}, k = {exkurt:.4f}")
-    print(f"Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], normal_data):.4f}, Log-likelihood initial: {-neg_log_likelihood([normal_mean, normal_var, normal_skew, normal_exkurt], normal_data):.4f}")
-    normal_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
-else:
-    print("Optimization failed.")
-    normal_expansion = [0] * len(x)
-    
-if lognorm_result.success:
-    mu, sigma2, skew, exkurt = lognorm_result.x
-    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
-    print(f"Fitted parameters: mu = {mu:.4f}, sigma^2 = {sigma2:.4f}, s = {skew:.4f}, k = {exkurt:.4f}")
-    print(f"Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], lognorm_data):.4f}, Log-likelihood initial: {-neg_log_likelihood([lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt], lognorm_data):.4f}")
-    lognorm_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
-else:
-    print("Optimization failed.")
-    lognorm_expansion = [0] * len(x)
-
-if t_result.success:
-    mu, sigma2, skew, exkurt = t_result.x
-    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
-    print(f"Fitted parameters: mu = {mu:.4f}, sigma^2 = {sigma2:.4f}, s = {skew:.4f}, k = {exkurt:.4f}")
-    print(f"Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], t_data):.4f}, Log-likelihood initial: {-neg_log_likelihood([t_mean, t_var, t_skew, t_exkurt], t_data):.4f}")
-    t_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
-else:
-    print("Optimization failed.")
-    t_expansion = [0] * len(x)
-    
-if nct_result.success:
-    mu, sigma2, skew, exkurt = nct_result.x
-    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
-    print(f"Fitted parameters: mu = {mu:.4f}, sigma^2 = {sigma2:.4f}, s = {skew:.4f}, k = {exkurt:.4f}")
-    print(f"Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], nct_data):.4f}, Log-likelihood initial: {-neg_log_likelihood([nct_mean, nct_var, nct_skew, nct_exkurt], nct_data):.4f}")
-    nct_expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
-else:
-    print("Optimization failed.")
-    nct_expansion = [0] * len(x)
+normal_expansion = gram_charlier_expansion_positivity_constraint(x, *norm.stats(moments='mvsk'))
+lognorm_expansion = gram_charlier_expansion_positivity_constraint(x, *lognorm.stats(0.5, moments = 'mvsk'))
+t_expansion = gram_charlier_expansion_positivity_constraint(x, *t.stats(5, moments = 'mvsk'))
+nct_expansion = gram_charlier_expansion_positivity_constraint(x, *nct.stats(5, 0.5, moments = 'mvsk'))
     
 # Plotting
 plt.figure(figsize=(8, 7))
@@ -210,7 +77,7 @@ plt.show()
 initial_params = [1,1,1,1]
 print(f'Log-likelihood initial: {-neg_log_likelihood(initial_params, normal_data)}')
 plt.plot(x, gram_charlier_expansion(x, *initial_params), 'r--', label='Initial')
-plt.plot(x, gram_charlier_expansion(x, normal_mean, normal_var, normal_skew, normal_exkurt), 'g--', label='True')
+plt.plot(x, gram_charlier_expansion(x, *norm.stats(moments = 'mvsk')), 'g--', label='True')
 
 for method in [
     'Nelder-Mead', 
@@ -231,7 +98,7 @@ for method in [
     res = minimize(neg_log_likelihood, initial_params, args=(normal_data), method=method)
     mu, sigma2, skew, exkurt = res.x
     print(f"{method}: Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], normal_data):.4f}")
-    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, intersections)
+    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, get_intersections())
     plt.plot(x, gram_charlier_expansion(x, mu, sigma2, skew, exkurt), label=method)
 
 plt.title('Optimization Methods Comparison')   
