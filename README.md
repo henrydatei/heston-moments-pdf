@@ -1,6 +1,10 @@
 # heston-moments-pdf
 Diploma thesis about the Heston SV Model, theoretical and realized moments &amp; pdf expansion methods
 
+Titel-Ideen:
+- Evaluating Expansion Methods for Realized Moments in Heston Model Simulations
+- Comparative Analysis of Expansion Methods for Realized Moments in Heston Model Simulations
+
 Heston Process ($X_t$ process from "Simulating the Cox–Ingersoll–Ross and Heston processes: matching the first four moments"):
 $$\begin{align}
 \mathrm{d}S_t &= \mu S_t\mathrm{d}t + \sqrt{v_t}S_t\mathrm{d}W_t^S \\
