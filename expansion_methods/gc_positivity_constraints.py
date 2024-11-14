@@ -7,7 +7,7 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from all_methods import neg_log_likelihood, get_intersections, transform_skew_kurt_into_positivity_region, gram_charlier_expansion_positivity_constraint, gram_charlier_expansion
+from all_methods import neg_log_likelihood_gc, get_intersections_gc, transform_skew_kurt_into_positivity_region, gram_charlier_expansion_positivity_constraint, gram_charlier_expansion
 
 # plot the positivity boundary
 # plt.plot([x[0] for x in intersections], [x[1] for x in intersections], linestyle = 'None', marker = 'o', markersize = 2, color = 'r')
@@ -75,7 +75,7 @@ plt.show()
 
 # Solver Test
 initial_params = [1,1,1,1]
-print(f'Log-likelihood initial: {-neg_log_likelihood(initial_params, normal_data)}')
+print(f'Log-likelihood initial: {-neg_log_likelihood_gc(initial_params, normal_data)}')
 plt.plot(x, gram_charlier_expansion(x, *initial_params), 'r--', label='Initial')
 plt.plot(x, gram_charlier_expansion(x, *norm.stats(moments = 'mvsk')), 'g--', label='True')
 
@@ -95,10 +95,10 @@ for method in [
     # 'trust-exact', # Jacobian is required
     # 'trust-krylov'# # Jacobian is required
     ]:
-    res = minimize(neg_log_likelihood, initial_params, args=(normal_data), method=method)
+    res = minimize(neg_log_likelihood_gc, initial_params, args=(normal_data), method=method)
     mu, sigma2, skew, exkurt = res.x
-    print(f"{method}: Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], normal_data):.4f}")
-    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, get_intersections())
+    print(f"{method}: Log-likelihood fitted: {-neg_log_likelihood_gc([mu, sigma2, skew, exkurt], normal_data):.4f}")
+    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, get_intersections_gc())
     plt.plot(x, gram_charlier_expansion(x, mu, sigma2, skew, exkurt), label=method)
 
 plt.title('Optimization Methods Comparison')   

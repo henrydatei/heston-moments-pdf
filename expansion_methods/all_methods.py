@@ -1,6 +1,16 @@
 import numpy as np
 from scipy.stats import norm
 from scipy.optimize import minimize
+import cmath
+
+i = 1j
+
+# These are the roots of He_6(z), each root is symmetric about the real axis, np.real() is nessary to remove the imaginary part which comes from numerical error
+Z_ROOT1 = np.real(cmath.sqrt(5 - (5**(2/3) * (1 + i * np.sqrt(3)) / (2 * (2 + i * np.sqrt(6)))**(1/3)) - ((1 - i * np.sqrt(3)) * (5 * (2 + i * np.sqrt(6)))**(1/3) / 2**(2/3))))
+
+Z_ROOT2 = np.real(cmath.sqrt(5 - (5**(2/3) * (1 - i * np.sqrt(3)) / (2 * (2 + i * np.sqrt(6)))**(1/3)) - ((1 + i * np.sqrt(3)) * (5 * (2 + i * np.sqrt(6)))**(1/3) / 2**(2/3))))
+
+Z_ROOT3 = np.real(cmath.sqrt(5 + (10**(2/3) / (2 + i * np.sqrt(6))**(1/3)) + ((10 * (2 + i * np.sqrt(6)))**(1/3))))
 
 def scipy_moments_to_cumulants(mean, variance, skewness, excess_kurtosis):
     return mean, variance, skewness*variance**1.5, excess_kurtosis*variance**2
@@ -19,7 +29,7 @@ def gram_charlier_expansion(x, mean, variance, third_cumulant, fourth_cumulant):
 
 def edgeworth_expansion(x, mean, variance, third_cumulant, fourth_cumulant):
     z = (x - mean) / np.sqrt(variance)
-    return norm.pdf(z) * (1 + third_cumulant/6 * hermite_polynomial(3, z) + fourth_cumulant/24 * hermite_polynomial(4, z) + third_cumulant**2/72 * hermite_polynomial(6, z))
+    return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + third_cumulant/6 * hermite_polynomial(3, z) + fourth_cumulant/24 * hermite_polynomial(4, z) + third_cumulant**2/72 * hermite_polynomial(6, z))
 
 def intersection_lines(a,b,c,d):
     x = (d-b)/(a-c)
@@ -38,7 +48,7 @@ def get_positivity_boundary_lines(z):
     d = -24/(z**4 - 6*z**2 + 3)
     return a, b, c, d
 
-def get_intersections(STEPS = 1000, Z_START = -10, Z_END = -np.sqrt(3)):
+def get_intersections_gc(STEPS = 1000, Z_START = -10, Z_END = -np.sqrt(3)):
     all_z, stepsize = np.linspace(Z_START, Z_END, STEPS, retstep=True)
     intersections = [(4,0), (0,0)]
 
@@ -53,9 +63,9 @@ def get_intersections(STEPS = 1000, Z_START = -10, Z_END = -np.sqrt(3)):
 def logistic_map(x, a,b):
     return a + (b-a)/(1+np.exp(-x))
 
-def neg_log_likelihood(params, data):
+def neg_log_likelihood_gc(params, data):
     mu, variance, s, k = params
-    s, k = transform_skew_kurt_into_positivity_region(s, k, get_intersections())
+    s, k = transform_skew_kurt_into_positivity_region(s, k, get_intersections_gc())
     likelihoods = gram_charlier_expansion(data, mu, variance, s, k)
     return -np.sum(np.log(likelihoods))
 
@@ -88,14 +98,90 @@ def transform_skew_kurt_into_positivity_region(skew, kurt, intersections):
 def gram_charlier_expansion_positivity_constraint(x, mean, variance, skewness, exkurt):
     initial_params = [mean, variance, skewness, exkurt]
     bounds = [(min(x)-1, max(x)+1), (0.1, 10), (-10, 10), (-10, 10)]
-    result = minimize(neg_log_likelihood, initial_params, args=(x), method='Powell', bounds=bounds)
+    result = minimize(neg_log_likelihood_gc, initial_params, args=(x), method='Powell', bounds=bounds)
     
     if result.success:
         mu, sigma2, skew, exkurt = result.x
-        skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, get_intersections())
+        skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, get_intersections_gc())
         # print(f"Fitted parameters: mu = {mu:.4f}, sigma^2 = {sigma2:.4f}, skew = {skew:.4f}, exkurt = {exkurt:.4f}")
         # print(f"Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], x):.4f}, Log-likelihood initial: {-neg_log_likelihood([mean, variance, skewness, exkurt], x):.4f}")
         expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
+    else:
+        print("Optimization failed.")
+        expansion = [0] * len(x)
+        
+    return expansion
+
+def parabolic_boundary_lines(z, k):
+    s = np.sqrt(-72/hermite_polynomial(6,z) - 3*k*hermite_polynomial(4,z)/hermite_polynomial(6,z) + 36*hermite_polynomial(3,z)**2/hermite_polynomial(6,z)**2) - 6*hermite_polynomial(3,z)/hermite_polynomial(6,z)
+    return s
+
+def parabolic_boundary_lines_coef(z):
+    a = -72/hermite_polynomial(6,z) + 36*hermite_polynomial(3,z)**2/hermite_polynomial(6,z)**2
+    b = -3*hermite_polynomial(4,z)/hermite_polynomial(6,z)
+    c = -6*hermite_polynomial(3,z)/hermite_polynomial(6,z)
+    return a, b, c
+
+def intersection_parabolas(a, b, c, d, e, f):
+    '''
+    Finds intersection of sqrt(a+b*k)+c = sqrt(d+e*k)+f
+    '''
+    k1 = (2*(b - e)**2*(-c + f)*np.sqrt(-a*b*e + a*e**2 + b**2*d + b*c**2*e - 2*b*c*e*f - b*d*e + b*e*f**2) + (b**2 - 2*b*e + e**2)*(-a*b + a*e + b*c**2 - 2*b*c*f + b*d + b*f**2 + c**2*e - 2*c*e*f - d*e + e*f**2))/((b - e)**2*(b**2 - 2*b*e + e**2))
+    s1 = c + np.sqrt(a + b*(2*(b - e)**2*(-c + f)*np.sqrt(-a*b*e + a*e**2 + b**2*d + b*c**2*e - 2*b*c*e*f - b*d*e + b*e*f**2) + (b**2 - 2*b*e + e**2)*(-a*b + a*e + b*c**2 - 2*b*c*f + b*d + b*f**2 + c**2*e - 2*c*e*f - d*e + e*f**2))/((b - e)**2*(b**2 - 2*b*e + e**2)))
+    k2 = (2*(b - e)**2*(c - f)*np.sqrt(-a*b*e + a*e**2 + b**2*d + b*c**2*e - 2*b*c*e*f - b*d*e + b*e*f**2) + (b**2 - 2*b*e + e**2)*(-a*b + a*e + b*c**2 - 2*b*c*f + b*d + b*f**2 + c**2*e - 2*c*e*f - d*e + e*f**2))/((b - e)**2*(b**2 - 2*b*e + e**2))
+    s2 = c + np.sqrt(a + b*(2*(b - e)**2*(c - f)*np.sqrt(-a*b*e + a*e**2 + b**2*d + b*c**2*e - 2*b*c*e*f - b*d*e + b*e*f**2) + (b**2 - 2*b*e + e**2)*(-a*b + a*e + b*c**2 - 2*b*c*f + b*d + b*f**2 + c**2*e - 2*c*e*f - d*e + e*f**2))/((b - e)**2*(b**2 - 2*b*e + e**2)))
+    return k1, s1, k2, s2
+
+def get_intersections_ew(STEPS = 5000, zroot1 = Z_ROOT1, zroot2 = Z_ROOT2, zroot3 = Z_ROOT3):
+    k = np.linspace(-10, 10, STEPS)
+    all_z, stepzise = np.linspace(-zroot3-0.1, 10, STEPS, retstep=True)
+    intersections = [(4,0), (0,0)]
+    # plt.plot(4,0, 'ro')
+    # plt.plot(0,0, 'ro')
+
+    for z in all_z:
+        if zroot1-0.01 < abs(z) < zroot1+0.01 or zroot2-0.01 < abs(z) < zroot2+0.01 or zroot3-0.01 < abs(z) < zroot3+0.01 or 1.8-0.035 < abs(z) < 1.8+0.035 or 1.67-0.015 < abs(z) < 1.67+0.015:
+            continue
+        # plt.plot(k, parabolic_boundary_lines(z, k), color='black')
+        # plt.plot(k, -parabolic_boundary_lines(z, k), color='black')
+        try:
+            a, b, c = parabolic_boundary_lines_coef(z)
+            d, e, f = parabolic_boundary_lines_coef(z + stepzise)
+            x1, y1, x2, y2 = intersection_parabolas(a, b, c, d, e, f)
+            yvalues = parabolic_boundary_lines(z, k)
+            # Try 1
+            # plt.plot(x1, y1, 'ro')
+            # plt.plot(x2, y2, 'bo')
+            
+            # Try 2
+            # plt.plot(x1, abs(y1), 'ro')
+                
+            # Try 3 and more
+            if 0 <= x1 <= 4 and 0 <= abs(y1) < 1:
+                # plt.plot(x1, abs(y1), 'ro')
+                intersections.append((x1, abs(y1)))
+        except Exception as e:
+            print('Error at z =', z, e)
+            
+    return intersections
+            
+def neg_log_likelihood_ew(params, data):
+    mu, variance, s, k = params
+    s, k = transform_skew_kurt_into_positivity_region(s, k, get_intersections_ew())
+    likelihoods = edgeworth_expansion(data, mu, variance, s, k)
+    return -np.sum(np.log(likelihoods))
+
+def edgeworth_expansion_positivity_constraint(x, mean, variance, skewness, exkurt):
+    initial_params = [mean, variance, skewness, exkurt]
+    bounds = [(min(x)-1, max(x)+1), (0.1, 10), (-10, 10), (-10, 10)]
+    result = minimize(neg_log_likelihood_ew, initial_params, args=(x), method='Powell', bounds=bounds)
+    
+    if result.success:
+        mu, sigma2, skew, exkurt = result.x
+        skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, get_intersections_ew())
+        # print(f"Fitted parameters: mu = {mu:.4f}, sigma^2 = {sigma2:.4f}, skew = {skew:.4f}, exkurt = {exkurt:.4f}")
+        # print(f"Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], x):.4f}, Log-likelihood initial: {-neg_log_likelihood([mean, variance, skewness, exkurt], x):.4f}")
+        expansion = edgeworth_expansion(x, mu, sigma2, skew, exkurt)
     else:
         print("Optimization failed.")
         expansion = [0] * len(x)
