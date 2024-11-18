@@ -28,35 +28,46 @@ lognorm_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(logno
 t_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(t_mean, t_var, t_skew, t_exkurt))
 nct_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(nct_mean, nct_var, nct_skew, nct_exkurt))
 
+test_cumulants = scipy_moments_to_cumulants(0, 0.0001, 0, 0)
+print(test_cumulants)
+test_expansion = gram_charlier_expansion(x, *test_cumulants)
+
 # Plotting
 plt.figure(figsize=(8, 7))
 
 # Plot Normal distribution and its expansion
-plt.subplot(4, 1, 1)
+plt.subplot(5, 1, 1)
 plt.plot(x, norm.pdf(x), 'r--', label='Normal PDF')
 plt.plot(x, normal_expansion, 'b-', label='Gram-Charlier Expansion')
 plt.title('Normal Distribution and Gram-Charlier Expansion')
 plt.legend()
 
 # Plot Skewed distribution and its expansion
-plt.subplot(4, 1, 2)
+plt.subplot(5, 1, 2)
 plt.plot(x, lognorm.pdf(x, 0.5), 'r--', label='Log-Normal PDF')
 plt.plot(x, lognorm_expansion, 'b-', label='Gram-Charlier Expansion')
 plt.title('Log-Normal Distribution and Gram-Charlier Expansion')
 plt.legend()
 
 # Plot Heavy-tailed distribution and its expansion
-plt.subplot(4, 1, 3)
+plt.subplot(5, 1, 3)
 plt.plot(x, t.pdf(x, 5), 'r--', label='t PDF')
 plt.plot(x, t_expansion, 'b-', label='Gram-Charlier Expansion')
 plt.title('t Distribution and Gram-Charlier Expansion')
 plt.legend()
 
 # Plot Non-central t distribution and its expansion
-plt.subplot(4, 1, 4)
+plt.subplot(5, 1, 4)
 plt.plot(x, nct.pdf(x, 5, 0.5), 'r--', label='NCT PDF')
 plt.plot(x, nct_expansion, 'b-', label='Gram-Charlier Expansion')
 plt.title('Non-central t Distribution and Gram-Charlier Expansion')
+plt.legend()
+
+# Plot test distribution expansion
+plt.subplot(5, 1, 5)
+plt.plot(x, norm.pdf(x), 'r--', label='Normal PDF')
+plt.plot(x, test_expansion, 'b-', label='Gram-Charlier Expansion')
+plt.title('Normal Distribution and Test Gram-Charlier Expansion')
 plt.legend()
 
 plt.tight_layout()
