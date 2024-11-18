@@ -1,43 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, t, nct
+import os
+import sys
 
-def scipy_moments_to_cumulants(mean, variance, skewness, excess_kurtosis):
-    return mean, variance, skewness*variance**1.5, excess_kurtosis*variance**2
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-def cgf(x, mean, variance, third_cumulant, fourth_cumulant):
-    return mean*x + 0.5*variance*x**2 + third_cumulant*x**3/6 + fourth_cumulant*x**4/24
-
-def derivative_cgf(x, mean, variance, third_cumulant, fourth_cumulant):
-    return mean + variance*x + third_cumulant*x**2/2 + fourth_cumulant*x**3/6
-
-def second_derivative_cgf(x, mean, variance, third_cumulant, fourth_cumulant):
-    return variance + third_cumulant*x + fourth_cumulant*x**2/2
-
-def find_saddlepoint(z, mean, variance, third_cumulant, fourth_cumulant):
-    """solves K'(t) = z and returns t"""
-    if fourth_cumulant == 0 and third_cumulant == 0 and variance == 0:
-        return None
-    elif fourth_cumulant == 0 and third_cumulant == 0:
-        return (z - mean)/variance
-    elif fourth_cumulant == 0:
-        # can this ever happen?
-        sqrt_term = np.sqrt(-2*mean*third_cumulant + 2*third_cumulant*z + variance**2)
-        return (sqrt_term - variance)/third_cumulant
-        # return (-sqrt_term - variance)/skewness
-    else:
-        term_with_162 = -162*fourth_cumulant**2*mean + 162*fourth_cumulant**2*z + 162*fourth_cumulant*third_cumulant*variance - 54*third_cumulant**3
-        term_with_18 = 18*fourth_cumulant*variance - 9*third_cumulant**2
-        term_with_sqrt = np.sqrt(term_with_162**2 + 4*term_with_18**3)
-        return 1/(3*np.cbrt(2)*fourth_cumulant) * np.cbrt(term_with_sqrt + term_with_162) - (np.cbrt(2)*term_with_18)/(3*fourth_cumulant*np.cbrt(term_with_sqrt + term_with_162)) - third_cumulant/fourth_cumulant
-    
-# print(find_saddlepoint(5, 0, 5/3, 0, 6))
-
-# Function to generate Saddlepoint Approximation
-def saddlepoint_approximation(x, mean, variance, third_cumulant, fourth_cumulant):
-    # get saddle point for x
-    s = find_saddlepoint(x, mean, variance, third_cumulant, fourth_cumulant)
-    return 1/np.sqrt(2*np.pi*second_derivative_cgf(s, mean, variance, third_cumulant, fourth_cumulant)) * np.exp(cgf(s, mean, variance, third_cumulant, fourth_cumulant) - s*x)
+from all_methods import scipy_moments_to_cumulants, saddlepoint_approximation
 
 # Calculate skewness and kurtosis
 normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')
