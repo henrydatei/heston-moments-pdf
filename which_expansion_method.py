@@ -25,11 +25,12 @@ v0 = 0.19
 kappa = 3
 theta = 0.19
 sigma = 0.4
-mu = 0
+mu = 0 # martingale
 rho = -0.7
 rolling_window = 22
 
 # Eraker 2004 (for time unit = 1 day)
+mu = 0.026 # is not 0, so we need to de-mean the data
 theta = 1.933
 kappa = 0.019
 rho = -0.569
@@ -44,6 +45,9 @@ print(f'Feller condition: {2 * kappa * theta > sigma**2}')
 
 # Simulation
 process = Heston_QE(S0=S0, v0=v0, kappa=kappa, theta=theta, sigma=sigma, mu=mu, rho=rho, T=T, N=time_points, n_paths=paths)
+if mu != 0:
+    # de-mean the data
+    process = process - mu
 process_df = process_to_log_returns(process, start_date, end_date)
 
 # Estimate moments
