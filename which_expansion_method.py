@@ -73,7 +73,8 @@ sp = saddlepoint_approximation(x, *scipy_moments_to_cumulants(mean=rm[0], varian
 
 # kde of monthly log returns
 # log_returns = process_df.values.flatten()
-monthly_log_returns = process_df.rolling(window=rolling_window).sum().dropna().values.flatten()
+# monthly_log_returns = process_df.rolling(window=rolling_window).sum().dropna().values.flatten()
+monthly_log_returns = process_df.resample('M').sum().values.flatten() # why does this work so much better?
 kde = gaussian_kde(monthly_log_returns)
 kde_values = kde(x)
 
