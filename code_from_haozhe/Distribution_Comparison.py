@@ -77,7 +77,7 @@ plt.plot(x[:q], f_hat_x[:q], label=r'$\hat{f}(x) using\ realized\ cumulants$', l
 # Adding a legend in the upper left corner
 plt.legend(loc='upper left')
 
-plt.savefig('Comparison_Density.pdf') 
+# plt.savefig('Comparison_Density.pdf') 
 plt.show()
 
 
@@ -180,5 +180,5 @@ plt.ylabel('Quantiles of Realized Distribution')
 plt.title('Q-Q Plot: Realized Distribution vs True Distribution')
 plt.legend()
 plt.grid(True)
-plt.savefig('Comparison_QQ.pdf') 
+# plt.savefig('Comparison_QQ.pdf') 
 plt.show()
