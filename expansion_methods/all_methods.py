@@ -25,11 +25,11 @@ def hermite_polynomial(n, x):
     
 def gram_charlier_expansion(x, mean, variance, third_cumulant, fourth_cumulant):
     z = (x - mean) / np.sqrt(variance)
-    return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + third_cumulant/6 * hermite_polynomial(3, z) + fourth_cumulant/24 * hermite_polynomial(4, z))
+    return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + third_cumulant/(6 * variance**1.5) * hermite_polynomial(3, z) + fourth_cumulant/(24 * variance**2) * hermite_polynomial(4, z))
 
 def edgeworth_expansion(x, mean, variance, third_cumulant, fourth_cumulant):
     z = (x - mean) / np.sqrt(variance)
-    return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + third_cumulant/6 * hermite_polynomial(3, z) + fourth_cumulant/24 * hermite_polynomial(4, z) + third_cumulant**2/72 * hermite_polynomial(6, z))
+    return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + third_cumulant/(6 * variance**1.5) * hermite_polynomial(3, z) + fourth_cumulant/(24 * variance**2) * hermite_polynomial(4, z) + (third_cumulant/(variance**1.5))**2/72 * hermite_polynomial(6, z))
 
 def intersection_lines(a,b,c,d):
     x = (d-b)/(a-c)
