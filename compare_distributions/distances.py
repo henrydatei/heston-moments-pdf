@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from simulation.SimEuler import heston_euler
 from simulation.SimHestonQE import Heston_QE
-from code_from_haozhe.RealizedMomentsEstimator_Aggregate_update import rMoments_mvsk
+from code_from_haozhe.RealizedMomentsEstimator_Aggregate_update import rMoments_mvsek
 
 np.random.seed(0)
 
@@ -68,12 +68,12 @@ RM_NP_return = 5    # Neuberger and Payne, 2020, in return form
 technique = RM_NP_return
 rm_qe = []
 for column in df_qe_logreturn.columns:
-    rm_qe.append(rMoments_mvsk(df_qe_logreturn[column], method=technique, days_aggregate=22, m1zero=True, ret_nc_mom=False).to_numpy())
+    rm_qe.append(rMoments_mvsek(df_qe_logreturn[column], method=technique, days_aggregate=22, m1zero=True, ret_nc_mom=False).to_numpy())
 rm_qe = np.squeeze(np.array(rm_qe))
 
 rm_euler = []
 for column in df_euler_logreturn.columns:
-    rm_euler.append(rMoments_mvsk(df_euler_logreturn[column], method=technique, days_aggregate=22, m1zero=True, ret_nc_mom=False).to_numpy())
+    rm_euler.append(rMoments_mvsek(df_euler_logreturn[column], method=technique, days_aggregate=22, m1zero=True, ret_nc_mom=False).to_numpy())
 rm_euler = np.squeeze(np.array(rm_euler))
 
 print(pd.DataFrame(rm_qe).T)
