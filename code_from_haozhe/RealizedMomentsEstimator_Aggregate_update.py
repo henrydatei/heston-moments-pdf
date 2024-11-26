@@ -200,7 +200,7 @@ def rMoments_nc(hfData, method, days_aggregate=22):
     return moments
 
 # Function to compute daily returns and realized moments
-def rMoments(hfData, method, days_aggregate=22, m1zero=True, Sk_out=15, Ku_out=20, ret_nc_mom=False):
+def rMoments_mvsk(hfData, method, days_aggregate=22, m1zero=True, Sk_out=15, Ku_out=20, ret_nc_mom=False):
     #dret = hfData.resample('D').sum()
     moments = rMoments_nc(hfData, method, days_aggregate)
     

@@ -11,7 +11,7 @@ import os
 
 from SimHestonQE import Heston_QE
 from Moments_list import MomentsCIR,getSkFromMoments,getKuFromMoments, MomentsBates
-from RealizedMomentsEstimator_Aggregate_update import rMoments, rMoments_nc
+from RealizedMomentsEstimator_Aggregate_update import rMoments_mvsk, rMoments_nc
 
 # # Check theoretical moments 
 print('*****************************************************Theoretical Moments*****************************************************************')
@@ -66,7 +66,7 @@ def Chunk_RealizedMomentsEstimator(chunk):
     technique = RM_NP_return
     rm = []
     for column in df_logreturn.columns:
-        rm.append(rMoments(df_logreturn[column], method=technique, days_aggregate=22, m1zero=True, ret_nc_mom=True).to_numpy())
+        rm.append(rMoments_mvsk(df_logreturn[column], method=technique, days_aggregate=22, m1zero=True, ret_nc_mom=True).to_numpy())
     rm = np.squeeze(np.array(rm))
 
     return rm

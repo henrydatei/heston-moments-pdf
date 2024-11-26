@@ -6,7 +6,7 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from all_methods import scipy_moments_to_cumulants, gram_charlier_expansion
+from all_methods import scipy_mvsek_to_cumulants, gram_charlier_expansion
 
 # Calculate skewness and kurtosis
 normal_mean, normal_var, normal_skew, normal_exkurt = norm.stats(moments='mvsk')
@@ -23,12 +23,12 @@ print(nct_skew, nct_exkurt)
 x = np.linspace(-5, 5, 1000)
 
 # Apply Gram-Charlier expansion
-normal_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(normal_mean, normal_var, normal_skew, normal_exkurt))
-lognorm_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt))
-t_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(t_mean, t_var, t_skew, t_exkurt))
-nct_expansion = gram_charlier_expansion(x, *scipy_moments_to_cumulants(nct_mean, nct_var, nct_skew, nct_exkurt))
+normal_expansion = gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(normal_mean, normal_var, normal_skew, normal_exkurt))
+lognorm_expansion = gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(lognorm_mean, lognorm_var, lognorm_skew, lognorm_exkurt))
+t_expansion = gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(t_mean, t_var, t_skew, t_exkurt))
+nct_expansion = gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(nct_mean, nct_var, nct_skew, nct_exkurt))
 
-test_cumulants = scipy_moments_to_cumulants(0, 0.0001, 0, 0)
+test_cumulants = scipy_mvsek_to_cumulants(0, 0.0001, 0, 0)
 print(test_cumulants)
 test_expansion = gram_charlier_expansion(x, *test_cumulants)
 

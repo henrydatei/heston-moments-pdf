@@ -9,8 +9,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from simulation.utils import process_to_log_returns
 from simulation.SimHestonQE import Heston_QE
-from code_from_haozhe.RealizedMomentsEstimator_Aggregate_update import rMoments, RM_CL, RM_NP, RM_ORS, RM_ACJV, RM_NP_return
-from expansion_methods.all_methods import scipy_moments_to_cumulants, gram_charlier_expansion, edgeworth_expansion, saddlepoint_approximation
+from code_from_haozhe.RealizedMomentsEstimator_Aggregate_update import rMoments_mvsk, RM_CL, RM_NP, RM_ORS, RM_ACJV, RM_NP_return
+from expansion_methods.all_methods import scipy_mvsek_to_cumulants, gram_charlier_expansion, edgeworth_expansion, saddlepoint_approximation
 
 np.random.seed(0)
 
@@ -52,24 +52,33 @@ process_df = process_to_log_returns(process, start_date, end_date)
 
 # Estimate moments
 technique = RM_NP_return
-rm = []
+mvsk = []
 for column in process_df.columns:
-    rm.append(rMoments(process_df[column], method=technique, days_aggregate=rolling_window, m1zero=True, ret_nc_mom=False).to_numpy())
-rm = np.squeeze(np.array(rm))
-rm = pd.DataFrame(rm).T # each column is a path and each row is a moment (mean, variance, skewness, kurtosis)
-print(rm)
-rm = rm.mean(axis=1) # rowwise means
+    mvsk.append(rMoments_mvsk(process_df[column], method=technique, days_aggregate=rolling_window, m1zero=True, ret_nc_mom=False).to_numpy())
+mvsk = np.squeeze(np.array(mvsk))
+mvsk = pd.DataFrame(mvsk).T # each column is a path and each row is a moment (mean, variance, skewness, kurtosis)
+print(mvsk)
+mvsk = mvsk.mean(axis=1) # rowwise means
 
 # modify variance
 # rm[1] = rm[1]**2
 
-print(rm)
+print(mvsk)
+
+# Calculate cumulants
+cumulants = scipy_mvsek_to_cumulants(mean=mvsk[0], variance=mvsk[1], skewness=mvsk[2], excess_kurtosis=mvsk[3]-3)
+print(cumulants)
+
+print("Haozhe MVSK:", scipy_mvsek_to_cumulants(*[-0.01676743,  0.01647651, -0.19187426,  3.36067764-3]))
+print("Haozhe Cumulants", [-0.01401158, 0.01647651, -0.0006112, 0.00093973])
+
+cumulants = [-0.01401158, 0.01647651, -0.0006112, 0.00093973]
 
 # Expansion methods
 x = np.linspace(-1, 1, 1000)
-gc = gram_charlier_expansion(x, *scipy_moments_to_cumulants(mean=rm[0], variance=rm[1], skewness=rm[2], excess_kurtosis=rm[3]-3))
-ew = edgeworth_expansion(x, *scipy_moments_to_cumulants(mean=rm[0], variance=rm[1], skewness=rm[2], excess_kurtosis=rm[3]-3))
-sp = saddlepoint_approximation(x, *scipy_moments_to_cumulants(mean=rm[0], variance=rm[1], skewness=rm[2], excess_kurtosis=rm[3]-3))
+gc = gram_charlier_expansion(x, *cumulants)
+ew = edgeworth_expansion(x, *cumulants)
+sp = saddlepoint_approximation(x, *cumulants)
 
 # kde of monthly log returns
 # log_returns = process_df.values.flatten()

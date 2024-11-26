@@ -12,7 +12,7 @@ Z_ROOT2 = np.real(cmath.sqrt(5 - (5**(2/3) * (1 - i * np.sqrt(3)) / (2 * (2 + i 
 
 Z_ROOT3 = np.real(cmath.sqrt(5 + (10**(2/3) / (2 + i * np.sqrt(6))**(1/3)) + ((10 * (2 + i * np.sqrt(6)))**(1/3))))
 
-def scipy_moments_to_cumulants(mean, variance, skewness, excess_kurtosis):
+def scipy_mvsek_to_cumulants(mean, variance, skewness, excess_kurtosis):
     return mean, variance, skewness*variance**1.5, excess_kurtosis*variance**2
 
 def hermite_polynomial(n, x):

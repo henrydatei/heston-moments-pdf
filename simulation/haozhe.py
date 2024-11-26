@@ -8,7 +8,7 @@ from scipy.stats import skew, kurtosis
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from SimHestonQE import Heston_QE
-from code_from_haozhe.RealizedMomentsEstimator_Aggregate_update import rMoments
+from code_from_haozhe.RealizedMomentsEstimator_Aggregate_update import rMoments_mvsk
 from moments.ACJV_moments import realized_daily_variance, realized_daily_skewness, realized_daily_kurtosis, realized_daily_mean, realized_daily_skewness_2, realized_daily_kurtosis_2
 from moments.CL_moments import realized_variance, realized_skewness, realized_kurtosis, realized_mean, realized_third_moment, realized_fourth_moment
 
@@ -59,7 +59,7 @@ RM_NP_return = 5    # Neuberger and Payne, 2020, in return form
 technique = RM_CL
 rm = []
 for column in df_logreturn.columns:
-    rm.append(rMoments(df_logreturn[column], method=technique, days_aggregate=22, m1zero=True, ret_nc_mom=True).to_numpy())
+    rm.append(rMoments_mvsk(df_logreturn[column], method=technique, days_aggregate=22, m1zero=True, ret_nc_mom=True).to_numpy())
 rm = np.squeeze(np.array(rm))
 
 print(pd.DataFrame(rm).T)
