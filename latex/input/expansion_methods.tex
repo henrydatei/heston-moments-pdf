@@ -1,6 +1,41 @@
 \section{Expansion Methods}
+- expansion methods are series that approximate a probability density function
+- usually they are not true densities, since they can go below zero for certain parameters
+- for some parameters, they are densities, we'll explore this in the following sections and how to get from a parameter set which gives not a density to a parameter set which gives a density
 
 \subsection{Gram-Charlier Expansion}
+- entdeckt von Gram 1883 und Charlier 1914
+- zwei Arten von Serien: Gram-Charlier A und Gram-Charlier B:
+\begin{align}
+    f_{GC,A} &\approx f(x) + \sum_{k=3}^n a_k f^{(k)}(x) \notag \\
+    f_{GC,B} &\approx \psi(x)\sum_{m=0}^n b_mg_m(x) \notag
+\end{align}
+- auch wenn die Expansion für jede Dichte $f$ und $\psi$ geht, so ist für den Typ A $f$ die Dichte der Standardnormalverteilung
+\begin{align}
+    f(x) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2}{2}\right) \notag
+\end{align}
+und für den Typ B $\psi$ die Wahrscheinlichkeitsfunktion der Poisson-Verteilung (Mitropol'skii 2020)
+\begin{align}
+    \psi(x) = \frac{\lambda^x}{x!}\exp(-\lambda) \notag
+\end{align}
+- $f^{(k)}$ ist die $k$-te Ableitung der Dichte $f$ und es existieren Polynome $H_k$, die folgende Gleichung erfüllen:
+\begin{align}
+    f^{(k)}(x) = (-1)^k f(x)H_k(x) \notag
+\end{align}
+- Die Polynome $H_k$ sind als Hermite-Polynome (Laplace 1811, Laplace 1812, Chebychef 1860, Hermite 1864) bekannt und haben folgende Eigenschaften (Abramowitz & Stegun 1968, p. 771ff):
+\begin{align}
+    H_{n+1} &= x\cdot H_n(x) - H'_n(x) \notag \\
+    H'_n(x) &= nH_{n-1}(x) \notag \\
+\end{align}
+Damit lassen sich die Hermite-Polynome rekursiv berechnen und die ersten Polynome sind:
+\begin{align}
+    H_{n+1}(x) &= x\cdot H_n(x) - nH_{n-1}(x) \notag \\
+    H_0(x) &= 1 \notag \\
+    H_1(x) &= x \notag \\
+    H_2(x) &= x^2 - 1 \notag \\
+    H_3(x) &= x^3-3x \notag \\
+    H_4(x) &= x^4-6x^2+3 \notag \\
+\end{align}
 
 \subsection{Edgeworth Expansion}
 
