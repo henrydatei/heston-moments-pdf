@@ -97,8 +97,7 @@ def transform_skew_exkurt_into_positivity_region(skew, exkurt, intersections):
 
 def gram_charlier_expansion_positivity_constraint(x, mean, variance, skewness, exkurt):
     initial_params = [mean, variance, skewness, exkurt]
-    bounds = [(min(x)-1, max(x)+1), (0.1, 10), (-10, 10), (-10, 10)]
-    result = minimize(neg_log_likelihood_gc, initial_params, args=(x), method='Powell', bounds=bounds)
+    result = minimize(neg_log_likelihood_gc, initial_params, args=(x), method='Powell')
     
     if result.success:
         mu, sigma2, skew, exkurt = result.x
