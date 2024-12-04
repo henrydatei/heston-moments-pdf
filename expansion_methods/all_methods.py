@@ -65,35 +65,35 @@ def logistic_map(x, a,b):
 
 def neg_log_likelihood_gc(params, data):
     mu, variance, s, k = params
-    s, k = transform_skew_kurt_into_positivity_region(s, k, get_intersections_gc())
+    s, k = transform_skew_exkurt_into_positivity_region(s, k, get_intersections_gc())
     likelihoods = gram_charlier_expansion(data, mu, variance, s, k)
     return -np.sum(np.log(likelihoods))
 
-def transform_skew_kurt_into_positivity_region(skew, kurt, intersections):
+def transform_skew_exkurt_into_positivity_region(skew, exkurt, intersections):
     skew_sign = np.sign(skew)
     skew = abs(skew)
-    new_kurt = logistic_map(kurt, 0, 4)
+    new_exkurt = logistic_map(exkurt, 0, 4)
 
-    if new_kurt == 4:
+    if new_exkurt == 4:
         return 0, 4
     
     # find i such that intersections[i][0] < new_kurt <= intersections[i+1][0]
     for i in range(len(intersections)-1):
-        if intersections[i][0] < new_kurt <= intersections[i+1][0]:
+        if intersections[i][0] < new_exkurt <= intersections[i+1][0]:
             break
 
     k_i, s_i = intersections[i]
     k_i2, s_i2 = intersections[i+1]
     a_i = (s_i * k_i2 - k_i * s_i2)/(k_i2 - k_i)
     b_i = (s_i2 - s_i)/(k_i2 - k_i)
-    s_u = a_i + b_i * new_kurt
+    s_u = a_i + b_i * new_exkurt
     s_l = -s_u
     # print(i, k_i, s_i, k_i2, s_i2, a_i, b_i, s_u, s_l)
 
     new_skew = logistic_map(skew, s_l, s_u)
     new_skew = skew_sign * new_skew
 
-    return new_skew, new_kurt
+    return new_skew, new_exkurt
 
 def gram_charlier_expansion_positivity_constraint(x, mean, variance, skewness, exkurt):
     initial_params = [mean, variance, skewness, exkurt]
@@ -102,8 +102,8 @@ def gram_charlier_expansion_positivity_constraint(x, mean, variance, skewness, e
     
     if result.success:
         mu, sigma2, skew, exkurt = result.x
-        skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, get_intersections_gc())
-        # print(f"Fitted parameters: mu = {mu:.4f}, sigma^2 = {sigma2:.4f}, skew = {skew:.4f}, exkurt = {exkurt:.4f}")
+        skew, exkurt = transform_skew_exkurt_into_positivity_region(skew, exkurt, get_intersections_gc())
+        print(f"Fitted parameters: mu = {mu:.4f}, sigma^2 = {sigma2:.4f}, skew = {skew:.4f}, exkurt = {exkurt:.4f}")
         # print(f"Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], x):.4f}, Log-likelihood initial: {-neg_log_likelihood([mean, variance, skewness, exkurt], x):.4f}")
         expansion = gram_charlier_expansion(x, mu, sigma2, skew, exkurt)
     else:
@@ -167,7 +167,7 @@ def get_intersections_ew(STEPS = 5000, zroot1 = Z_ROOT1, zroot2 = Z_ROOT2, zroot
             
 def neg_log_likelihood_ew(params, data):
     mu, variance, s, k = params
-    s, k = transform_skew_kurt_into_positivity_region(s, k, get_intersections_ew())
+    s, k = transform_skew_exkurt_into_positivity_region(s, k, get_intersections_ew())
     likelihoods = edgeworth_expansion(data, mu, variance, s, k)
     return -np.sum(np.log(likelihoods))
 
@@ -178,7 +178,7 @@ def edgeworth_expansion_positivity_constraint(x, mean, variance, skewness, exkur
     
     if result.success:
         mu, sigma2, skew, exkurt = result.x
-        skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, get_intersections_ew())
+        skew, exkurt = transform_skew_exkurt_into_positivity_region(skew, exkurt, get_intersections_ew())
         # print(f"Fitted parameters: mu = {mu:.4f}, sigma^2 = {sigma2:.4f}, skew = {skew:.4f}, exkurt = {exkurt:.4f}")
         # print(f"Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], x):.4f}, Log-likelihood initial: {-neg_log_likelihood([mean, variance, skewness, exkurt], x):.4f}")
         expansion = edgeworth_expansion(x, mu, sigma2, skew, exkurt)

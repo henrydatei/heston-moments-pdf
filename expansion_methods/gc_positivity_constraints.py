@@ -95,8 +95,9 @@ for method in [
     res = minimize(neg_log_likelihood_gc, initial_params, args=(normal_data), method=method)
     mu, sigma2, skew, exkurt = res.x
     print(f"{method}: Log-likelihood fitted: {-neg_log_likelihood_gc([mu, sigma2, skew, exkurt], normal_data):.4f}")
-    skew, exkurt = transform_skew_kurt_into_positivity_region(skew, exkurt, get_intersections_gc())
-    plt.plot(x, gram_charlier_expansion(x, mu, sigma2, skew, exkurt), label=method)
+    skew, exkurt = transform_skew_exkurt_into_positivity_region(skew, exkurt, get_intersections_gc())
+    print(f"Fitted parameters: {mu:.4f}, {sigma2:.4f}, {skew:.4f}, {exkurt:.4f}")
+    plt.plot(x, gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(mu, sigma2, skew, exkurt)), label=method)
 
 plt.title('Optimization Methods Comparison')   
 plt.legend()
