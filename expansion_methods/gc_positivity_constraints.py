@@ -7,19 +7,16 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from all_methods import neg_log_likelihood_gc, get_intersections_gc, transform_skew_kurt_into_positivity_region, gram_charlier_expansion_positivity_constraint, gram_charlier_expansion
+from all_methods import neg_log_likelihood_gc, get_intersections_gc, transform_skew_exkurt_into_positivity_region, gram_charlier_expansion_positivity_constraint, gram_charlier_expansion, scipy_mvsek_to_cumulants
 
 # plot the positivity boundary
-# plt.plot([x[0] for x in intersections], [x[1] for x in intersections], linestyle = 'None', marker = 'o', markersize = 2, color = 'r')
-# plt.plot([lognorm_exkurt], [lognorm_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'b')
-# plt.plot([t_exkurt], [t_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'g')
-# plt.plot([nct_exkurt], [nct_skew], linestyle = 'None', marker = 'o', markersize = 5, color = 'y')
-# plt.title('Positivity Boundary of Gram-Charlier Density Function')
-# plt.xlabel('Kurtosis')
-# plt.ylabel('Skewness')
-# plt.legend(['Positivity Boundary', 'Log-Normal', 't', 'NCT'])
-# plt.tight_layout()
-# plt.show()
+intersections = get_intersections_gc()
+plt.plot([x[0] for x in intersections], [x[1] for x in intersections], linestyle = 'None', marker = 'o', markersize = 2, color = 'r')
+plt.title('Positivity Boundary of Gram-Charlier Density Function')
+plt.xlabel('Excess Kurtosis')
+plt.ylabel('Skewness')
+plt.tight_layout()
+plt.show()
 
 # Define x range for plotting
 x = np.linspace(-5, 5, 1000)
