@@ -21,16 +21,6 @@ plt.show()
 # Define x range for plotting
 x = np.linspace(-5, 5, 1000)
 
-# scipy set seed
-np.random.seed(0)
-
-# Apply Gram-Charlier expansion with MLE
-N_SAMPLES = 1000
-normal_data = norm.rvs(size=N_SAMPLES)
-lognorm_data = lognorm.rvs(0.5, size=N_SAMPLES)
-t_data = t.rvs(5, size=N_SAMPLES)
-nct_data = nct.rvs(5, 0.5, size=N_SAMPLES)
-
 normal_expansion = gram_charlier_expansion_positivity_constraint(x, *norm.stats(moments='mvsk'))
 lognorm_expansion = gram_charlier_expansion_positivity_constraint(x, *lognorm.stats(0.5, moments = 'mvsk'))
 t_expansion = gram_charlier_expansion_positivity_constraint(x, *t.stats(5, moments = 'mvsk'))
@@ -43,34 +33,38 @@ plt.figure(figsize=(8, 7))
 plt.subplot(4, 1, 1)
 plt.plot(x, norm.pdf(x), 'r--', label='Normal PDF')
 plt.plot(x, normal_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
-plt.title(f'Normal Distribution and Positivity Gram-Charlier Expansion (n = {N_SAMPLES})')
+plt.title(f'Normal Distribution and Positivity Gram-Charlier Expansion')
 plt.legend()
 
 # Plot Skewed distribution and its expansion
 plt.subplot(4, 1, 2)
 plt.plot(x, lognorm.pdf(x, 0.5), 'r--', label='Log-Normal PDF')
 plt.plot(x, lognorm_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
-plt.title(f'Log-Normal Distribution and Positivity Gram-Charlier Expansion (n = {N_SAMPLES})')
+plt.title(f'Log-Normal Distribution and Positivity Gram-Charlier Expansion')
 plt.legend()
 
 # Plot Heavy-tailed distribution and its expansion
 plt.subplot(4, 1, 3)
 plt.plot(x, t.pdf(x, 5), 'r--', label='t PDF')
 plt.plot(x, t_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
-plt.title(f't Distribution and Positivity Gram-Charlier Expansion (n = {N_SAMPLES})')
+plt.title(f't Distribution and Positivity Gram-Charlier Expansion')
 plt.legend()
 
 # Plot Non-central t distribution and its expansion
 plt.subplot(4, 1, 4)
 plt.plot(x, nct.pdf(x, 5, 0.5), 'r--', label='NCT PDF')
 plt.plot(x, nct_expansion, 'b-', label='Positivity Gram-Charlier Expansion')
-plt.title(f'Non-central t Distribution and Positivity Gram-Charlier Expansion (n = {N_SAMPLES})')
+plt.title(f'Non-central t Distribution and Positivity Gram-Charlier Expansion')
 plt.legend()
 
 plt.tight_layout()
 plt.show()
 
 # Solver Test
+
+np.random.seed(0)
+normal_data = norm.rvs(size=1000)
+
 initial_params = [1,1,1,1] # mu, sigma2, skew, exkurt
 print(f'Log-likelihood initial: {-neg_log_likelihood_gc(initial_params, normal_data)}')
 plt.plot(x, gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(*initial_params)), 'r--', label='Initial')

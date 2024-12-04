@@ -96,19 +96,8 @@ def transform_skew_exkurt_into_positivity_region(skew, exkurt, intersections):
     return new_skew, new_exkurt
 
 def gram_charlier_expansion_positivity_constraint(x, mean, variance, skewness, exkurt):
-    initial_params = [mean, variance, skewness, exkurt]
-    result = minimize(neg_log_likelihood_gc, initial_params, args=(x), method='Powell')
-    
-    if result.success:
-        mu, sigma2, skew, exkurt = result.x
-        skew, exkurt = transform_skew_exkurt_into_positivity_region(skew, exkurt, get_intersections_gc())
-        print(f"Fitted parameters: mu = {mu:.4f}, sigma^2 = {sigma2:.4f}, skew = {skew:.4f}, exkurt = {exkurt:.4f}")
-        # print(f"Log-likelihood fitted: {-neg_log_likelihood([mu, sigma2, skew, exkurt], x):.4f}, Log-likelihood initial: {-neg_log_likelihood([mean, variance, skewness, exkurt], x):.4f}")
-        expansion = gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(mu, sigma2, skew, exkurt))
-        print(f"Cumulants: {scipy_mvsek_to_cumulants(mu, sigma2, skew, exkurt)}")
-    else:
-        print("Optimization failed.")
-        expansion = [0] * len(x)
+    new_skew, new_exkurt = transform_skew_exkurt_into_positivity_region(skewness, exkurt, get_intersections_gc())
+    expansion = gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(mean, variance, new_skew, new_exkurt))
         
     return expansion
 
