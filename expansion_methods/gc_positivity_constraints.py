@@ -71,10 +71,10 @@ plt.tight_layout()
 plt.show()
 
 # Solver Test
-initial_params = [1,1,1,1]
+initial_params = [1,1,1,1] # mu, sigma2, skew, exkurt
 print(f'Log-likelihood initial: {-neg_log_likelihood_gc(initial_params, normal_data)}')
-plt.plot(x, gram_charlier_expansion(x, *initial_params), 'r--', label='Initial')
-plt.plot(x, gram_charlier_expansion(x, *norm.stats(moments = 'mvsk')), 'g--', label='True')
+plt.plot(x, gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(*initial_params)), 'r--', label='Initial')
+plt.plot(x, gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(*norm.stats(moments = 'mvsk'))), 'g--', label='True')
 
 for method in [
     'Nelder-Mead', 
