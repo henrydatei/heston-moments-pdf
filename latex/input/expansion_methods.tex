@@ -68,6 +68,8 @@ wobei $\mu_i$ die zentralen Momente der zu approximierenden Verteilung sind und 
 \end{align}
 Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockinger (2001) ist, dass diese Gleichung die Form $\gamma_1 = a(z)\cdot\gamma_2^* + b(z)$ hat. For two $z$, $z_1$ and $z_2$, we get two lines $\gamma_1 = a(z_1)\cdot \gamma_2^* + b(z_1)$ and $\gamma_1 = a(z_2)\cdot \gamma_2^* + b(z_2)$. The intersection of this lines is one point of the boundary if $z_1$ and $z_2$ are infinitesimal close together. Two lines $f(x) = a+bx$ and $g(x) = cx+d$ intersect at $x = \frac{d-b}{a-c}$ and $y = \frac{ad-bc}{a-c}$ and iterating from $z_1=-10$ to $z_{1000}=-\sqrt{3}$ for 1000 steps (stepsize $\Delta z$), calculating $a(z_i)$, $b(z_i)$, $a(z_i+\Delta z)$ and $b(z_i+\Delta z)$, find intersection gives approximately a point $(\gamma_1, \gamma_2^*)$ of the boundary. For completeness adding to more points $(0,4)$ and $(0,0)$ (see \ref{fig:gram_charlier_boundary}).
 
+%TODO: Diagramm mit s(k, z) linien? 
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{img/gc_positivity_boundary.png}
@@ -77,6 +79,8 @@ Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockin
 
 - Using a bisection algorithm and a logisitc map, they make the boundary piecewise linear and find for each unconstraint pair $(\tilde{\gamma_1}, \tilde{\gamma_2^*})\in\mathbb{R}^2$ a constraint pair in the positivity region $(\gamma_1, \gamma_2^*)\in \mathcal{D}$.
 - Finding a closed form expression for the boundary is difficult, even with 24 hours on a high performancce computer and Python's sympy library I was not able to find one.
+
+%TODO: Vergleich unconstraint & constraint
 
 \subsection{Edgeworth Expansion}
 - beschrieben von Edgeworth 1907, er schlägt unter anderem vor, die Approximation bis zum 6. Term zu berechnen um das oben angesprochene Problem der asympotischen Expansion zu umgehen. Eine formelle Darstellung der ersten Terme findet sich z.B. in Brenn & Anfinsen (2017):
@@ -88,7 +92,7 @@ In dieser Arbeit nur Betrachtung der ersten 4 Cumulants, daher reduziert sich de
     f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_3^2}{72\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)\right] \notag
 \end{align}
 
-- Positivity constraints
+%TODO: Positivity constraints
 
 \subsection{Cornish-Fisher Expansion}
 
