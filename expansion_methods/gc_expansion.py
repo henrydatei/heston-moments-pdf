@@ -64,11 +64,11 @@ plt.title('Non-central t Distribution and Gram-Charlier Expansion')
 plt.legend()
 
 # Plot test distribution expansion
-plt.subplot(5, 1, 5)
-plt.plot(x, norm.pdf(x), 'r--', label='Normal PDF')
-plt.plot(x, test_expansion, 'b-', label='Gram-Charlier Expansion')
-plt.title('Normal Distribution and Test Gram-Charlier Expansion')
-plt.legend()
+# plt.subplot(5, 1, 5)
+# plt.plot(x, norm.pdf(x), 'r--', label='Normal PDF')
+# plt.plot(x, test_expansion, 'b-', label='Gram-Charlier Expansion')
+# plt.title('Normal Distribution and Test Gram-Charlier Expansion')
+# plt.legend()
 
 plt.tight_layout()
 plt.show()
