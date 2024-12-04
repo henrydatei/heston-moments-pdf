@@ -25,7 +25,7 @@ x = np.linspace(-5, 5, 1000)
 np.random.seed(0)
 
 # Apply Gram-Charlier expansion with MLE
-N_SAMPLES = 1000000
+N_SAMPLES = 1000
 normal_data = norm.rvs(size=N_SAMPLES)
 lognorm_data = lognorm.rvs(0.5, size=N_SAMPLES)
 t_data = t.rvs(5, size=N_SAMPLES)
