@@ -86,7 +86,22 @@ Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockin
 - Using a bisection algorithm and a logisitc map, they make the boundary piecewise linear and find for each unconstraint pair $(\tilde{\gamma_1}, \tilde{\gamma_2^*})\in\mathbb{R}^2$ a constraint pair in the positivity region $(\gamma_1, \gamma_2^*)\in \mathcal{D}$.
 - Finding a closed form expression for the boundary is difficult, even with 24 hours on a high performancce computer and Python's sympy library I was not able to find one.
 
-%TODO: Vergleich unconstraint & constraint
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|l|l|l|l|l|l|l|l}
+        Distribution & Parameters & $\mu$ & $\sigma^2$ & $\kappa_3$ & $\gamma_1$ & $\kappa_4$ & $\gamma_2^*$ \\
+        \hline
+        Standardnormal & $\mu=0$, $\sigma=1$ & 0 & 1 & 0 & 0 & 0 & 0 \\
+        Lognormal & $\mu=0$, $\sigma = 0.5$ & 1.1331 & 0.3647 & 0.3855 & 1.7502 & 0.7845 & 5.8984 \\
+        t-Distribution & \\
+        Non-Central t-Distribution \\
+        
+    \end{tabular}
+    \caption{Distribution parameters and theoretical moments and cumulants.}
+    \label{table:distributions_theoretical_moments}
+\end{table}
+
+- Vergleich von constraint und unconstraint Parametern und dem Einfluss auf die Gram-Charlier Expansion. Test von 4 Verteilungen: Standardnormal, lognormal, t-Verteilung und Non-Central-T-Verteilung. Die Parameter und daraus resultierenden theoretischen Momente und Cumulants sind in Tabelle \ref{table:distributions_theoretical_moments} angegeben.
 
 \subsection{Edgeworth Expansion}
 - beschrieben von Edgeworth 1907, er schlägt unter anderem vor, die Approximation bis zum 6. Term zu berechnen um das oben angesprochene Problem der asympotischen Expansion zu umgehen. Eine formelle Darstellung der ersten Terme findet sich z.B. in Brenn & Anfinsen (2017):
