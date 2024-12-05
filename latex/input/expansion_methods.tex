@@ -123,10 +123,29 @@ Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockin
 \end{align}
 In dieser Arbeit nur Betrachtung der ersten 4 Cumulants, daher reduziert sich der Ausdruck auf:
 \begin{align}
-    f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_3^2}{72\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)\right] \notag
+    \label{eq:ew_expansion_short}
+    f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_3^2}{72\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)\right]
 \end{align}
-
-%TODO: Positivity constraints
+- Using same method as Jondeau & Rockinger (2001) to find the positivity boundary of the Edgeworth Expansion, we have to rewrite \eqref{eq:ew_expansion_short} with $z = \frac{x-\mu}{\sigma}$:
+\begin{align}
+    \label{eq:ew_expansion_s_ek}
+    f(x)_{GC,A} \approx \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{z^2}{2}\right) \left[1 + \frac{\gamma_1}{6}H_3(z) + \frac{\gamma_2^*}{24}H_4(z) + \frac{\gamma_1^2}{72}He_6(z)\right]
+\end{align}
+And then solve the equation $1 + \frac{\gamma_1}{6}He_3(z) + \frac{\gamma_2^*}{24}He_4(z) + \frac{\gamma_1^2}{72}He_6(z)=0$ for $\gamma_1$:
+\begin{align}
+    0 &= 1+\frac{\gamma_1}{6}He_3(z) + \frac{\gamma_2^*}{24}He_4(z) + \frac{\gamma_1^2}{72}He_6(z) \\
+    0 &= \frac{72}{He_6(z)} + 12\gamma_1\frac{He_3(z)}{He_6(z)} + 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + \gamma_1^2 \notag \\
+    -\frac{72}{He_6(z)} - 3\gamma_2^*\frac{He_4(z)}{He_6(z)} &=  12\gamma_1\frac{He_3(z)}{He_6(z)} + \gamma_1^2 \notag \\
+    -\frac{72}{He_6(z)} - 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2} &= 12\gamma_1\frac{He_3(z)}{He_6(z)} + \gamma_1^2 + 36\frac{He_3(z)^2}{He_6(z)^2} \notag \\
+    -\frac{72}{He_6(z)} - 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2} &= \left(\gamma_1+6\frac{He_3(z)}{He_6(z)}\right)^2 \notag \\
+    \gamma_1 &= \pm\sqrt{-\frac{72}{He_6(z)} - 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2}} - 6\frac{He_3(z)}{He_6(z)} \notag
+\end{align} %TODO: drüberlesen, ob alle s durch gamma_1 und alle k durch gamma_2^* ersetzt wurden
+This holds as longs as $He_6(z)\neq 0$ which has 6 solutions:
+\begin{align}
+    z_{1/2} &= \pm \sqrt{5-\frac{5^{2/3}\left(1+i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1-i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 0.6167\\
+    z_{3/4} &= \pm \sqrt{5-\frac{5^{2/3}\left(1-i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1+i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 1.8892 \\
+    z_{5/6} &= \pm \sqrt{5+\frac{10^{2/3}}{\sqrt[3]{2+i\sqrt{6}}} + \sqrt[3]{10\left(2+i\sqrt{6}\right)}} = \pm 3.3243 \\
+\end{align}
 
 \subsection{Cornish-Fisher Expansion}
 
