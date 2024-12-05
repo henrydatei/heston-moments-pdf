@@ -66,9 +66,15 @@ wobei $\mu_i$ die zentralen Momente der zu approximierenden Verteilung sind und 
     \gamma_1 &= -\frac{6}{He_3(z)} - \frac{He_4(z)}{4\cdot He_3(z)}\gamma_2^* \notag \\
     \gamma_1 &= \frac{z^4-6z^2+3}{12z-4z^3}\cdot \gamma_2^* + \frac{24}{12z-4z^3} \notag
 \end{align}
-Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockinger (2001) ist, dass diese Gleichung die Form $\gamma_1 = a(z)\cdot\gamma_2^* + b(z)$ hat. For two $z$, $z_1$ and $z_2$, we get two lines $\gamma_1 = a(z_1)\cdot \gamma_2^* + b(z_1)$ and $\gamma_1 = a(z_2)\cdot \gamma_2^* + b(z_2)$. The intersection of this lines is one point of the boundary if $z_1$ and $z_2$ are infinitesimal close together. Two lines $f(x) = a+bx$ and $g(x) = cx+d$ intersect at $x = \frac{d-b}{a-c}$ and $y = \frac{ad-bc}{a-c}$ and iterating from $z_1=-10$ to $z_{1000}=-\sqrt{3}$ for 1000 steps (stepsize $\Delta z$), calculating $a(z_i)$, $b(z_i)$, $a(z_i+\Delta z)$ and $b(z_i+\Delta z)$, find intersection gives approximately a point $(\gamma_1, \gamma_2^*)$ of the boundary. For completeness adding to more points $(0,4)$ and $(0,0)$ (see \ref{fig:gram_charlier_boundary}).
+Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockinger (2001) ist, dass diese Gleichung die Form $\gamma_1 = a(z)\cdot\gamma_2^* + b(z)$ hat. For two $z$, $z_1$ and $z_2$, we get two lines $\gamma_1 = a(z_1)\cdot \gamma_2^* + b(z_1)$ and $\gamma_1 = a(z_2)\cdot \gamma_2^* + b(z_2)$. The intersection of this lines is one point of the boundary if $z_1$ and $z_2$ are infinitesimal close together (see \ref{fig:gram_charlier_boundary_lines_20_vs_1000}). Two lines $f(x) = a+bx$ and $g(x) = cx+d$ intersect at $x = \frac{d-b}{a-c}$ and $y = \frac{ad-bc}{a-c}$ and iterating from $z_1=-10$ to $z_{1000}=-\sqrt{3}$ for 1000 steps (stepsize $\Delta z$), calculating $a(z_i)$, $b(z_i)$, $a(z_i+\Delta z)$ and $b(z_i+\Delta z)$, find intersection gives approximately a point $(\gamma_1, \gamma_2^*)$ of the boundary. For completeness adding to more points $(0,4)$ and $(0,0)$ (see \ref{fig:gram_charlier_boundary}).
 
-%TODO: Diagramm mit s(k, z) linien? 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/gc_positivity_boundary_lines_20.png.png}
+    \includegraphics[width=0.4\textwidth]{img/gc_positivity_boundary_lines_1000.png}
+    \caption{Boundary lines of the positivity region of the Gram-Charlier Expansion. The left image shows 20 lines, the right image shows 1000 lines. The red dots are the boundary points. The boundary is symmetric to the x-axis.}
+    \label{fig:gram_charlier_boundary_lines_20_vs_1000}
+\end{figure}
 
 \begin{figure}[h]
     \centering
