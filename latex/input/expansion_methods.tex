@@ -70,7 +70,7 @@ Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockin
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth]{img/gc_positivity_boundary_lines_20.png.png}
+    \includegraphics[width=0.4\textwidth]{img/gc_positivity_boundary_lines_20.png}
     \includegraphics[width=0.4\textwidth]{img/gc_positivity_boundary_lines_1000.png}
     \caption{Boundary lines of the positivity region of the Gram-Charlier Expansion. The left image shows 20 lines, the right image shows 1000 lines. The red dots are the boundary points. The boundary is symmetric to the x-axis.}
     \label{fig:gram_charlier_boundary_lines_20_vs_1000}
@@ -93,15 +93,28 @@ Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockin
         \hline
         Standardnormal & $\mu=0$, $\sigma=1$ & 0 & 1 & 0 & 0 & 0 & 0 \\
         Lognormal & $\mu=0$, $\sigma = 0.5$ & 1.1331 & 0.3647 & 0.3855 & 1.7502 & 0.7845 & 5.8984 \\
-        t-Distribution & \\
-        Non-Central t-Distribution \\
-        
+        t-Distribution & $\nu=5$ & 0 & 1.6667 & 0 & 0 & 16.6667 & 6 \\
+        Non-Central t-Distribution & $\nu=5, \mu=0.5$ & 0.5947 & 1.7297 & 1.5357 & 0.6751 & 21.5969 & 7.2189
     \end{tabular}
     \caption{Distribution parameters and theoretical moments and cumulants.}
     \label{table:distributions_theoretical_moments}
 \end{table}
 
-- Vergleich von constraint und unconstraint Parametern und dem Einfluss auf die Gram-Charlier Expansion. Test von 4 Verteilungen: Standardnormal, lognormal, t-Verteilung und Non-Central-T-Verteilung. Die Parameter und daraus resultierenden theoretischen Momente und Cumulants sind in Tabelle \ref{table:distributions_theoretical_moments} angegeben.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/gc_expansion.png}
+    \caption{Gram-Charlier Expansion of different distributions}
+    \label{fig:gc_expansion}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/gc_positivity_expansion.png}
+    \caption{Gram-Charlier Expansion with positivity constraints of different distributions}
+    \label{fig:gc_positivity_expansion}
+\end{figure}
+
+- Vergleich von constraint und unconstraint Parametern und dem Einfluss auf die Gram-Charlier Expansion. Test von 4 Verteilungen: Standardnormal, lognormal, t-Verteilung und Non-Central-T-Verteilung. Die Parameter und daraus resultierenden theoretischen Momente und Cumulants sind in Tabelle \ref{table:distributions_theoretical_moments} angegeben. Die Ergebnisse sind in Abbildung \ref{fig:gc_expansion} und Abbildung \ref{fig:gc_positivity_expansion} dargestelt. Man sieht sehr deutlich dass die positivity constraints notwendig sind, diese aber auch die Expansion verzerren, auch wenn, wie bei der Standardnormalverteilung, keine constraints notwendig gewesen wären. insbesondere hier wird durch die logisitic map eine Excess Kurtosis von 0 auf den Wert 2 gebracht, sodass das unconstrainte Paar $(\tilde{\gamma_1}, \tilde{\gamma_2^*}) = (0,0)$ zum constrainten Paar $(\gamma_1, \gamma_2^*) = (0,2)$ wird.
 
 \subsection{Edgeworth Expansion}
 - beschrieben von Edgeworth 1907, er schlägt unter anderem vor, die Approximation bis zum 6. Term zu berechnen um das oben angesprochene Problem der asympotischen Expansion zu umgehen. Eine formelle Darstellung der ersten Terme findet sich z.B. in Brenn & Anfinsen (2017):
