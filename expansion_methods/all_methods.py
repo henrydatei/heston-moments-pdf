@@ -48,6 +48,10 @@ def get_positivity_boundary_lines(z):
     d = -24/(z**4 - 6*z**2 + 3)
     return a, b, c, d
 
+def linear_boundary_lines(z, k):
+    a, b, _, _ = get_positivity_boundary_lines(z)
+    return a*k + b
+
 def get_intersections_gc(STEPS = 1000, Z_START = -10, Z_END = -np.sqrt(3)):
     all_z, stepsize = np.linspace(Z_START, Z_END, STEPS, retstep=True)
     intersections = [(4,0), (0,0)]

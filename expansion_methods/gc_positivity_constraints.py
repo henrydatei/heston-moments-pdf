@@ -7,7 +7,20 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from all_methods import neg_log_likelihood_gc, get_intersections_gc, transform_skew_exkurt_into_positivity_region, gram_charlier_expansion_positivity_constraint, gram_charlier_expansion, scipy_mvsek_to_cumulants
+from all_methods import neg_log_likelihood_gc, get_intersections_gc, transform_skew_exkurt_into_positivity_region, gram_charlier_expansion_positivity_constraint, gram_charlier_expansion, scipy_mvsek_to_cumulants, linear_boundary_lines
+
+# Plot lines
+for z in np.linspace(-10, -np.sqrt(3), 1000):
+    plt.plot(np.linspace(-10, 10, 1000), linear_boundary_lines(z, np.linspace(-10, 10, 1000)), color='black')
+intersections = get_intersections_gc()
+plt.plot([x[0] for x in intersections], [x[1] for x in intersections], linestyle = 'None', marker = 'o', markersize = 1, color = 'r')
+plt.xlim(-1, 5)
+plt.ylim(0, 2)
+plt.xlabel('Excess Kurtosis')
+plt.ylabel('Skewness')
+plt.title('Boundary Lines of Positivity Region')
+plt.tight_layout()
+plt.show()
 
 # plot the positivity boundary
 intersections = get_intersections_gc()
