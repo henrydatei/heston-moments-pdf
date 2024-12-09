@@ -142,10 +142,77 @@ And then solve the equation $1 + \frac{\gamma_1}{6}He_3(z) + \frac{\gamma_2^*}{2
 \end{align} %TODO: drüberlesen, ob alle s durch gamma_1 und alle k durch gamma_2^* ersetzt wurden
 This holds as longs as $He_6(z)\neq 0$ which has 6 solutions:
 \begin{align}
-    z_{1/2} &= \pm \sqrt{5-\frac{5^{2/3}\left(1+i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1-i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 0.6167\\
-    z_{3/4} &= \pm \sqrt{5-\frac{5^{2/3}\left(1-i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1+i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 1.8892 \\
-    z_{5/6} &= \pm \sqrt{5+\frac{10^{2/3}}{\sqrt[3]{2+i\sqrt{6}}} + \sqrt[3]{10\left(2+i\sqrt{6}\right)}} = \pm 3.3243 \\
+    z_{1/2} &= \pm \sqrt{5-\frac{5^{2/3}\left(1+i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1-i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 0.6167 \notag\\
+    z_{3/4} &= \pm \sqrt{5-\frac{5^{2/3}\left(1-i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1+i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 1.8892 \notag \\
+    z_{5/6} &= \pm \sqrt{5+\frac{10^{2/3}}{\sqrt[3]{2+i\sqrt{6}}} + \sqrt[3]{10\left(2+i\sqrt{6}\right)}} = \pm 3.3243 \notag
 \end{align}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/edgeworth_positivity_boundary_lines.png}
+    \caption{Boundary Lines for Edgeworth Expansion}
+    \label{fig:ew_boundary_lines}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/edgeworth_positivity_boundary_intersections_1.png}
+    \caption{Intersections of Boundary Lines for Edgeworth Expansion, red is first intersection, blue is second intersection}
+    \label{fig:ew_boundary_intersections_1}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/edgeworth_positivity_boundary_intersections_3.png}
+    \caption{Intersections of Boundary Lines for Edgeworth Expansion (zoomed out), upper half}
+    \label{fig:ew_boundary_intersections_3}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/edgeworth_positivity_boundary_intersections_4.png}
+    \caption{Intersections of Boundary Lines for Edgeworth Expansion (zoomed in), upper half}
+    \label{fig:ew_boundary_intersections_4}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/edgeworth_positivity_boundary_intersections_7.png}
+    \caption{Final Boundary Points for Edgeworth Expansion, upper half}
+    \label{fig:ew_boundary_intersections_7}
+\end{figure}
+
+- Plot the lines $\gamma_1(\gamma_2^*, z)$ for many values of $z$ and skipping over the 6 singularities, we get \ref{fig:ew_boundary_lines}, much smaller than the GC boundary, for $\gamma_1 = 0$ excess kurtosis can be between 0 and 4. This is the same as for Gram-Charlier boundary because when skewness is 0, Gram-Charlier and Edgeworth expansion are the same. As for Gram-Charlier expansion, the boundary is the envelope of the lines $\gamma_1(\gamma_2^*, z)$, we get it by calculating the intersection of the two parabolas $\gamma_1(\gamma_2^*, z)$ and $\gamma_1(\gamma_2^*, z+\Delta z)$. These lines are parabolas and have the form $\gamma_1 = \sqrt{a(z) + b(z)\cdot \gamma_2^*} + c(z)$. For two different $z$, the parabolas $\gamma_{1,1} = \sqrt{a+b\gamma_2^*}+c$ and $\gamma_{1,2}=\sqrt{d+e\gamma_2^*}+f$ have the two intersections
+\begin{align}
+    \gamma_{2,1}^* &= \frac{2(b - e)^2(-c + f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)} \notag \\
+    \gamma_{1,1} &= c + \sqrt{a + b \cdot \left(\frac{2(b - e)^2(-c + f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)}\right)} \notag \\
+    \gamma_{2,2}^* &= \frac{2(b - e)^2(c - f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)} \notag \\
+    \gamma_{1,2} &= c + \sqrt{a + b \cdot \left(\frac{2(b - e)^2(c - f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)}\right)} \notag
+\end{align}
+- For a plot of intersections (red dot is intersection 1, blue is intersection 2), see \ref{fig:ew_boundary_intersections_1}. Weil es immer zwei Schnittpunkte gibt, funktioniert die Methode von Jondeau & Rockinger (2001) nicht so gut. Daher Durchführung folgender Schritte, um die Positivitätsregion zu finden:
+\begin{enumerate}
+    \item boundary gets described mostly by red dots, so ignore second intersection. The envelope is symmetric around the $x$-axis and since we have for the boundary lines a second solution of the form $\gamma_1=-\sqrt{a(z)+b(z)\cdot \gamma_2^*}+c(z)$ which have the same intersection $\gamma_2^*$ and $-\gamma_1$, we can take the absolute of $\gamma_1$ for the red intersections and later mirror it around the $x$-axis.
+    \item If we zoom out, we see many more intersection points which are not part of the boundary (\ref{fig:ew_boundary_intersections_3}). We know from the previous images that $\gamma_2^*$ is somewhat between 0 and 4 and $\gamma_1$ between -1 and 1, so we restrict the intersection points to have $\gamma_2^*\in (-0.1,4.1)$ and $\vert \gamma_1\vert \in [0,1)$ (\ref{fig:ew_boundary_intersections_4})
+    \item The amount of points around $\gamma_2^*=0$ and going up too $\gamma_1=1$ are from intersections from boundary lines where $z$ is smaller than the negative third singularity, so leaving this out. The points around $\gamma_2^*=4$ are hard to filter out, they come from $\vert z\vert$ around 1.8 and 1.67 and I filtered them out by removing all $z$ where $z\in (1.8-0.035, 1.8+0.035)$ or $z\in (1.67-0.015,1.67+0.015)$
+    \item I noticed that the boundary lines are extremly steep at this points, almost vertical and I get rounding errors, even when I use Python's float datatype which maps to IEEE-754 double precision with 64 bits where 52 bits are used for the fraction which equals about 16 decimal digits (Python Docs, Leonardo.Z (2013)). In general I am worried about computational accuracy since some points are at $\gamma_2^*>4$, ie. one point is at $(\gamma_2^*, \gamma_1) = (4.01, 0.222)$, but if I try to solve the following equation for $z$:
+    \begin{align}
+        1 + \frac{0.222}{6}He_3(z) + \frac{4.01}{24}He_4(z) + \frac{0.222^2}{72}He_6(z)<0 \notag
+    \end{align}
+    I find a solution: $-1.84611<z<-1.75826$. If this point is inside the boundary, there should be no solution, the Edgeworth expansion gives a density, but this is not the case. So to be on the safe side, I remove every intersection point that has not $\gamma_2^*\in [0,4]$. This is a very conservative approach, but I want to be sure that I do not have any false positives.
+    \item I added $(0,0)$ and $(4,0)$ to the boundary points, the next and second last bondary points are $(3.7795\cdot 10^{-6}, 0.1378)$ and $(3.9775, 0.3009)$. A linear interpolation between these points gives the boundary (\ref{fig:ew_boundary_intersections_7}).
+\end{enumerate}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/ew_expansion.png}
+    \caption{Edgeworth Expansion of different distributions}
+    \label{fig:ew_expansion}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/ew_positivity_expansion.png}
+    \caption{Edgeworth Expansion with positivity constraints of different distributions}
+    \label{fig:ew_positivity_expansion}
+\end{figure}
+
+- Wir vergleichen wieder die constraint und unconstraint Parameter und den Einfluss auf die Edgeworth Expansion anhand der selben Verteilungen wie bei der Gram-Charlier Expansion (\ref{table:distributions_theoretical_moments}). Die Ergebnisse sind in Abbildung \ref{fig:ew_expansion} und Abbildung \ref{fig:ew_positivity_expansion} dargestelt. Die Schlussfolgerungen sind die selben wie bei der Gram Charlier Expansion: Man sieht sehr deutlich dass die positivity constraints notwendig sind, diese aber auch die Expansion verzerren, auch wenn, wie bei der Standardnormalverteilung, keine constraints notwendig gewesen wären.
 
 \subsection{Cornish-Fisher Expansion}
 
