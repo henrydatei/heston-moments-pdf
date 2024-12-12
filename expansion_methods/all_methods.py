@@ -201,3 +201,17 @@ def saddlepoint_approximation(x, mean, variance, third_cumulant, fourth_cumulant
     # get saddle point for x
     s = find_saddlepoint(x, mean, variance, third_cumulant, fourth_cumulant)
     return 1/np.sqrt(2*np.pi*second_derivative_cgf(s, mean, variance, third_cumulant, fourth_cumulant)) * np.exp(cgf(s, mean, variance, third_cumulant, fourth_cumulant) - s*x)
+
+def cornish_fisher_expansion(x, mean, variance, skewness, excess_kurtosis):
+    return_values = []
+    for single_x in x:
+        x_values = np.linspace(-10, 10, 1000)
+        z_p = norm.cdf(x_values)
+        x_p = mean + np.sqrt(variance) * (z_p + skewness/6 * (z_p**2 - 1) + excess_kurtosis/24 * (z_p**3 - 3*z_p) - skewness**2/36 * (2*z_p**3 - 5*z_p))
+        # find the index i in x_values such that x_values[i] < single_x <= x_values[i+1]
+        i = 0
+        while x_values[i] < single_x:
+            i += 1
+        # linear interpolation
+        return_values.append(x_p[i] + (x_p[i+1] - x_p[i])/(x_values[i+1] - x_values[i]) * (single_x - x_values[i]))
+    return return_values
