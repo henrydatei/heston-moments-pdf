@@ -288,7 +288,7 @@ def numerical_derivative(x, y):
 
     return deriv
 
-def cornish_fisher_expansion(x, mean, variance, skewness, excess_kurtosis):
+def cornish_fisher_expansion(x, mean, variance, skewness, excess_kurtosis, pdf = True):
     return_values = []
     x_values = np.linspace(-10, 10, 1000)
     z_p = norm.cdf(x_values, loc = mean, scale = np.sqrt(variance))
@@ -305,7 +305,10 @@ def cornish_fisher_expansion(x, mean, variance, skewness, excess_kurtosis):
         while x_values[i] < single_x:
             i += 1
         # linear interpolation
-        return_values.append(density[i] + (density[i+1] - density[i])/(x_values[i+1] - x_values[i]) * (single_x - x_values[i]))
+        if pdf:
+            return_values.append(density[i] + (density[i+1] - density[i])/(x_values[i+1] - x_values[i]) * (single_x - x_values[i]))
+        else:
+            return_values.append(x_p[i] + (x_p[i+1] - x_p[i])/(x_values[i+1] - x_values[i]) * (single_x - x_values[i]))
     
     if isinstance(x_orig, int) or isinstance(x_orig, float):
         return return_values[0]
