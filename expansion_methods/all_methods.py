@@ -202,7 +202,11 @@ def saddlepoint_approximation(x, mean, variance, third_cumulant, fourth_cumulant
     s = find_saddlepoint(x, mean, variance, third_cumulant, fourth_cumulant)
     return 1/np.sqrt(2*np.pi*second_derivative_cgf(s, mean, variance, third_cumulant, fourth_cumulant)) * np.exp(cgf(s, mean, variance, third_cumulant, fourth_cumulant) - s*x)
 
-def find_s_k_from_skewness_exkurt_table(skewness, excess_kurtosis):
+def two_d_interpolation(x1, y1, x2, y2, d_x, d_y):
+    l = (d_x + d_y)/2
+    return x1 + (x2 - x1) * l, y1 + (y2 - y1) * l
+
+def find_s_k_from_skewness_exkurt_table(skewness, excess_kurtosis, interpolate = True):
     skew_parameter = None
     exkurt_parameter = None
     actual_skewness_values = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2]
@@ -254,8 +258,23 @@ def find_s_k_from_skewness_exkurt_table(skewness, excess_kurtosis):
     
     actual_skewness_idx = np.searchsorted(actual_skewness_values, skewness)
     actual_exkurt_idx = np.searchsorted(actual_exkurt_values, excess_kurtosis)
+    
     if actual_skewness_idx < len(actual_skewness_values) and actual_exkurt_idx < len(actual_exkurt_values) and actual_skewness_idx < len(s_values[actual_exkurt_idx]):
-        return s_values[actual_exkurt_idx][actual_skewness_idx], k_values[actual_exkurt_idx][actual_skewness_idx]
+        if skewness in actual_skewness_values and excess_kurtosis in actual_exkurt_values:
+            return s_values[actual_exkurt_idx][actual_skewness_idx], k_values[actual_exkurt_idx][actual_skewness_idx]
+        if interpolate:
+            s2, k2 = s_values[actual_exkurt_idx][actual_skewness_idx], k_values[actual_exkurt_idx][actual_skewness_idx]
+            
+            actual_skewness_idx = actual_skewness_idx - 1 if actual_skewness_idx > 0 else 0
+            actual_exkurt_idx = actual_exkurt_idx - 1 if actual_exkurt_idx > 0 else 0
+            s1, k1 = s_values[actual_exkurt_idx][actual_skewness_idx], k_values[actual_exkurt_idx][actual_skewness_idx]
+            
+            d_x = skewness - actual_skewness_values[actual_skewness_idx]
+            d_y = excess_kurtosis - actual_exkurt_values[actual_exkurt_idx]
+            
+            return two_d_interpolation(s1, k1, s2, k2, d_x, d_y)
+        else:
+            return s_values[actual_exkurt_idx][actual_skewness_idx], k_values[actual_exkurt_idx][actual_skewness_idx]
     else:
         return skewness, excess_kurtosis
 
@@ -287,12 +306,13 @@ def numerical_derivative(x, y):
     deriv[-1] = (y[-1] - y[-2]) / (x[-1] - x[-2])
 
     return deriv
-
-def cornish_fisher_expansion(x, mean, variance, skewness, excess_kurtosis, pdf = True):
+    
+def cornish_fisher_expansion(x, mean, variance, skewness, excess_kurtosis, pdf = True, interpolate = True):
     return_values = []
+    s, k = find_s_k_from_skewness_exkurt_table(skewness, excess_kurtosis, interpolate)
     x_values = np.linspace(-10, 10, 1000)
     z_p = norm.cdf(x_values, loc = mean, scale = np.sqrt(variance))
-    x_p = z_p + skewness/6 * (z_p**2 - 1) + excess_kurtosis/24 * (z_p**3 - 3*z_p) - skewness**2/36 * (2*z_p**3 - 5*z_p)
+    x_p = z_p + s/6 * (z_p**2 - 1) + k/24 * (z_p**3 - 3*z_p) - s**2/36 * (2*z_p**3 - 5*z_p)
     density = numerical_derivative(x_values, x_p)
     
     x_orig = x # store the original x value and type
