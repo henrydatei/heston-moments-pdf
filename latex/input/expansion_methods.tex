@@ -216,6 +216,40 @@ This holds as longs as $He_6(z)\neq 0$ which has 6 solutions:
 
 \subsection{Cornish-Fisher Expansion}
 
+- beschrieben von Cornish und Fisher (1938)
+- asympotische Expansion
+- approximiert Quantile einer Verteilung basierend auf den Cumulants
+- Sei $z_p$ das $p$-Quantil der Normalverteilung mit mean $\mu$ und variance $\sigma^2$, dann kann man das $p$-Quantil einer Zufallsvariable $X$, $x_p$, approximieren mit (wie üblich, Darstellung nur der ersten Terme)
+\begin{align}
+    x_p \approx z_p + \frac{\gamma_1}{6}He_2(z_p) + \frac{\gamma_2^*}{24}He_3(z_p) - \frac{\gamma_1^2}{36}(2\cdot He_3(z_p) + He_1(z_p)) \notag
+\end{align}
+- Um die Dichte zu erhalten, kann man die $x_p$ numerisch berechnen und ableiten.
+- Abuora & Maillard (2016) stellen fest, dass die Parameter $\gamma_1$ und $\gamma_2^*$ nicht der Skewness und Excess Kurtosis der approximierten Verteilung entsprechen. Sie bezeichnen die Parameter mit $s = \gamma_1$ und $k = \gamma_2^*$ und geben Gleichungen an, um die tatsächliche Skewness $s^*$ und Excess Kurtosis $k^*$ der approximierten Verteilung zu berechnen:
+\begin{align}
+    s^* &= \frac{M_3}{M_{2}^{3/2}} \notag \\
+    k^* &= \frac{M_4}{M_{2}^2} - 3 \notag \\
+    M_1 &= 0 \\
+    M_2 &= 1 + \frac{1}{96}k^2 + \frac{25}{1296}s^4 - \frac{1}{36}ks^2 \\
+    M_3 &= s - \frac{76}{216}s^3 + \frac{85}{1296}s^5 + \frac{1}{4}ks - \frac{13}{144}ks^3 + \frac{1}{32}k^2s \\
+    M_4 &= 3 + k + \frac{7}{16}k^2 + \frac{3}{32}k^3 + \frac{31}{3072}k^4 - \frac{7}{216}s^4 - \frac{25}{486}s^6 + \frac{21665}{559872}s^8 \notag
+\end{align}
+- Maillard (2018) veröffentlicht dann die Umkehrung des Prozesses: Kennt man die tatsächliche Skewness und Excess Kurtosis, so kann man die Parameter $s$ und $k$ berechnen. Eine Tabelle findet sich in seinem Paper im Appendix.
+- In Abuora & Maillard (2016) wird auch ermittelt, wie die Domain of validity der Cornish-Fisher Expansion aussieht. Es stellt sich heraus, dass diese recht groß ist, selbst eine Excess Kurtosis von über 40 ist möglich und teilweise Skewness größer als $\pm 3$. Wenn man außerhalb der Domain of validity ist, dann sieht man das nicht direkt in der Dichte, sondern in den Quantilen, die dann negativ werden (siehe \ref{fig:cf_expansion} und \ref{fig:cf_expansion_cdf}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/cf_expansion.png}
+    \caption{Cornish-Fisher Expansion of different distributions}
+    \label{fig:cf_expansion}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/cf_expansion_cdf.png}
+    \caption{CDF of Cornish-Fisher Expansion of different distributions}
+    \label{fig:cf_expansion_cdf}
+\end{figure}
+
 \subsection{Saddlepoint Approximation}
 
 - vorgeschlagen von Daniels (1954), allerdings nur Dichte, Verteilungsfunktion von Lugannani & Rice (1980).
