@@ -73,7 +73,7 @@ def compute_density_via_ifft_accurate(mu, kappa, theta, sigma, rho, tau):
     # recovered density
     f_x = RecoverDensity(cF, x, 2 ** 15)
 
-    return f_x
+    return x, f_x
 
 def RecoverDensity(cf, x, N=8192):
     i = 1j  # assigning i=sqrt(-1)
@@ -102,24 +102,22 @@ def RecoverDensity(cf, x, N=8192):
     return f_xiInterp(x)
 
 
-# plot the Heston log-return distribution
-x1, density_1 = compute_density_via_ifft_simple(mu = 0, kappa = 3, theta = 0.19, sigma = 0.4, rho=-0.7, tau = 1/12)
-density_2 = compute_density_via_ifft_accurate(mu = 0, kappa = 3, theta = 0.19, sigma = 0.4, rho=-0.7, tau = 1/12)
+# # plot the Heston log-return distribution
+# x1, density_1 = compute_density_via_ifft_simple(mu = 0, kappa = 3, theta = 0.19, sigma = 0.4, rho=-0.7, tau = 1/12)
+# x2, density_2 = compute_density_via_ifft_accurate(mu = 0, kappa = 3, theta = 0.19, sigma = 0.4, rho=-0.7, tau = 1/12)
 
-# print(len(density_1), len(density_2))
+# # print(len(density_1), len(density_2))
 
-x = np.linspace(-2.0, 2.0, 1000)
+# plt.grid()
+# plt.xlabel("x")
+# plt.ylabel("$f(x)$")
+# plt.plot(x1, density_1, color="blue", label='Density with simple FFT')
+# plt.plot(x2, density_2, color="green", label='Density with FFT and interpolation and stabilization')
+# plt.xlim(-10, 10)
+# plt.ylim(0, 5)
+# plt.title("Different methods for computing the density")
 
-plt.grid()
-plt.xlabel("x")
-plt.ylabel("$f(x)$")
-plt.plot(x1, density_1, color="blue", label='Density with simple FFT')
-plt.plot(x, density_2, color="green", label='Density with FFT and interpolation and stabilization')
-plt.xlim(-10, 10)
-plt.ylim(0, 5)
-plt.title("Different methods for computing the density")
-
-# Adding a legend in the upper left corner
-plt.legend()
-plt.tight_layout()
-plt.show()
+# # Adding a legend in the upper left corner
+# plt.legend()
+# plt.tight_layout()
+# plt.show()
