@@ -72,6 +72,9 @@ def compute_density_via_ifft_accurate(mu, kappa, theta, sigma, rho, tau):
 
     # recovered density
     f_x = RecoverDensity(cF, x, 2 ** 15)
+    
+    # Sometimes f_x seems to be slightly negative, so we need to set it to zero
+    f_x = np.maximum(f_x, 0)
 
     return x, f_x
 
