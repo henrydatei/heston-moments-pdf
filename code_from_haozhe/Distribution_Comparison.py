@@ -27,6 +27,7 @@ f_hat_x = Expansion_GramCharlier(cumulant)
 # get an empirical distribution
 print('*****************************************************Simulation*****************************************************************')
 # seed_everything(seed=33)
+np.random.seed(0)
 time_points = 60 * 22 * 12    
 burnin = 10 * 22 * 12
 T = 60         
@@ -64,7 +65,7 @@ data = monthly_logreturn.to_numpy()
 x = np.linspace(-2.0, 2.0, 1000)
 q = 1000       # quantile
 # plot the density comparison
-plt.figure(figsize=(12, 8))
+# plt.figure(figsize=(12, 8))
 plt.grid()
 plt.xlabel("x")
 plt.ylabel("$f(x)$")
