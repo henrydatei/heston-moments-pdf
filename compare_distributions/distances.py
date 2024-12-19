@@ -162,3 +162,6 @@ print(f'Haozhe PDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
 
 cv_statistic, p_value = Cramer_von_Mises_test(x_theory, density, x, gc_haozhe)
 print(f'Haozhe PDF Cramer von Mises Statistic: {cv_statistic}, P-Value: {p_value}')
+
+print(f"Henry JS Divergence: {jensenshannon(density, gc)}")
+print(f"Haozhe JS Divergence: {jensenshannon(density, gc_haozhe)}")
