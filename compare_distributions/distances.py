@@ -136,10 +136,12 @@ plt.show()
 # CDFs + Normalisation (since the sum of the PDF over all space should equal 1)
 theory_cdf = pdf_to_cdf(x_theory, density)
 empirical_cdf = pdf_to_cdf(x, gc)
+haozhe_cdf = pdf_to_cdf(x, gc_haozhe)
 
 # Plotting
 plt.plot(x_theory, theory_cdf, 'r--', label='Theoretical CDF')
 plt.plot(x, empirical_cdf, 'b-', label='Gram-Charlier Expansion CDF')
+plt.plot(x, haozhe_cdf, 'm-', label='Haozhe Gram-Charlier Expansion CDF')
 plt.title('Theoretical vs GC of Log-Returns')
 plt.legend()
 
@@ -147,10 +149,16 @@ plt.tight_layout()
 plt.show()
 
 ks_statistic, p_value = KS_test(x_theory, density, x, gc)
-print(f'KS Statistic: {ks_statistic}, P-Value: {p_value}')
+print(f'Henry PDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
 
 ks_statistic, p_value = KS_test_2(x_theory, theory_cdf, x, empirical_cdf)
-print(f'KS Statistic: {ks_statistic}, P-Value: {p_value}')
+print(f'Henry CDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
 
 cv_statistic, p_value = Cramer_von_Mises_test(x_theory, density, x, gc)
-print(f'Cramer von Mises Statistic: {cv_statistic}, P-Value: {p_value}')
+print(f'Henry PDF Cramer von Mises Statistic: {cv_statistic}, P-Value: {p_value}')
+
+ks_statistic, p_value = KS_test(x_theory, density, x, gc_haozhe)
+print(f'Haozhe PDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
+
+cv_statistic, p_value = Cramer_von_Mises_test(x_theory, density, x, gc_haozhe)
+print(f'Haozhe PDF Cramer von Mises Statistic: {cv_statistic}, P-Value: {p_value}')
