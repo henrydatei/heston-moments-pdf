@@ -7,7 +7,7 @@ from scipy.stats import gaussian_kde
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from simulation.utils import process_to_log_returns
+from simulation.utils import process_to_log_returns_interday
 from simulation.SimHestonQE import Heston_QE
 from code_from_haozhe.RealizedMomentsEstimator_Aggregate_update import rMoments_mvsek, RM_CL, RM_NP, RM_ORS, RM_ACJV, RM_NP_return
 from expansion_methods.all_methods import scipy_mvsek_to_cumulants, gram_charlier_expansion, edgeworth_expansion, saddlepoint_approximation
@@ -48,7 +48,7 @@ process = Heston_QE(S0=S0, v0=v0, kappa=kappa, theta=theta, sigma=sigma, mu=mu, 
 if mu != 0:
     # de-mean the data
     process = process - mu
-process_df = process_to_log_returns(process, start_date, end_date)
+process_df = process_to_log_returns_interday(process, start_date, end_date)
 
 # Estimate moments
 technique = RM_NP_return

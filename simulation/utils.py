@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-def process_to_log_returns(process: np.ndarray, start_date: str, end_date: str, burnin_timesteps: int = 2 * 22 * 79 * 12 + 22 * 79 * 10) -> pd.DataFrame:
+def process_to_log_returns_interday(process: np.ndarray, start_date: str, end_date: str, burnin_timesteps: int = 2 * 22 * 79 * 12 + 22 * 79 * 10) -> pd.DataFrame:
     QE_process_transform = process[:,1:].T # need to transform it to set the index
 
     # Create a DatetimeIndex for every 5 minutes during trading hours
@@ -23,5 +23,19 @@ def process_to_log_returns(process: np.ndarray, start_date: str, end_date: str, 
     # set the first 2 years and 10 months as burnin (standard burnin period)
     # we want to estimate unconditional moments, so we need to remove the burnin period because inital parameters are not unconditional
     df_logreturn = df_logreturn.iloc[burnin_timesteps:]
+
+    return df_logreturn
+
+def process_to_log_returns(process: np.ndarray, start_date: str, end_date: str, time_points: int, burnin_timesteps: int = 10*22*12) -> pd.DataFrame:
+    process = np.diff(process)
+    process_cut = process[:, burnin_timesteps:]
+    process_transform = process_cut.T
+    
+    date_range = pd.date_range(start=start_date, end=end_date, freq='B')
+    datetime_index = pd.DatetimeIndex([pd.Timestamp(f'{day.date()}') for day in date_range])
+    time_index = time_points - burnin_timesteps
+    datetime_index = datetime_index[:time_index]
+    
+    df_logreturn = pd.DataFrame(process_transform, index=datetime_index, columns=[f'Path_{i+1}' for i in range(process_cut.shape[0])])
 
     return df_logreturn

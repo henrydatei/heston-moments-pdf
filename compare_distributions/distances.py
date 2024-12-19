@@ -47,7 +47,7 @@ print(f'Feller condition: {2 * kappa * theta > sigma**2}')
 
 # Simulation
 process = Heston_QE(S0=S0, v0=v0, kappa=kappa, theta=theta, sigma=sigma, mu=mu, rho=rho, T=T, N=time_points, n_paths=paths)
-process_df = process_to_log_returns(process, start_date, end_date)
+process_df = process_to_log_returns(process, start_date, end_date, time_points, burnin_timesteps=10*22*12)
 
 # Estimate moments
 technique = RM_NP_return
