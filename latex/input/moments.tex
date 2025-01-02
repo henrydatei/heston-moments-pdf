@@ -162,6 +162,11 @@ wobei
     x^{(1)} &= e^r-1
 \end{align}
 where \ref{eq:x1} comes from Neuberger (2012).
+- In der Arbeit von Neuberger (2012) wird auch die Aggregation Property eingeführt: Wenn $g$ eine reelle Function ist, $X$ ein Prozess und für Zeiten $0\le s\le t\le u\le T$ gilt:
+\begin{align}
+    \mathbb{E}_s(g(X_u-X_s)) = \mathbb{E}_s(g(X_u-X_t)) + \mathbb{E}_t(g(X_t-X_s))\notag
+\end{align}
+dann hat $(g,X)$ die Aggregation Property. Das nutzt man z.B. in der Schätzung der low-frequency Varianz, indem man die high-frequency Varianz addiert. Fukasawa & Matsushita (2021) nutzen diese Idee und finden heraus, dass sie realisierten zentralen Momente ein unbiased Estimator für die Cumulants sind. %TODO: checken, wie Haozhe eigentlich das ausrechnet. Oder findet Fukasawa & Matsushita nur das zeug mit der Aggregation Property raus? Auf jeden Fall muss hier was hin, dass ich diese -3 Geschichte in der GC Expansion erklären kann. Vllt sind das auch zwei Erkenntnisse aus dem Paper.
 
 \subsection{The First 4 Moments of the Heston Model}
 
