@@ -3,36 +3,40 @@ import scipy.fft as fft
 import scipy.interpolate as interpolate
 import matplotlib.pyplot as plt
 
-def characteristic_function(t, mu, kappa, theta, sigma, rho, tau):
+def characteristic_function(u, mu, kappa, theta, sigma, rho, t):
     """
     This function calculates the characteristic function of log-return rt of a Bates process
 
     Args:
-        t: Argument of the characteristic function
+        u: Argument of the characteristic function
         mu: Drift of the price process
         kappa: Rate of mean reversion.
         theta: Long-term mean.
         sigma: Volatility of the variance diffusion process.
         rho: Correlation between Brownian motions.
-        tau: Time horizon.
+        t: Time horizon.
 
     Returns:
         characteristic function of log-return rt
     """
 
-    A = mu * tau * t * 1j
+    # Define functions for each component
+    A = mu * t * u * 1j
 
-    d = np.sqrt((rho*sigma*t*1j - kappa)**2 - sigma**2*(-t*1j - t**2))
+    d = np.sqrt((rho*sigma*u*1j - kappa)**2 - sigma**2*(-u*1j - u**2))
 
-    g = (kappa - rho*sigma*t*1j - d) / (kappa - rho*sigma*t*1j + d)
+    g = (kappa - rho*sigma*u*1j - d) / (kappa - rho*sigma*u*1j + d)
 
-    B = theta * kappa / sigma**2 * ((kappa - rho*sigma*t*1j - d) * tau - 2 * np.log((1-g*np.exp(-d*tau)) / (1-g)))
+    B = theta * kappa / sigma**2 * ((kappa - rho*sigma*u*1j - d) * t - 2 * np.log((1-g*np.exp(-d*t)) / (1-g)))
+
+    D = 0j
 
     gamma = 2 * kappa * theta / sigma**2
 
-    C_unc = np.log((2*kappa/sigma**2)**gamma * (2*kappa/sigma**2 - (kappa - rho*sigma*t*1j - d) / sigma**2 * (1 - np.exp(-d*tau)) / (1 - g * np.exp(-d*tau)))**(-gamma))
+    C_unc = np.log((2*kappa/sigma**2)**gamma * (2*kappa/sigma**2 - (kappa - rho*sigma*u*1j - d) / sigma**2 * (1 - np.exp(-d*t)) / (1 - g * np.exp(-d*t)))**(-gamma))
 
-    phi = np.exp(A + B + C_unc)
+
+    phi = np.exp(A + B + C_unc + D)
 
     return phi
 
@@ -61,11 +65,11 @@ def compute_density_via_ifft_simple(mu, kappa, theta, sigma, rho, tau, N=2**15, 
 
     return t, f_x
 
-def compute_density_via_ifft_accurate(mu, kappa, theta, sigma, rho, tau):
+def compute_density_via_ifft_accurate(mu, kappa, theta, sigma, rho, t):
     i = 1j  # assigning i=sqrt(-1)
 
     # Define unconditional characteristic function for the log-return rt
-    cF = lambda u: characteristic_function(u, mu, kappa, theta, sigma, rho, tau)
+    cF = lambda u: characteristic_function(u, mu, kappa, theta, sigma, rho, t)
 
     # define domain for density
     x = np.linspace(-2.0, 2.0, 1000)
@@ -74,7 +78,7 @@ def compute_density_via_ifft_accurate(mu, kappa, theta, sigma, rho, tau):
     f_x = RecoverDensity(cF, x, 2 ** 15)
     
     # Sometimes f_x seems to be slightly negative, so we need to set it to zero
-    f_x = np.maximum(f_x, 0)
+    # f_x = np.maximum(f_x, 0)
 
     return x, f_x
 
