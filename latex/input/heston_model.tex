@@ -13,6 +13,16 @@
     \mathbb{E}(\mathrm{d}W_t^S\mathrm{d}W_t^v) &= \rho\mathrm{d}t
 \end{align}
 
+- Varianz-Prozess ist ein CIR-Process (Cox-Ingersoll-Ross, Cox et al 1985) mit Mean-Reversion $\kappa$, Long-Run-Varianz $\theta$ und Volatilität $\sigma$. Die Übergangswahrscheinlichkeit von $v_t$ conditional on $v_0$ ist proportional zu einer noncentral chi-squared verteilten Zufallsvariable:
+\begin{align}
+    \label{eq:heston_model_variance_transition}
+    v_t\mid v_0 &\sim c\cdot \chi^2'_{\nu}(\Lambda) \\
+    c &= \sigma^2\left(1 - \exp(-\kappa t)\right)(4\kappa)^{-1} \notag \\
+    \nu &= \frac{4\kappa\theta}{\sigma^2} \notag \\
+    \Lambda &= \frac{v_0}{c}\exp(-\kappa t) \notag
+\end{align}
+$\chi^2'$ steht für eine nichtzentrale Chi-Quadrat-Verteilung mit $\nu$ Freiheitsgraden und $\Lambda$ als nichtzentralem Parameter.
+
 \subsection{Characteristic Function and Density of the Heston Model}
 - Hat eine Zufallsvariable $X$ eine Dichte $f(x)$, so kann man die charakteristische Funktion $\phi(t)$ von $X$ berechnen durch
 \begin{align}
@@ -46,3 +56,24 @@ und $\tau = T-t$ als Zeithorizont.
 \end{figure}
 
 \subsection{Simulating the Heston Model}
+
+- Heston Model is a model with continuous time, for simulation we need to discretize the time. Small timesteps require a lot of computational power, large timesteps can lead to zero or negative volatility if the so called Feller condition is not satisfied. The Feller condition is satisfied if $2\kappa\theta > \sigma^2$ but Eraker et al (2003) show, that for S&P 500 index options the Feller condition is not satisfied. There are many more studies that show this result for other markets and assets (e.g. Chang et al 2021, Hu & Liu 2022).
+- Intuitivster Weg der Zeit-Diskretisierung: Euler–Maruyama Diskretisierung:
+\begin{align}
+    X_{t+\Delta} &= X_t - \frac{1}{2}v_t\Delta + \sqrt{v_t}\sqrt{\Delta}Z_{X,t} \notag \\
+    v_{t+\Delta} &= v_t + \kappa(\theta - v_t)\Delta + \sigma\sqrt{v_t}\sqrt{\Delta}Z_{v,t} \notag
+\end{align}
+wobei $Z\sim\mathcal{N}(0,1)$, $\Delta = T/n$, $T$ die gesamte Zeit und $n$ die Anzahl der Schritte ist. Die Korrelation zwischen $Z_{X,t}$ und $Z_{v,t}$ kann man wie folgt simulieren (Andersen 2008): %TODO: andere Quelle finden, nicht immer nur Andersen oder Ostap
+\begin{align}
+    Z_{v,t} &= \Phi^{-1}(U_1) \notag \\
+    Z_{X,t} &= \rho Z_{v,t} + \sqrt{1-\rho^2}\Phi^{-1}(U_2) \notag
+\end{align}
+wobei $U_1$ und $U_2$ unabhängige Zufallsvariablen sind, die gleichverteilt sind auf $[0,1]$ und $\Phi^{-1}$ die inverse Verteilungsfunktion der Standardnormalverteilung ist.
+- Bei dieser Diskretisierung sieht man auch gut das Problem der möglichen Negativität der Volatilität (Okhrin et al 2022):
+\begin{align}
+    \mathbb{P}(v_{t+\Delta}<0 \mid v_t>0) &= \mathbb{P}\left(Z_{v,t} < \frac{-v_t-\kappa(\theta-v_t)\Delta}{\sigma\sqrt{v_t}\sqrt{\Delta}}\right) \notag \\
+    &= \Phi\left(Z_{v,t} < \frac{-v_t-\kappa(\theta-v_t)\Delta}{\sigma\sqrt{v_t}\sqrt{\Delta}}\right) \notag \\
+    &> 0 \notag
+\end{align}
+wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Es gibt verschiedene Methoden, um dieses Problem zu lösen, z.B. die Absorption (replace $v_t$ mit $v_t^+ = \max{0, v_t}$) oder Reflection Method (replace $v_t$ mit $\vert v_t\vert$). Alle diese Methoden ändern aber den unterliegenden Prozess, daher stimmen z.B. die Momente der Volatilität nicht mehr mit den theoretischen Momenten überein (Okhrin et al 2022, Tsoskounoglou 2024). 
+- In der Studie von Okhrin et al (2022) Andersen's QE scheme performs best in terms of speed and accuracy. Andersen (2008) approximates the noncentral chi-square distribution in \eqref{eq:heston_model_variance_transition} with a mixture of distributions, a Dirac distribution and a noncentral Gaussian distribution
