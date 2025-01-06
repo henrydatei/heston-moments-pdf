@@ -22,7 +22,8 @@ c.execute('''
         start_date TEXT,
         end_date TEXT,
         interval TEXT,
-        filename TEXT
+        filename TEXT,
+        max_number_of_same_prices INTEGER
     )
 ''')
 
