@@ -57,7 +57,7 @@ und $\tau = T-t$ als Zeithorizont.
 
 \subsection{Simulating the Heston Model}
 
-- Heston Model is a model with continuous time, for simulation we need to discretize the time. Small timesteps require a lot of computational power, large timesteps can lead to zero or negative volatility if the so called Feller condition is not satisfied. The Feller condition is satisfied if $2\kappa\theta > \sigma^2$ but Eraker et al (2003) show, that for S&P 500 index options the Feller condition is not satisfied. There are many more studies that show this result for other markets and assets (e.g. Chang et al 2021, Hu & Liu 2022).
+- Heston Model is a model with continuous time, for simulation we need to discretize the time. Small timesteps require a lot of computational power, large timesteps can lead to zero or negative volatility if the so called Feller condition is not satisfied (Albrecher et al 2007). The Feller condition is satisfied if $2\kappa\theta > \sigma^2$ but Eraker et al (2003) show, that for S&P 500 index options the Feller condition is not satisfied. There are many more studies that show this result for other markets and assets (e.g. Chang et al 2021, Hu & Liu 2022).
 - Intuitivster Weg der Zeit-Diskretisierung: Euler–Maruyama Diskretisierung:
 \begin{align}
     X_{t+\Delta} &= X_t - \frac{1}{2}v_t\Delta + \sqrt{v_t}\sqrt{\Delta}Z_{X,t} \notag \\
