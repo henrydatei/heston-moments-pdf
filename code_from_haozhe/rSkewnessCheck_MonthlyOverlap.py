@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from SimHestonQE import Heston_QE
-# from RealizedSkewness_NP_MonthlyOverlap import rCumulants, rSkewness, rMoments
+from RealizedSkewness_NP_MonthlyOverlap import rCumulants, rSkewness, rMoments
 from RealizedMomentsEstimator_MonthOverlap import rMoments
 # from Moments_Skewness import MomentsBates_Skewness
 from Moments_list import MomentsBates
@@ -63,19 +63,19 @@ technique = RM_NP_return
 rm, rc, rk = ([] for i in range(3))
 for column in cut_df_logreturn.columns:
     rm.append(rMoments(cut_df_logreturn[column], method=technique, months_overlap=6).to_numpy())
-    # rc.append(rCumulants(cut_df_logreturn[column], method=technique, months_overlap=6).to_numpy())
-    # rk.append(rSkewness(cut_df_logreturn[column], method=technique, months_overlap=6).to_numpy())
+    rc.append(rCumulants(cut_df_logreturn[column], method=technique, months_overlap=6).to_numpy())
+    rk.append(rSkewness(cut_df_logreturn[column], method=technique, months_overlap=6).to_numpy())
 
 #rm, rc = np.squeeze(np.array(rm)), np.squeeze(np.array(rc))           # no need to squeeze rk because it has one element which has been automatically squeezed by np
 rm = np.array(rm)
-# rc = np.array(rc)
-# rk = np.array(rk)
+rc = np.array(rc)
+rk = np.array(rk)
 rm = np.mean(rm, axis=1)
-# rc = np.mean(rc, axis=1)
-# rk = np.mean(rk, axis=1)      # average along the time series, so get average realized mean, var, skew, kurt w.r.t. each path
+rc = np.mean(rc, axis=1)
+rk = np.mean(rk, axis=1)      # average along the time series, so get average realized mean, var, skew, kurt w.r.t. each path
 print(rm)
-# print(rc)
-# print(rk)
+print(rc)
+print(rk)
 
 # computed_skewness = rc[:,2] / rc[:,1]**(3/2)
 # print(f'Computed Skewness is: {computed_skewness}, vs True Skewness is: {skewness}')
