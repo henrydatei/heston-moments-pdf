@@ -7,7 +7,7 @@ c = conn.cursor()
 # Create the table 'simulations'
 c.execute('''
     CREATE TABLE simulations (
-        id INTEGER PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         mu REAL,
         kappa REAL,
         theta REAL,
@@ -22,8 +22,17 @@ c.execute('''
         start_date TEXT,
         end_date TEXT,
         interval TEXT,
-        filename TEXT,
-        max_number_of_same_prices INTEGER
+        max_number_of_same_prices INTEGER,
+        NP_rc1 REAL,
+        NP_rc2 REAL,
+        NP_rc3 REAL,
+        NP_rc4 REAL,
+        NP_rm1 REAL,
+        NP_rm2 REAL,
+        NP_rm3 REAL,
+        NP_rm4 REAL,
+        NP_rskewness REAL,
+        NP_rexcess_kurtosis REAL
     )
 ''')
 
