@@ -98,6 +98,12 @@ def create_simulation_and_save_it(conn, start_date, end_date, time_points, T, S0
     
     c = conn.cursor()
     
+    # check if this parameter combination is already in the database
+    c.execute('SELECT * FROM simulations WHERE v0 = ? AND kappa = ? AND theta = ? AND sigma = ? AND mu = ? AND rho = ? AND time_points = ? AND burnin = ? AND T = ? AND S0 = ? AND paths = ? AND start_date = ? AND end_date = ?', (v0, kappa, theta, sigma, mu, rho, time_points, burnin, T, S0, paths, start_date, end_date))
+    if c.fetchone() is not None:
+        print(f'Simulation with parameters v0={v0}, kappa={kappa}, theta={theta}, sigma={sigma}, mu={mu}, rho={rho}, time_points={time_points}, burnin={burnin}, T={T}, S0={S0}, paths={paths}, start_date={start_date}, end_date={end_date} already exists.')
+        return
+    
     process = Heston_QE(S0=S0, v0=v0, kappa=kappa, theta=theta, sigma=sigma, mu=mu, rho=rho, T=T, N=time_points, n_paths=paths)
     if mu != 0:
         # de-mean the data
