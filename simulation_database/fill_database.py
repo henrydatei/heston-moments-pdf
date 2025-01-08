@@ -14,7 +14,7 @@ from simulation.utils import process_to_log_returns_interday, process_to_log_ret
 from code_from_haozhe.RealizedMomentsEstimator_Aggregate_update import rMoments_mvsek, RM_NP_return
 from code_from_haozhe.RealizedSkewness_NP_MonthlyOverlap import rCumulants
 
-np.random.seed(33)
+np.random.seed(0)
 simulations_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'simulations')
 # conn = sqlite3.connect('simulation_database.db')
 # c = conn.cursor()
@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
     print('#Simulations:', len(parameter_list))
 
-    with ProcessPoolExecutor() as executor:
+    with ProcessPoolExecutor(max_workers=52) as executor:
         executor.map(worker_function, parameter_list)
         
     print('Elapsed time:', time.time() - start_time)
