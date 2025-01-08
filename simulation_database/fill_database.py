@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor
+import time
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -82,20 +83,20 @@ sigmas = np.arange(sigma_min, sigma_max, sigma_step)
 mus = np.arange(mu_min, mu_max, mu_step)
 rhos = np.arange(rho_min, rho_max, rho_step)
 
-v0s = [0.1]
-kappas = [3]
-thetas = [0.01, 0.5]
-sigmas = [0.1, 0.5]
-mus = [0]
-rhos = [-0.7]
+# v0s = [0.1]
+# kappas = [3]
+# thetas = [0.01, 0.5]
+# sigmas = [0.1, 0.5]
+# mus = [0]
+# rhos = [-0.7]
 
-print(len(v0s), len(kappas), len(thetas), len(sigmas), len(mus), len(rhos))
-print(v0s)
-print(kappas)
-print(thetas)
-print(sigmas)
-print(mus)
-print(rhos)
+# print(len(v0s), len(kappas), len(thetas), len(sigmas), len(mus), len(rhos))
+# print(v0s)
+# print(kappas)
+# print(thetas)
+# print(sigmas)
+# print(mus)
+# print(rhos)
 
 def create_simulation_and_save_it(conn, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin):
     
@@ -149,6 +150,7 @@ def worker_function(params):
 #                         create_simulation_and_save_it(start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin)
 
 if __name__ == '__main__':
+    start_time = time.time()
     parameter_list = [
         (start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin)
         for v0 in v0s
@@ -164,4 +166,4 @@ if __name__ == '__main__':
     with ProcessPoolExecutor() as executor:
         executor.map(worker_function, parameter_list)
         
-# 47 Minuten laufzeit
+    print('Elapsed time:', time.time() - start_time)
