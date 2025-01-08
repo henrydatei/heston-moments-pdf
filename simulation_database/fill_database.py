@@ -20,9 +20,12 @@ simulations_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'simu
 
 start_date = '2000-07-01'
 end_date = '2100-07-01'
-time_points = 60 * 22 * 12
-burnin = 10 * 22 * 12
-T = 60
+# time_points = 60 * 22 * 12
+time_points = 15 * 22 * 79 * 12
+# burnin = 10 * 22 * 12
+burnin = 3 * 22 * 79 * 12
+# T = 60
+T = 15
 S0 = 100
 paths = 1
 # v0 = 0.19
@@ -79,12 +82,12 @@ sigmas = np.arange(sigma_min, sigma_max, sigma_step)
 mus = np.arange(mu_min, mu_max, mu_step)
 rhos = np.arange(rho_min, rho_max, rho_step)
 
-v0s = [0.1, 0.5]
-kappas = [0.5, 3]
+v0s = [0.1]
+kappas = [3]
 thetas = [0.01, 0.5]
 sigmas = [0.1, 0.5]
 mus = [0]
-rhos = [0.3, -0.7]
+rhos = [-0.7]
 
 print(len(v0s), len(kappas), len(thetas), len(sigmas), len(mus), len(rhos))
 print(v0s)
@@ -108,8 +111,8 @@ def create_simulation_and_save_it(conn, start_date, end_date, time_points, T, S0
     if mu != 0:
         # de-mean the data
         process = process - mu
-    # process_df = process_to_log_returns_interday(process, start_date, end_date)
-    process_df = process_to_log_returns(process, start_date, end_date, time_points, burnin)
+    process_df = process_to_log_returns_interday(process, start_date, end_date)
+    # process_df = process_to_log_returns(process, start_date, end_date, time_points, burnin)
     
     # number of equal values in the first column -> indicator for maleformed parameters when feller condition is far away from saisfied
     max_number_of_same_prices = process_df.iloc[:, 0].value_counts().max()
