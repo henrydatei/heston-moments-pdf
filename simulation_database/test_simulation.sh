@@ -26,6 +26,10 @@ ml purge
 ml release/24.04 GCCcore/13.2.0 Python/3.11.5
 
 cd /home/s4307678/heston-moments-pdf
+
+python -m venv venv
+source venv/bin/activate
+
 pip install matplotlib
 pip install numpy
 pip install pandas
@@ -37,3 +41,5 @@ pip install tqdm
 # pip install pytorch-lightning
 
 srun python simulation_database/fill_database.py
+
+deactivate
