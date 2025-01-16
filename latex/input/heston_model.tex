@@ -76,4 +76,18 @@ wobei $U_1$ und $U_2$ unabhängige Zufallsvariablen sind, die gleichverteilt sin
     &> 0 \notag
 \end{align}
 wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Es gibt verschiedene Methoden, um dieses Problem zu lösen, z.B. die Absorption (replace $v_t$ mit $v_t^+ = \max{0, v_t}$) oder Reflection Method (replace $v_t$ mit $\vert v_t\vert$). Alle diese Methoden ändern aber den unterliegenden Prozess, daher stimmen z.B. die Momente der Volatilität nicht mehr mit den theoretischen Momenten überein (Okhrin et al 2022, Tsoskounoglou 2024). 
-- In der Studie von Okhrin et al (2022) Andersen's QE scheme performs best in terms of speed and accuracy. Andersen (2008) approximates the noncentral chi-square distribution in \eqref{eq:heston_model_variance_transition} with a mixture of distributions, a Dirac distribution and a noncentral Gaussian distribution
+- In der Studie von Okhrin et al (2022) Andersen's QE scheme performs best in terms of speed and accuracy. Andersen (2008) approximates the noncentral chi-square distribution in \eqref{eq:heston_model_variance_transition} with a mixture of distributions, a Dirac distribution and a noncentral Gaussian distribution. Für ausreichend große Werte von $v_t$ gilt
+\begin{align}
+    \label{eq:qe_normal}
+    v_{t+\Delta} = a(b+Z_v)^2
+\end{align}
+mit $Z_v\sim\mathcal{N}(0,1)$. Für andere Werte von $v_t$ gilt
+\begin{align}
+    \label{eq:qe_dirac}
+    v_{t+\Delta} &= \Psi^{-1}(U_v, p, \beta) \\
+    \Psi^{-1}(u,p,\beta) &= \begin{cases}
+        0 & 0\le u\le p \\
+        \beta^{-1}\ln\left(\frac{1-p}{1-u}\right) & p<u\le 1
+    \end{cases} \notag
+\end{align}
+Die Parameter $a$, $b$, $p$ und $\beta$ werden über moment-matching geschätzt, vom dem einen zum anderen Schema kann man wechseln, wenn der Wert $\psi$ über einer Schelle $\psi_c$ liegt. Dann nutzt man \eqref{eq:qe_dirac}, sonst \eqref{eq:qe_normal}. Der Wert $\psi$ ist der Quotient aus $s^2$ und $m^2$, wobei $m$ der Erwartungswert von $v_{t+\Delta}$ und $s^2$ die Varianz von $v_{t+\Delta}$ ist.
