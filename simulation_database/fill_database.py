@@ -6,6 +6,7 @@ import numpy as np
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor
 import time
+import argparse
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -151,6 +152,12 @@ def worker_function(params):
 
 if __name__ == '__main__':
     start_time = time.time()
+    
+    parser = argparse.ArgumentParser(description='Run a subset of simulations.')
+    parser.add_argument('--i', type=int, required=True, help='Index of the job (0-19)')
+    args = parser.parse_args()
+    i = args.i
+    
     parameter_list = [
         (start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin)
         for v0 in v0s
@@ -160,10 +167,16 @@ if __name__ == '__main__':
         for mu in mus
         for rho in rhos
     ]
+    
+    chunk_size = len(parameter_list) // 20
+    start_index = i * chunk_size
+    end_index = (i + 1) * chunk_size if i < 19 else len(parameter_list)
 
-    print('#Simulations:', len(parameter_list))
+    sub_parameter_list = parameter_list[start_index:end_index]
 
-    with ProcessPoolExecutor(max_workers=52) as executor:
-        executor.map(worker_function, parameter_list)
+    print(f"Processing chunk {i}: {len(sub_parameter_list)} simulations.")
+
+    with ProcessPoolExecutor() as executor:
+        executor.map(worker_function, sub_parameter_list)
         
     print('Elapsed time:', time.time() - start_time)
