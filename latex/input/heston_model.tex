@@ -2,6 +2,7 @@
 
 \subsection{Model Description}
 
+- Von Heston (1993) vorgestellt und ist ein stochastic volatility model, die Volatilität ist nicht konstant, wie z.B. beim Black-Scholes-Merton-Model, sondern folgt auch einem random process.
 \begin{align}
     \label{eq:heston_model_price}
     \mathrm{d}S_t &= \mu S_t\mathrm{d}t + \sqrt{v_t}S_t\mathrm{d}W_t^S \\
@@ -12,6 +13,7 @@
     \label{eq:heston_model_correlation}
     \mathbb{E}(\mathrm{d}W_t^S\mathrm{d}W_t^v) &= \rho\mathrm{d}t
 \end{align}
+wobei $\kappa$, $\theta$ und $\sigma$ strikt positiv sind, $\mathrm{d}W_t^S$ und $\mathrm{d}W_t^v$ sind increments von Brownian Motions mit der Korrelation $\rho$. $S_t$ ist der Preis eines Assests, z.B. einer Aktie, Aleihe, FX-Rate, etc. Der Prozess $X_t$ ist der Logarithmus des Preisprozesses $S_t$; $v_t$ ist der instantaneous Varianz-Prozess. Der Parameter $\mu$ ist der Drift des Preis-Prozesses.
 
 - Varianz-Prozess ist ein CIR-Process (Cox-Ingersoll-Ross, Cox et al 1985) mit Mean-Reversion $\kappa$, Long-Run-Varianz $\theta$ und Volatilität $\sigma$. Die Übergangswahrscheinlichkeit von $v_t$ conditional on $v_0$ ist proportional zu einer noncentral chi-squared verteilten Zufallsvariable:
 \begin{align}
@@ -21,7 +23,7 @@
     \nu &= \frac{4\kappa\theta}{\sigma^2} \notag \\
     \Lambda &= \frac{v_0}{c}\exp(-\kappa t) \notag
 \end{align}
-$\chi^2'$ steht für eine nichtzentrale Chi-Quadrat-Verteilung mit $\nu$ Freiheitsgraden und $\Lambda$ als nichtzentralem Parameter.
+$\chi^2'$ steht für eine nichtzentrale Chi-Quadrat-Verteilung mit $\nu$ Freiheitsgraden und $\Lambda$ als nichtzentralem Parameter (Okhrin et al 2022).
 
 \subsection{Characteristic Function and Density of the Heston Model}
 - Hat eine Zufallsvariable $X$ eine Dichte $f(x)$, so kann man die charakteristische Funktion $\phi(t)$ von $X$ berechnen durch
