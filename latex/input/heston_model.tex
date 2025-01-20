@@ -91,3 +91,13 @@ mit $Z_v\sim\mathcal{N}(0,1)$. Für andere Werte von $v_t$ gilt
     \end{cases} \notag
 \end{align}
 Die Parameter $a$, $b$, $p$ und $\beta$ werden über moment-matching geschätzt, vom dem einen zum anderen Schema kann man wechseln, wenn der Wert $\psi$ über einer Schelle $\psi_c$ liegt. Dann nutzt man \eqref{eq:qe_dirac}, sonst \eqref{eq:qe_normal}. Der Wert $\psi$ ist der Quotient aus $s^2$ und $m^2$, wobei $m$ der Erwartungswert von $v_{t+\Delta}$ und $s^2$ die Varianz von $v_{t+\Delta}$ ist.
+- Für den Preisprozess schlägt Andersen (2008) folgendes Schema vor:
+\begin{align}
+    \ln(S_{t+\Delta}) &= \ln(S_t) + K_0 + K_1v_t + K_2v_{t+\Delta} + \sqrt{K_3v_t + K_4v_{t+\Delta}}\cdot Z \notag \\
+    K_0 &= -\frac{\rho\kappa\theta}{\sigma}\Delta \notag \\
+    K_1 &= \xi_1\Delta\left(\frac{\kappa\rho}{\sigma} - \frac{1}{2}\right)-\frac{\rho}{\sigma} \notag \\
+    K_2 &= \xi_2\Delta\left(\frac{\kappa\rho}{\sigma}-\frac{1}{2}\right)+\frac{\rho}{\sigma} \notag \\
+    K_3 &= \xi_1\Delta(1-\rho^2) \notag \\
+    K_4 &= \xi_2\Delta(1-\rho^2) \notag
+\end{align}
+wobei $Z$ standardnormalverteilt ist und $\xi_1$ und $\xi_2$ gewisse Konstanten sind, im Paper wird $\xi_1=\xi_2=0.5$ vorgeschlagen.
