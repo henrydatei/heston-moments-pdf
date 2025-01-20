@@ -6,7 +6,7 @@
 #SBATCH --nodes=5
 #SBATCH --time=24:00:00
 #SBATCH -J fill_database_test
-#SBATCH --array=0-19
+#SBATCH --array=0-29
 #SBATCH --error="/home/s4307678/.out/myjob-%A_%a.out"
 #SBATCH --output="/home/s4307678/.out/myjob-%A_%a.out"
 

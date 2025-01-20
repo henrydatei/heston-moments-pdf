@@ -154,7 +154,7 @@ if __name__ == '__main__':
     start_time = time.time()
     
     parser = argparse.ArgumentParser(description='Run a subset of simulations.')
-    parser.add_argument('--i', type=int, required=True, help='Index of the job (0-19)')
+    parser.add_argument('--i', type=int, required=True, help='Index of the job (0-29)')
     args = parser.parse_args()
     i = args.i
     
@@ -168,9 +168,9 @@ if __name__ == '__main__':
         for rho in rhos
     ]
     
-    chunk_size = len(parameter_list) // 20
+    chunk_size = len(parameter_list) // 30
     start_index = i * chunk_size
-    end_index = (i + 1) * chunk_size if i < 19 else len(parameter_list)
+    end_index = (i + 1) * chunk_size if i < 29 else len(parameter_list)
 
     sub_parameter_list = parameter_list[start_index:end_index]
 
