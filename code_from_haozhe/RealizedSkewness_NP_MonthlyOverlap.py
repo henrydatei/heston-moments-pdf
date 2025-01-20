@@ -265,7 +265,7 @@ def RealizedEstimatorsNP_return(x, nM):        # use log-prices x as inputs (!) 
     
     #m1r = (np.exp(rt) - 1).sum() / (nM - 1)  # for percentage return
     m1r = foravg_rt.sum() / nM                # for the average log return of the whole series
-    mean = rt.resample('M').sum().values[-1]    # this is for the average of the last month but may not contain tau points, i.e., 22*79
+    mean = rt.resample('ME').sum().values[-1]    # this is for the average of the last month but may not contain tau points, i.e., 22*79
     
 
     m2r_NP = np.sum(2 * (np.exp(rt) - 1 - rt)) / (nM - 1)
