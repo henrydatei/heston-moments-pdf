@@ -1,1 +1,15 @@
 \section{Methodological Approach and Implementation}
+
+- all die in den vorherigen Kapiten vorgestellten Methoden wurden in Python implementiert
+- Simulation von $n=1$ und $n=100$ Paths des Heston-Models mit dem QE schema von Andersen (2008) %TODO: n=100 noch simulieren
+- Parameter der Simulation:
+    - Interday 5 Minuten Preisdaten (79 pro Tag), 22 Handelstage pro Monat, 12 Monate pro Jahr, 15 Jahre ($T = 15$); insgesamt 312840 Preise pro Path
+    - Burnin von 3 Jahren um Bias von Startpreis $S_0 = 100$ und Startvolatilität $v_0$ zu eleminieren
+    - $v_0$: Start 0.01, Ende 0.5, Schrittweite 0.05
+    - $\kappa$: Start 0.01, Ende 1, Schrittweite 0.1
+    - $\theta$: Start 0.01, Ende 1, Schrittweite 0.05
+    - $\sigma$: Start 0.01, Ende 1, Schrittweite 0.05
+    - $\mu$: Start -0.1, Ende 0.1, Schrittweite 0.01
+    - $\rho$: Start -0.9, Ende 0.9, Schrittweite 0.1
+- Es stellte sich in Vorversuchen heraus, dass das QE-Schema numerische Fehler produziert, wenn die Feller condition sehr deutlich nicht erfüllt war. Das zeichnete sich dadurch aus, dass sehr viele Preise den selben Wert haben, daher wurde beim ersten Pfad einer jeden Simulation gezählt, wie oft der häufigste Wert vorkommt. Wenn keine Fehler bei der Simulation auftreten liegt dieser Wert im unteren einstelligen Bereich, bei Fehlern in den Tausendern %TODO: prüfen
+- Pro Pfad wurden die ersten 4 realisierten Momente, Skewness und Kurtosis nach Neuberger & Payne (2021) und die ersten 4 Kumulanten nach Fukasawa & Matsushita (2021) der 5-minütigen Returns ermittelt. Über die 100 Pfade werden diese Ergebnisse dann gemittelt, sodass man 4 Momente, 4 Kumulanten, Skewness und Kurtosis pro Simulation erhält. Dieser Prozess ist sehr zeitaufwendig, Rechenzeit beträgt etwa 100 Sekunden auf einem 1.8 GHz Dual-Core Intel Core i5. Es empfiehlt sich daher diese Simulationen zu parallelisieren und die Ergebnisse z.B. mit einer Sqlite-Datenbank zu sammeln.
