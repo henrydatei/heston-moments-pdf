@@ -32,7 +32,7 @@ time_points = 15 * 22 * 79 * 12
 burnin = 3 * 22 * 79 * 12
 T = 15
 S0 = 100
-paths = 1
+paths = 100
 
 # Full Simulation
 v0_min = 0.01
