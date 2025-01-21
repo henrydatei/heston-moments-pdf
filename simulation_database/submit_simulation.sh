@@ -2,11 +2,11 @@
 
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=52
-#SBATCH --mem-per-cpu=4000
+#SBATCH --mem-per-cpu=16000
 #SBATCH --nodes=5
 #SBATCH --time=24:00:00
-#SBATCH -J fill_database_test
-#SBATCH --array=0-29
+#SBATCH -J fill_database
+#SBATCH --array=0-49
 #SBATCH --error="/home/s4307678/.out/myjob-%A_%a.out"
 #SBATCH --output="/home/s4307678/.out/myjob-%A_%a.out"
 
@@ -41,6 +41,6 @@ pip install tqdm
 # pip install yfinance
 # pip install pytorch-lightning
 
-srun python simulation_database/fill_database.py --i $SLURM_ARRAY_TASK_ID
+srun python simulation_database/fill_database.py --i $SLURM_ARRAY_TASK_ID --chunks 50
 
 deactivate
