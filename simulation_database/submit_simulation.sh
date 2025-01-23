@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #SBATCH --cpus-per-task=52
-#SBATCH --mem-per-cpu=16000
+#SBATCH --mem-per-cpu=4000
 #SBATCH --nodes=5
 #SBATCH --time=24:00:00
 #SBATCH -J fill_database
