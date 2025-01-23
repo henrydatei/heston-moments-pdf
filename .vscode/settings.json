@@ -9,5 +9,10 @@
             "database": "sportwetten",
             "username": "postgres"
         }
-    ]
+    ],
+    "files.associations": {
+        "*.tex": "tex",
+        "*.xml": "xml",
+        "dense": "cpp"
+    }
 }
