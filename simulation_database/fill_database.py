@@ -78,48 +78,48 @@ def create_simulation_and_save_it(params):
     os.makedirs(subjob_dir, exist_ok=True)
     
     # create database
-    conn = sqlite3.connect(f'simulation_database_{worker_id}.db')
-    c = conn.cursor()
+    # conn = sqlite3.connect(f'simulation_database_{worker_id}.db')
+    # c = conn.cursor()
 
-    # Create the table 'simulations'
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS simulations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            mu REAL,
-            kappa REAL,
-            theta REAL,
-            sigma REAL,
-            rho REAL,
-            v0 REAL,
-            time_points INTEGER,
-            burnin INTEGER,
-            T INTEGER,
-            S0 REAL,
-            paths INTEGER,
-            start_date TEXT,
-            end_date TEXT,
-            interval TEXT,
-            max_number_of_same_prices INTEGER,
-            NP_rc1 REAL,
-            NP_rc2 REAL,
-            NP_rc3 REAL,
-            NP_rc4 REAL,
-            NP_rm1 REAL,
-            NP_rm2 REAL,
-            NP_rm3 REAL,
-            NP_rm4 REAL,
-            NP_rskewness REAL,
-            NP_rexcess_kurtosis REAL,
-            seed INTEGER
-        )
-    ''')
-    conn.commit()
+    # # Create the table 'simulations'
+    # c.execute('''
+    #     CREATE TABLE IF NOT EXISTS simulations (
+    #         id INTEGER PRIMARY KEY AUTOINCREMENT,
+    #         mu REAL,
+    #         kappa REAL,
+    #         theta REAL,
+    #         sigma REAL,
+    #         rho REAL,
+    #         v0 REAL,
+    #         time_points INTEGER,
+    #         burnin INTEGER,
+    #         T INTEGER,
+    #         S0 REAL,
+    #         paths INTEGER,
+    #         start_date TEXT,
+    #         end_date TEXT,
+    #         interval TEXT,
+    #         max_number_of_same_prices INTEGER,
+    #         NP_rc1 REAL,
+    #         NP_rc2 REAL,
+    #         NP_rc3 REAL,
+    #         NP_rc4 REAL,
+    #         NP_rm1 REAL,
+    #         NP_rm2 REAL,
+    #         NP_rm3 REAL,
+    #         NP_rm4 REAL,
+    #         NP_rskewness REAL,
+    #         NP_rexcess_kurtosis REAL,
+    #         seed INTEGER
+    #     )
+    # ''')
+    # conn.commit()
     
-    # check if this parameter combination is already in the database
-    c.execute('SELECT * FROM simulations WHERE v0 = ? AND kappa = ? AND theta = ? AND sigma = ? AND mu = ? AND rho = ? AND time_points = ? AND burnin = ? AND T = ? AND S0 = ? AND paths = ? AND start_date = ? AND end_date = ? AND seed = ?', (v0, kappa, theta, sigma, mu, rho, time_points, burnin, T, S0, paths, start_date, end_date, seed))
-    if c.fetchone() is not None:
-        logging.info(f'Worker {worker_id}: Simulation with parameters v0={v0}, kappa={kappa}, theta={theta}, sigma={sigma}, mu={mu}, rho={rho}, time_points={time_points}, burnin={burnin}, T={T}, S0={S0}, paths={paths}, start_date={start_date}, end_date={end_date}, seed={seed} already exists.')
-        return
+    # # check if this parameter combination is already in the database
+    # c.execute('SELECT * FROM simulations WHERE v0 = ? AND kappa = ? AND theta = ? AND sigma = ? AND mu = ? AND rho = ? AND time_points = ? AND burnin = ? AND T = ? AND S0 = ? AND paths = ? AND start_date = ? AND end_date = ? AND seed = ?', (v0, kappa, theta, sigma, mu, rho, time_points, burnin, T, S0, paths, start_date, end_date, seed))
+    # if c.fetchone() is not None:
+    #     logging.info(f'Worker {worker_id}: Simulation with parameters v0={v0}, kappa={kappa}, theta={theta}, sigma={sigma}, mu={mu}, rho={rho}, time_points={time_points}, burnin={burnin}, T={T}, S0={S0}, paths={paths}, start_date={start_date}, end_date={end_date}, seed={seed} already exists.')
+    #     return
 
     try:
         process = Heston_QE(S0=S0, v0=v0, kappa=kappa, theta=theta, sigma=sigma, mu=mu, rho=rho, T=T, N=time_points, n_paths=paths)
@@ -155,10 +155,10 @@ def create_simulation_and_save_it(params):
         logging.info(f"Worker {worker_id} result: {result}")
     
         # insert into database
-        c.execute('INSERT INTO simulations (mu, kappa, theta, sigma, rho, v0, time_points, burnin, T, S0, paths, start_date, end_date, interval, max_number_of_same_prices, NP_rc1, NP_rc2, NP_rc3, NP_rc4, NP_rm1, NP_rm2, NP_rm3, NP_rm4, NP_rskewness, NP_rexcess_kurtosis, seed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', result)
-        conn.commit()
-        conn.close()
-        logging.info(f'Worker {worker_id}: Simulation saved in database.')
+        # c.execute('INSERT INTO simulations (mu, kappa, theta, sigma, rho, v0, time_points, burnin, T, S0, paths, start_date, end_date, interval, max_number_of_same_prices, NP_rc1, NP_rc2, NP_rc3, NP_rc4, NP_rm1, NP_rm2, NP_rm3, NP_rm4, NP_rskewness, NP_rexcess_kurtosis, seed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', result)
+        # conn.commit()
+        # conn.close()
+        # logging.info(f'Worker {worker_id}: Simulation saved in database.')
 
     except Exception as e:
         logging.error(f"Worker {worker_id}: Error {e}")
