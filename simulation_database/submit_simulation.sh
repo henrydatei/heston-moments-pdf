@@ -1,6 +1,5 @@
 #!/bin/sh
 
-#SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=52
 #SBATCH --mem-per-cpu=16000
 #SBATCH --nodes=5
