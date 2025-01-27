@@ -66,7 +66,7 @@ rhos = np.arange(rho_min, rho_max, rho_step)
 # kappas = [0.61]
 # thetas = [0.66]
 # sigmas = [0.66]
-mus = [0]
+mus = [0.05]
 # rhos = [0.7]
 
 def create_simulation_and_save_it(params):
