@@ -123,8 +123,8 @@ def create_simulation_and_save_it(params):
 
     try:
         process = Heston_QE(S0=S0, v0=v0, kappa=kappa, theta=theta, sigma=sigma, mu=mu, rho=rho, T=T, N=time_points, n_paths=paths)
-        if mu != 0:
-            process = process - mu
+        # if mu != 0:
+        #     process = process - mu
         process_df = process_to_log_returns_interday(process, start_date, end_date)
 
         max_number_of_same_prices = process_df.iloc[:, 0].value_counts().max()
@@ -133,7 +133,7 @@ def create_simulation_and_save_it(params):
         mvsek = []
         realized_cumulants = []
         for column in process_df.columns:
-            mvsek.append(rMoments_mvsek(process_df[column], method=technique, days_aggregate=22, m1zero=True, ret_nc_mom=True).to_numpy())
+            mvsek.append(rMoments_mvsek(process_df[column], method=technique, days_aggregate=22, m1zero=False, ret_nc_mom=True).to_numpy())
             realized_cumulants.append(rCumulants(process_df[column], method=technique, months_overlap=6).to_numpy())
 
         mvsek = pd.DataFrame(np.squeeze(np.array(mvsek))).T.mean(axis=1)
