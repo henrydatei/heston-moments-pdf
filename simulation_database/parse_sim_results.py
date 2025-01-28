@@ -73,8 +73,15 @@ def parse_log_file(log_file):
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
     pattern = re.compile(r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d+ - Worker \d+ result: )')
+    
+    # get total lines in log_file
+    total_lines = 0
     with open(log_file, 'r') as file:
-        for line in file:
+        for _ in file:
+            total_lines += 1
+    
+    with open(log_file, 'r') as file:
+        for line in tqdm(file, total=total_lines, desc='Processing log file'):
             if pattern.match(line):
                 line = pattern.sub('', line)
                 line = re.sub(r'\(|\)', '', line)
