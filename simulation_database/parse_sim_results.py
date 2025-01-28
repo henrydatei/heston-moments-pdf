@@ -111,5 +111,5 @@ def process_results_folder():
                 insert_csv_to_db(csv_path)
 
 if __name__ == "__main__":
-    # process_results_folder()
+    process_results_folder()
     parse_log_file('/Users/henryhaustein/Downloads/heston-moments-pdf/simulation_database/results/log.txt')
