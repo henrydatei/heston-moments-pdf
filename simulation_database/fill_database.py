@@ -6,6 +6,7 @@ from multiprocessing import Pool, cpu_count
 import time
 import argparse
 import logging
+import sqlite3
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -61,12 +62,20 @@ mus = np.arange(mu_min, mu_max, mu_step)
 rhos = np.arange(rho_min, rho_max, rho_step)
 
 # Short local test
-# v0s = [0.11]
-# kappas = [0.61]
-# thetas = [0.66]
-# sigmas = [0.66]
+# v0s = [0.21]
+# kappas = [0.51]
+# thetas = [0.36]
+# sigmas = [0.16]
 mus = [0.05]
-# rhos = [0.7]
+# rhos = [-0.8]
+
+def load_existing_combinations():
+    query = """SELECT start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin FROM simulations"""
+    
+    with sqlite3.connect('simulations.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(query)
+        return set(cursor.fetchall())  # Speichert alle Kombinationen als Tupel in einem Set
 
 def create_simulation_and_save_it(params):
     subjob_id, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin = params
@@ -122,6 +131,8 @@ def main():
 
     i = args.i
     num_chunks = args.chunks
+    
+    existing_combinations = load_existing_combinations()
 
     parameter_list = [
         (i, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin)
@@ -136,6 +147,11 @@ def main():
     sub_parameter_list = parameter_list[start_index:end_index]
 
     print(f"Processing chunk {i}: {len(sub_parameter_list)} simulations.")
+    
+    # Entferne bereits berechnete Parameterkombinationen durch schnellen Lookup im Set
+    sub_parameter_list = [params for params in sub_parameter_list if params[1:] not in existing_combinations]
+    
+    print(f"Processing chunk {i}: {len(sub_parameter_list)} simulations left after removing already computed results.")
 
     # Nutzung aller verfügbaren CPU-Kerne
     with Pool(processes=cpu_count()) as pool:
