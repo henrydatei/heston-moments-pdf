@@ -6,6 +6,7 @@ import sys
 import os
 import pandas as pd
 from scipy.interpolate import interp1d
+import sqlite3
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -55,63 +56,24 @@ def Cramer_von_Mises_test(x_1, pdf_1, x_2, pdf_2):
     res = stats.cramervonmises_2samp(samples_1, samples_2)
     return res.statistic, res.pvalue
 
-np.random.seed(0)
+c = sqlite3.connect('simulations.db')
+cursor = c.cursor()
+random_simulation = cursor.execute('SELECT * FROM simulations WHERE max_number_of_same_prices < 10 ORDER BY RANDOM() LIMIT 1').fetchone()
+c.close()
 
-# Define parameters for the simulation
-time_points = 3 * 12 * 22 * 79  # 3 years with 12 months with 22 trading days with 79 prices (5 minute intervals from 9:30 am to 4pm and inital price
-time_points = 60 * 22 * 12
-start_date = '2014-07-01'
-end_date = '2076-07-01'
-T = 3
-T = 60
-S0 = 100
-paths = 10
-paths = 1
-v0 = 0.19
-kappa = 3
-theta = 0.19
-sigma = 0.4
-mu = 0 # martingale
-rho = -0.7
-rolling_window = 22
+cumulants = random_simulation[16:20]
+mu = random_simulation[1]
+kappa = random_simulation[2]
+theta = random_simulation[3]
+sigma = random_simulation[4]
+rho = random_simulation[5]
 
-# # Eraker 2004 (for time unit = 1 day)
-# mu = 0.026 # is not 0, so we need to de-mean the data
-# theta = 1.933
-# kappa = 0.019
-# rho = -0.569
-# sigma = 0.220
-
-# # Eraker 2004 (for time unit = 5 min)
-# kappa = 0.019 * 1/78
-# sigma = 0.220 * np.sqrt(1/78)
-
-# Check if Feller condition is satisfied
-print(f'Feller condition: {2 * kappa * theta > sigma**2}')
-
-# Simulation
-process = Heston_QE(S0=S0, v0=v0, kappa=kappa, theta=theta, sigma=sigma, mu=mu, rho=rho, T=T, N=time_points, n_paths=paths)
-process_df = process_to_log_returns(process, start_date, end_date, time_points, burnin_timesteps=10*22*12)
-
-# Estimate moments
-technique = RM_NP_return
-mvsek = []
-for column in process_df.columns:
-    mvsek.append(rMoments_mvsek(process_df[column], method=technique, days_aggregate=rolling_window, m1zero=True, ret_nc_mom=False).to_numpy())
-mvsek = np.squeeze(np.array(mvsek))
-mvsek = pd.DataFrame(mvsek).T # each column is a path and each row is a moment (mean, variance, skewness, kurtosis)
-print(mvsek)
-mvsek = mvsek.mean(axis=1) # rowwise means
-
-print(mvsek)
-
-# Calculate cumulants
-cumulants = scipy_mvsek_to_cumulants(mean=mvsek[0], variance=mvsek[1], skewness=mvsek[2], excess_kurtosis=mvsek[3])
-print(cumulants)
+print(f'Random Simulation {random_simulation[0]} Cumulants: {cumulants}')
+print(f'Random Simulation Parameters: {mu, kappa, theta, sigma, rho}')
 
 # Expansion methods
 x = np.linspace(-2, 2, 1000)
-gc = gram_charlier_expansion(x, *cumulants)
+gc = gram_charlier_expansion(x, *cumulants, fakasawa=True)
 gc_haozhe = Expansion_GramCharlier(cumulants)
 
 true_cumulant = np.array([-0.00791667, 0.01601168, -0.00056375, 0.00088632])
@@ -123,10 +85,10 @@ x_theory, density = compute_density_via_ifft_accurate(mu, kappa, theta, sigma, r
 
 # Plotting
 plt.plot(x_theory, density, 'r--', label='Theoretical Density')
-plt.plot(x, gc, 'b-', label='Henry Gram-Charlier Expansion')
-plt.plot(x, gc_haozhe, 'm-', label='Haozhe Gram-Charlier Expansion')
-plt.plot(x, gc_true, 'g-', label='Henry True Gram-Charlier Expansion')
-plt.plot(x, gc_true_haozhe, 'y-', label='Haozhe True Gram-Charlier Expansion')
+plt.plot(x, gc, 'b-', label='Gram-Charlier Expansion')
+# plt.plot(x, gc_haozhe, 'm-', label='Haozhe Gram-Charlier Expansion')
+plt.plot(x, gc_true, 'g-', label='True Gram-Charlier Expansion')
+# plt.plot(x, gc_true_haozhe, 'y-', label='Haozhe True Gram-Charlier Expansion')
 plt.title('Theoretical vs GC of Log-Returns')
 plt.legend()
 
@@ -141,7 +103,7 @@ haozhe_cdf = pdf_to_cdf(x, gc_haozhe)
 # Plotting
 plt.plot(x_theory, theory_cdf, 'r--', label='Theoretical CDF')
 plt.plot(x, empirical_cdf, 'b-', label='Gram-Charlier Expansion CDF')
-plt.plot(x, haozhe_cdf, 'm-', label='Haozhe Gram-Charlier Expansion CDF')
+# plt.plot(x, haozhe_cdf, 'm-', label='Haozhe Gram-Charlier Expansion CDF')
 plt.title('Theoretical vs GC of Log-Returns')
 plt.legend()
 
@@ -157,11 +119,11 @@ print(f'Henry CDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
 cv_statistic, p_value = Cramer_von_Mises_test(x_theory, density, x, gc)
 print(f'Henry PDF Cramer von Mises Statistic: {cv_statistic}, P-Value: {p_value}')
 
-ks_statistic, p_value = KS_test(x_theory, density, x, gc_haozhe)
-print(f'Haozhe PDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
+# ks_statistic, p_value = KS_test(x_theory, density, x, gc_haozhe)
+# print(f'Haozhe PDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
 
-cv_statistic, p_value = Cramer_von_Mises_test(x_theory, density, x, gc_haozhe)
-print(f'Haozhe PDF Cramer von Mises Statistic: {cv_statistic}, P-Value: {p_value}')
+# cv_statistic, p_value = Cramer_von_Mises_test(x_theory, density, x, gc_haozhe)
+# print(f'Haozhe PDF Cramer von Mises Statistic: {cv_statistic}, P-Value: {p_value}')
 
-print(f"Henry JS Divergence: {jensenshannon(density, gc)}")
-print(f"Haozhe JS Divergence: {jensenshannon(density, gc_haozhe)}")
+# print(f"Henry JS Divergence: {jensenshannon(density, gc)}")
+# print(f"Haozhe JS Divergence: {jensenshannon(density, gc_haozhe)}")
