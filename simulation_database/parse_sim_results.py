@@ -1,8 +1,13 @@
 import sqlite3
 import os
+import sys
 import pandas as pd
 from tqdm import tqdm
 import re
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from simulation_database.database_utils import add_column, update_value
 
 db_file = 'simulations.db'
 
@@ -116,7 +121,28 @@ def process_results_folder():
             for csv_file in tqdm(csv_files, desc=f'Processing {subfolder}', leave=False):
                 csv_path = os.path.join(subfolder_path, csv_file)
                 insert_csv_to_db(csv_path)
+                
+def check_feller_condition():
+    add_column('simulations', 'feller_condition', 'INTEGER')
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM simulations')
+    simulations = cursor.fetchall()
+    for simulation in tqdm(simulations, desc='Checking Feller Condition'):
+        mu, kappa, theta, sigma, rho, v0 = simulation[1:7]
+        if 2 * kappa * theta > sigma ** 2:
+            update_value('simulations', 'feller_condition', 1, mu, kappa, theta, sigma, rho, v0)
+        else:
+            update_value('simulations', 'feller_condition', 0, mu, kappa, theta, sigma, rho, v0)
+
+def round_numbers():
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+    cursor.execute('UPDATE simulations SET mu=ROUND(mu, 6), kappa=ROUND(kappa, 6), theta=ROUND(theta, 6), sigma=ROUND(sigma, 6), rho=ROUND(rho, 6), v0=ROUND(v0, 6)')
+    conn.commit()
 
 if __name__ == "__main__":
-    process_results_folder()
-    parse_log_file('/Users/henryhaustein/Downloads/heston-moments-pdf/simulation_database/results/log.txt')
+    # process_results_folder()
+    # parse_log_file('/Users/henryhaustein/Downloads/heston-moments-pdf/simulation_database/results/log.txt')
+    round_numbers()
+    # check_feller_condition()
