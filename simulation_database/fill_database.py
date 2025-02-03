@@ -7,6 +7,7 @@ import time
 import argparse
 import logging
 import sqlite3
+# from realized_cumulants import r_cumulants
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -99,6 +100,11 @@ def create_simulation_and_save_it(params):
         for column in process_df.columns:
             mvsek.append(rMoments_mvsek(process_df[column], method=technique, days_aggregate=22, m1zero=False, ret_nc_mom=True).to_numpy())
             realized_cumulants.append(rCumulants(process_df[column], method=technique, months_overlap=6).to_numpy())
+            # values = process_df[column].to_numpy(dtype=np.float64)
+            # timestamps = process_df.index.to_numpy(dtype=np.int64) // 10 ** 9
+            # cumulants = r_cumulants(values, timestamps, months_overlap=6)
+            # realized_cumulants.append(cumulants)
+            # logging.info(f"Worker {worker_id}: Results from Rust Code: {cumulants}")
 
         mvsek = pd.DataFrame(np.squeeze(np.array(mvsek))).T.mean(axis=1)
         realized_cumulants = pd.DataFrame(np.squeeze(np.array(realized_cumulants))).T.mean(axis=1)
