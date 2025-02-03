@@ -33,7 +33,6 @@ T = 15
 S0 = 100
 paths = 1
 seed = 0
-np.random.seed(seed)
 
 # Full Simulation
 v0_min = 0.01
@@ -82,6 +81,8 @@ def create_simulation_and_save_it(params):
     subjob_id, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin = params
     worker_id = os.getpid()
     logging.info(f"Worker {worker_id}: Running simulation with v0={v0}, kappa={kappa}, theta={theta}, sigma={sigma}, mu={mu}, rho={rho}, seed={seed}")
+    
+    np.random.seed(seed)
 
     subjob_dir = os.path.join(results_dir, f'subjob_{subjob_id}')
     os.makedirs(subjob_dir, exist_ok=True)
