@@ -132,7 +132,7 @@ def main():
     start_time = time.time()
 
     parser = argparse.ArgumentParser(description='Run a subset of simulations.')
-    parser.add_argument('--i', type=int, required=True, help='Index of the job')
+    parser.add_argument('--i', type=int, help='Index of the job', default=0)
     parser.add_argument('--chunks', type=int, default=1, help='Number of chunks')
     args = parser.parse_args()
 
