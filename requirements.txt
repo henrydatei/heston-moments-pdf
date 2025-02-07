@@ -9,4 +9,3 @@ sympy>=1.13.1
 torch>=2.5.1
 tqdm>=4.66.5
 yfinance>=0.2.20
-itertools

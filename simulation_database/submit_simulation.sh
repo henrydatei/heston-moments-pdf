@@ -39,7 +39,6 @@ pip install scipy
 pip install tqdm
 # pip install yfinance
 # pip install pytorch-lightning
-pip install itertools
 
 srun python simulation_database/fill_database.py --i $SLURM_ARRAY_TASK_ID --chunks 100
 
