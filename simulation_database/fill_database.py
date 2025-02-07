@@ -66,7 +66,7 @@ rhos = np.arange(rho_min, rho_max, rho_step)
 # kappas = [0.51]
 # thetas = [0.36]
 # sigmas = [0.16]
-mus = [0.05]
+mus = [0, 0.05]
 # rhos = [-0.8]
 
 def load_existing_combinations():
@@ -99,7 +99,11 @@ def create_simulation_and_save_it(params):
         mvsek = []
         realized_cumulants = []
         for column in process_df.columns:
-            mvsek.append(rMoments_mvsek(process_df[column], method=technique, days_aggregate=22, m1zero=False, ret_nc_mom=True).to_numpy())
+            if mu == 0:
+                m1zero = True
+            else:
+                m1zero = False
+            mvsek.append(rMoments_mvsek(process_df[column], method=technique, days_aggregate=22, m1zero=m1zero, ret_nc_mom=True).to_numpy())
             realized_cumulants.append(rCumulants(process_df[column], method=technique, months_overlap=6).to_numpy())
             # values = process_df[column].to_numpy(dtype=np.float64)
             # timestamps = process_df.index.to_numpy(dtype=np.int64) // 10 ** 9
