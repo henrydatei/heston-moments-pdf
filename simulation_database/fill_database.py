@@ -187,7 +187,7 @@ def main():
     # ]
     
     parameter_list = [
-        (i, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin) for i, (v0, kappa, theta, sigma, mu, rho) in enumerate(missing_combinations())
+        (i, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin) for v0, kappa, theta, sigma, mu, rho in missing_combinations()
     ]
 
     chunk_size = len(parameter_list) // num_chunks
