@@ -7,6 +7,7 @@ import time
 import argparse
 import logging
 import sqlite3
+import itertools
 # from realized_cumulants import r_cumulants
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -69,6 +70,9 @@ rhos = np.arange(rho_min, rho_max, rho_step)
 mus = [0, 0.05]
 # rhos = [-0.8]
 
+def runden(x, ndigits=6):
+    return round(x, ndigits)
+
 def load_existing_combinations():
     query = """SELECT start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin FROM simulations"""
     
@@ -76,6 +80,37 @@ def load_existing_combinations():
         cursor = conn.cursor()
         cursor.execute(query)
         return set(cursor.fetchall())  # Speichert alle Kombinationen als Tupel in einem Set
+    
+def missing_combinations():
+    all_combinations = set(
+        (runden(v0), runden(kappa), runden(theta), runden(sigma), runden(mu), runden(rho))
+        for v0, kappa, theta, sigma, mu, rho in itertools.product(v0s, kappas, thetas, sigmas, mus, rhos)
+    )
+    
+    logging.info("Erwartete Anzahl Kombinationen:", len(all_combinations))
+
+    # Verbindung zur SQLite-Datenbank herstellen
+    conn = sqlite3.connect("simulations.db")
+    cursor = conn.cursor()
+
+    # Auslesen der in der Datenbank gespeicherten Parameterkombinationen
+    cursor.execute("SELECT v0, kappa, theta, sigma, mu, rho FROM simulations")
+    db_combinations = set(
+        (runden(row[0]), runden(row[1]), runden(row[2]), runden(row[3]), runden(row[4]), runden(row[5]))
+        for row in cursor.fetchall()
+    )
+
+    logging.info("In der DB gefundene Kombinationen:", len(db_combinations))
+
+    # Fehlende Kombinationen ermitteln
+    missing = all_combinations - db_combinations
+
+    logging.info("Anzahl fehlender Kombinationen:", len(missing))
+
+    conn.close()
+    
+    return missing
+    
 
 def create_simulation_and_save_it(params):
     subjob_id, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin = params
@@ -143,12 +178,16 @@ def main():
     i = args.i
     num_chunks = args.chunks
     
-    existing_combinations = load_existing_combinations()
+    # existing_combinations = load_existing_combinations()
 
+    # parameter_list = [
+    #     (i, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin)
+    #     for v0 in v0s for kappa in kappas for theta in thetas
+    #     for sigma in sigmas for mu in mus for rho in rhos
+    # ]
+    
     parameter_list = [
-        (i, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin)
-        for v0 in v0s for kappa in kappas for theta in thetas
-        for sigma in sigmas for mu in mus for rho in rhos
+        (i, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin) for i, (v0, kappa, theta, sigma, mu, rho) in enumerate(missing_combinations())
     ]
 
     chunk_size = len(parameter_list) // num_chunks
@@ -160,9 +199,9 @@ def main():
     print(f"Processing chunk {i}: {len(sub_parameter_list)} simulations.")
     
     # Entferne bereits berechnete Parameterkombinationen durch schnellen Lookup im Set
-    sub_parameter_list = [params for params in sub_parameter_list if params[1:] not in existing_combinations]
+    # sub_parameter_list = [params for params in sub_parameter_list if params[1:] not in existing_combinations]
     
-    print(f"Processing chunk {i}: {len(sub_parameter_list)} simulations left after removing already computed results.")
+    # print(f"Processing chunk {i}: {len(sub_parameter_list)} simulations left after removing already computed results.")
 
     # Nutzung aller verfügbaren CPU-Kerne
     with Pool(processes=cpu_count()) as pool:
