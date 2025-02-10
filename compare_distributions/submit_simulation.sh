@@ -2,7 +2,7 @@
 
 #SBATCH --mem-per-cpu=4000
 #SBATCH --nodes=1
-#SBATCH --time=24:00:00
+#SBATCH --time=01:00:00
 #SBATCH -J fill_database_with_distances
 #SBATCH --array=0-99
 #SBATCH --error="/home/s4307678/.out/myjob-%A_%a.out"
