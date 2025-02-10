@@ -30,9 +30,12 @@ def gram_charlier_expansion(x, mean, variance, third_cumulant, fourth_cumulant, 
     else:
         return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + third_cumulant/(6 * variance**1.5) * hermite_polynomial(3, z) + (fourth_cumulant / variance**2)/24 * hermite_polynomial(4, z))
 
-def edgeworth_expansion(x, mean, variance, third_cumulant, fourth_cumulant):
+def edgeworth_expansion(x, mean, variance, third_cumulant, fourth_cumulant, fakasawa = False):
     z = (x - mean) / np.sqrt(variance)
-    return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + third_cumulant/(6 * variance**1.5) * hermite_polynomial(3, z) + fourth_cumulant/(24 * variance**2) * hermite_polynomial(4, z) + (third_cumulant/(variance**1.5))**2/72 * hermite_polynomial(6, z))
+    if fakasawa:
+        return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + third_cumulant/(6 * variance**1.5) * hermite_polynomial(3, z) + (fourth_cumulant / variance**2 - 3)/24 * hermite_polynomial(4, z) + (third_cumulant/(variance**1.5))**2/72 * hermite_polynomial(6, z))
+    else:
+        return norm.pdf(x, loc = mean, scale = np.sqrt(variance)) * (1 + third_cumulant/(6 * variance**1.5) * hermite_polynomial(3, z) + fourth_cumulant/(24 * variance**2) * hermite_polynomial(4, z) + (third_cumulant/(variance**1.5))**2/72 * hermite_polynomial(6, z))
 
 def intersection_lines(a,b,c,d):
     x = (d-b)/(a-c)
@@ -103,9 +106,9 @@ def transform_skew_exkurt_into_positivity_region(skew, exkurt, intersections):
 
     return new_skew, new_exkurt
 
-def gram_charlier_expansion_positivity_constraint(x, mean, variance, skewness, exkurt):
+def gram_charlier_expansion_positivity_constraint(x, mean, variance, skewness, exkurt, fakasawa = False):
     new_skew, new_exkurt = transform_skew_exkurt_into_positivity_region(skewness, exkurt, get_intersections_gc())
-    expansion = gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(mean, variance, new_skew, new_exkurt))
+    expansion = gram_charlier_expansion(x, *scipy_mvsek_to_cumulants(mean, variance, new_skew, new_exkurt), fakasawa)
         
     return expansion
 
@@ -168,9 +171,9 @@ def neg_log_likelihood_ew(params, data):
     likelihoods = edgeworth_expansion(data, mu, variance, s, k)
     return -np.sum(np.log(likelihoods))
 
-def edgeworth_expansion_positivity_constraint(x, mean, variance, skewness, exkurt):
+def edgeworth_expansion_positivity_constraint(x, mean, variance, skewness, exkurt, fakasawa = False):
     new_skew, new_exkurt = transform_skew_exkurt_into_positivity_region(skewness, exkurt, get_intersections_ew())
-    expansion = edgeworth_expansion(x, *scipy_mvsek_to_cumulants(mean, variance, new_skew, new_exkurt))
+    expansion = edgeworth_expansion(x, *scipy_mvsek_to_cumulants(mean, variance, new_skew, new_exkurt), fakasawa)
         
     return expansion
 
