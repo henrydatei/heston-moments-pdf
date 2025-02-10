@@ -15,6 +15,27 @@ Z_ROOT3 = np.real(cmath.sqrt(5 + (10**(2/3) / (2 + i * np.sqrt(6))**(1/3)) + ((1
 def scipy_mvsek_to_cumulants(mean, variance, skewness, excess_kurtosis):
     return mean, variance, skewness*variance**1.5, excess_kurtosis*variance**2
 
+def moments_to_cumulants(first_moment, second_moment, third_moment, fourth_moment):
+    first_cumulant = first_moment
+    second_cumulant = second_moment - first_moment**2
+    third_cumulant = third_moment - 3*first_moment*second_moment + 2*first_moment**3
+    fourth_cumulant = fourth_moment - 4*first_moment*third_moment - 3*second_moment**2 + 12*first_moment**2*second_moment - 6*first_moment**4
+    return first_cumulant, second_cumulant, third_cumulant, fourth_cumulant
+
+def moments_to_mvsek(first_moment, second_moment, third_moment, fourth_moment):
+    mean = first_moment
+    variance = second_moment - first_moment**2
+    skewness = (third_moment - 3*first_moment*second_moment + 2*first_moment**3) / variance**1.5
+    excess_kurtosis = (fourth_moment - 4*first_moment*third_moment + 6*first_moment**2*second_moment - 3*first_moment**4) / variance**2 - 3
+    return mean, variance, skewness, excess_kurtosis
+
+def cumulants_to_mvsek(first_cumulant, second_cumulant, third_cumulant, fourth_cumulant):
+    mean = first_cumulant
+    variance = second_cumulant
+    skewness = third_cumulant / variance**1.5
+    excess_kurtosis = fourth_cumulant / variance**2
+    return mean, variance, skewness, excess_kurtosis
+
 def hermite_polynomial(n, x):
     if n == 0:
         return 1
@@ -279,7 +300,6 @@ def find_s_k_from_skewness_exkurt_table(skewness, excess_kurtosis, interpolate =
             if actual_skewness_idx >= len(s_values[actual_exkurt_idx]):
                 actual_skewness_idx = len(s_values[actual_exkurt_idx]) - 1
             
-            print(actual_exkurt_idx, actual_skewness_idx)
             s1, k1 = s_values[actual_exkurt_idx][actual_skewness_idx], k_values[actual_exkurt_idx][actual_skewness_idx]
             
             d_x = skewness - actual_skewness_values[actual_skewness_idx]
