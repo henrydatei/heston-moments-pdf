@@ -268,8 +268,15 @@ def find_s_k_from_skewness_exkurt_table(skewness, excess_kurtosis, interpolate =
         if interpolate:
             s2, k2 = s_values[actual_exkurt_idx][actual_skewness_idx], k_values[actual_exkurt_idx][actual_skewness_idx]
             
-            actual_skewness_idx = actual_skewness_idx - 1 if actual_skewness_idx > 0 else 0
             actual_exkurt_idx = actual_exkurt_idx - 1 if actual_exkurt_idx > 0 else 0
+            
+            # versuche in der Tabelle für Skewness eins nach links zu gehen
+            actual_skewness_idx = actual_skewness_idx - 1 if actual_skewness_idx > 0 else 0
+            # das klappt aber nicht immer
+            if actual_skewness_idx >= len(s_values[actual_exkurt_idx]):
+                actual_skewness_idx = len(s_values[actual_exkurt_idx]) - 1
+            
+            print(actual_exkurt_idx, actual_skewness_idx)
             s1, k1 = s_values[actual_exkurt_idx][actual_skewness_idx], k_values[actual_exkurt_idx][actual_skewness_idx]
             
             d_x = skewness - actual_skewness_values[actual_skewness_idx]
