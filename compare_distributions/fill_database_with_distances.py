@@ -209,8 +209,9 @@ def process_simulation(simulation):
         logging.error(f'Error with SP with moments for simulation {simulation[0]}: {e}')
         
     # write results to csv
-    df = pd.DataFrame(results)
-    df.to_csv(os.path.join(results_dir, f"results_{os.getpid()}.csv"), index=False)
+    df = pd.DataFrame(results, index=[0])
+    filename = os.path.join(results_dir, f"results_{os.getpid()}.csv")
+    df.to_csv(filename, index=False, mode='a', header=not os.path.exists(filename))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -221,13 +222,13 @@ if __name__ == '__main__':
     c = sqlite3.connect('simulations.db')
     cursor = c.cursor()
 
-    total_rows = c.execute("SELECT COUNT(*) FROM simulations WHERE GC_cum_KS_stat IS NOT NULL").fetchone()[0]
+    total_rows = c.execute("SELECT COUNT(*) FROM simulations WHERE GC_cum_KS_stat IS NULL").fetchone()[0]
     rows_per_chunk = math.ceil(total_rows / args.chunks)
 
     start_index = args.i * rows_per_chunk
     end_index = min(start_index + rows_per_chunk, total_rows)
 
-    query = f"SELECT * FROM simulations WHERE GC_cum_KS_stat IS NOT NULL LIMIT {rows_per_chunk} OFFSET {start_index}"
+    query = f"SELECT * FROM simulations WHERE GC_cum_KS_stat IS NULL LIMIT {rows_per_chunk} OFFSET {start_index}"
     simulations = cursor.execute(query).fetchall()
     c.close()
     
