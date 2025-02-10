@@ -204,7 +204,9 @@ def process_simulation(simulation):
     except:
         logging.error(f'Error with SP with moments for simulation {simulation[0]}')
         
-    return results
+    # write results to csv
+    df = pd.DataFrame(results)
+    df.to_csv(os.path.join(results_dir, f"results_{os.getpid()}.csv"), index=False)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -288,13 +290,7 @@ if __name__ == '__main__':
     add_column('simulations', 'SP_mom_CV_stat', 'FLOAT')
     add_column('simulations', 'SP_mom_CV_p', 'FLOAT')
     
+    results_dir = os.path.join(results_dir, f"task_{args.i}")
+    
     with Pool(os.cpu_count()) as pool:
         results = pool.map(process_simulation, simulations)
-    
-    logging.info(f"Chunk {args.i} results: {results}")
-    
-    # write results to csv
-    df = pd.DataFrame(results)
-    output_dir = os.path.join(results_dir, f"task_{args.i}")
-    os.makedirs(output_dir, exist_ok=True)
-    df.to_csv(os.path.join(output_dir, f"results_{os.getpid()}.csv"), index=False)
