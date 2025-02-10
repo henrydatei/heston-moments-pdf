@@ -41,3 +41,52 @@ def update_value(table, column, value, mu, kappa, theta, sigma, rho, v0):
     else:
         cursor.execute(f'UPDATE {table} SET {column}={value} WHERE {where_stmt}')
         conn.commit()
+
+def update_multiple_values(table, values, mu, kappa, theta, sigma, rho, v0):
+    """
+    Aktualisiert mehrere Spalten in einer Tabelle, sofern genau ein Datensatz 
+    mit den angegebenen Parametern existiert.
+
+    Parameter:
+      table (str): Name der Tabelle.
+      values (dict): Dictionary mit Spaltennamen als Schlüssel und den neuen Werten als Wert.
+      mu, kappa, theta, sigma, rho, v0: Parameter, die in der WHERE-Klausel verwendet werden.
+    """
+    conn = sqlite3.connect('simulations.db')
+    cursor = conn.cursor()
+    
+    # WHERE-Klausel und Parameterbindung
+    where_clause = "mu=? AND kappa=? AND theta=? AND sigma=? AND rho=? AND v0=?"
+    where_params = (mu, kappa, theta, sigma, rho, v0)
+    
+    # Überprüfen, ob genau ein Eintrag existiert
+    cursor.execute(f"SELECT count(*) FROM {table} WHERE {where_clause}", where_params)
+    num = cursor.fetchone()[0]
+    if num == 0:
+        print(f'Kein Eintrag gefunden in {table} mit {where_clause} und Werten {where_params}')
+        return
+    elif num > 1:
+        print(f'Mehrere Einträge gefunden in {table} mit {where_clause} und Werten {where_params}')
+        return
+    
+    # Abfrage der aktuellen Werte für die zu aktualisierenden Spalten
+    columns = ", ".join(values.keys())
+    cursor.execute(f"SELECT {columns} FROM {table} WHERE {where_clause}", where_params)
+    current_values = cursor.fetchone()
+    
+    # Prüfen, welche Spalten aktualisiert werden müssen
+    changes = {}
+    for i, col in enumerate(values.keys()):
+        if current_values[i] != values[col]:
+            changes[col] = values[col]
+    
+    if changes:
+        # Aufbau der SET-Klausel mit Parameterbindung
+        set_clause = ", ".join([f"{col}=?" for col in changes.keys()])
+        update_params = list(changes.values()) + list(where_params)
+        query = f"UPDATE {table} SET {set_clause} WHERE {where_clause}"
+        cursor.execute(query, update_params)
+        conn.commit()
+        # print(f"Spalten aktualisiert: {', '.join(changes.keys())}")
+    
+    conn.close()
