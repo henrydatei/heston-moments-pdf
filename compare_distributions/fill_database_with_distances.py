@@ -7,12 +7,36 @@ from tqdm import tqdm
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from expansion_methods.all_methods import scipy_mvsek_to_cumulants, gram_charlier_expansion
+from expansion_methods.all_methods import moments_to_cumulants, moments_to_mvsek, cumulants_to_mvsek, gram_charlier_expansion, gram_charlier_expansion_positivity_constraint, edgeworth_expansion, edgeworth_expansion_positivity_constraint, cornish_fisher_expansion, saddlepoint_approximation
 from heston_model_properties.theoretical_density import compute_density_via_ifft_accurate
-from simulation_database.database_utils import add_column
-from compare_distributions.distances import pdf_to_cdf, KS_test_sample_from_pdf, KS_test_sample_from_cdf, Cramer_von_Mises_test
+from simulation_database.database_utils import add_column, update_multiple_values
+from compare_distributions.distances import pdf_to_cdf, KS_test_sample_from_cdf, Cramer_von_Mises_test
 
-from code_from_haozhe.GramCharlier_expansion import Expansion_GramCharlier
+def do_tests(expansion_method, argument, fakasawa):
+    if fakasawa:
+        expansion = expansion_method(x, *argument, fakasawa=True)
+    else:
+        expansion = expansion_method(x, *argument)
+
+    # CDFs + Normalisation (since the sum of the PDF over all space should equal 1)
+    theory_cdf = pdf_to_cdf(x_theory, density)
+    empirical_cdf = pdf_to_cdf(x, expansion)
+
+    ks_statistic, ks_p_value = KS_test_sample_from_cdf(x_theory, theory_cdf, x, empirical_cdf)
+
+    cv_statistic, cv_p_value = Cramer_von_Mises_test(x_theory, theory_cdf, x, empirical_cdf)
+    
+    return ks_statistic, ks_p_value, cv_statistic, cv_p_value
+
+def insert_into_database(expansion_type, ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0):
+    values = {
+        f'{expansion_type}_KS_stat': ks_statistic,
+        f'{expansion_type}_KS_p': ks_p_value,
+        f'{expansion_type}_CV_stat': cv_statistic,
+        f'{expansion_type}_CV_p': cv_p_value
+    }
+    update_multiple_values('simulations', values, mu, kappa, theta, sigma, rho, v0)
+    
 
 c = sqlite3.connect('simulations.db')
 cursor = c.cursor()
@@ -21,41 +45,165 @@ cursor = c.cursor()
 simulations = cursor.execute('SELECT * FROM simulations LIMIT 2').fetchall()
 c.close()
 
+add_column('simulations', 'GC_cum_KS_stat', 'FLOAT')
+add_column('simulations', 'GC_cum_KS_p', 'FLOAT')
+add_column('simulations', 'GC_cum_CV_stat', 'FLOAT')
+add_column('simulations', 'GC_cum_CV_p', 'FLOAT')
+
+add_column('simulations', 'GC_mom_KS_stat', 'FLOAT')
+add_column('simulations', 'GC_mom_KS_p', 'FLOAT')
+add_column('simulations', 'GC_mom_CV_stat', 'FLOAT')
+add_column('simulations', 'GC_mom_CV_p', 'FLOAT')
+
+add_column('simulations', 'GC_pos_cum_KS_stat', 'FLOAT')
+add_column('simulations', 'GC_pos_cum_KS_p', 'FLOAT')
+add_column('simulations', 'GC_pos_cum_CV_stat', 'FLOAT')
+add_column('simulations', 'GC_pos_cum_CV_p', 'FLOAT')
+
+add_column('simulations', 'GC_pos_mom_KS_stat', 'FLOAT')
+add_column('simulations', 'GC_pos_mom_KS_p', 'FLOAT')
+add_column('simulations', 'GC_pos_mom_CV_stat', 'FLOAT')
+add_column('simulations', 'GC_pos_mom_CV_p', 'FLOAT')
+
+add_column('simulations', 'EW_cum_KS_stat', 'FLOAT')
+add_column('simulations', 'EW_cum_KS_p', 'FLOAT')
+add_column('simulations', 'EW_cum_CV_stat', 'FLOAT')
+add_column('simulations', 'EW_cum_CV_p', 'FLOAT')
+
+add_column('simulations', 'EW_mom_KS_stat', 'FLOAT')
+add_column('simulations', 'EW_mom_KS_p', 'FLOAT')
+add_column('simulations', 'EW_mom_CV_stat', 'FLOAT')
+add_column('simulations', 'EW_mom_CV_p', 'FLOAT')
+
+add_column('simulations', 'EW_pos_cum_KS_stat', 'FLOAT')
+add_column('simulations', 'EW_pos_cum_KS_p', 'FLOAT')
+add_column('simulations', 'EW_pos_cum_CV_stat', 'FLOAT')
+add_column('simulations', 'EW_pos_cum_CV_p', 'FLOAT')
+
+add_column('simulations', 'EW_pos_mom_KS_stat', 'FLOAT')
+add_column('simulations', 'EW_pos_mom_KS_p', 'FLOAT')
+add_column('simulations', 'EW_pos_mom_CV_stat', 'FLOAT')
+add_column('simulations', 'EW_pos_mom_CV_p', 'FLOAT')
+
+add_column('simulations', 'CF_cum_KS_stat', 'FLOAT')
+add_column('simulations', 'CF_cum_KS_p', 'FLOAT')
+add_column('simulations', 'CF_cum_CV_stat', 'FLOAT')
+add_column('simulations', 'CF_cum_CV_p', 'FLOAT')
+
+add_column('simulations', 'CF_mom_KS_stat', 'FLOAT')
+add_column('simulations', 'CF_mom_KS_p', 'FLOAT')
+add_column('simulations', 'CF_mom_CV_stat', 'FLOAT')
+add_column('simulations', 'CF_mom_CV_p', 'FLOAT')
+
+add_column('simulations', 'SP_cum_KS_stat', 'FLOAT')
+add_column('simulations', 'SP_cum_KS_p', 'FLOAT')
+add_column('simulations', 'SP_cum_CV_stat', 'FLOAT')
+add_column('simulations', 'SP_cum_CV_p', 'FLOAT')
+
+add_column('simulations', 'SP_mom_KS_stat', 'FLOAT')
+add_column('simulations', 'SP_mom_KS_p', 'FLOAT')
+add_column('simulations', 'SP_mom_CV_stat', 'FLOAT')
+add_column('simulations', 'SP_mom_CV_p', 'FLOAT')
+
 for simulation in tqdm(simulations):
-    print(simulation)
+    # print(simulation)
 
     cumulants = simulation[16:20]
+    moments = simulation[20:24]
     mu = simulation[1]
     kappa = simulation[2]
     theta = simulation[3]
     sigma = simulation[4]
     rho = simulation[5]
+    v0 = simulation[6]
 
-    print(f'Random Simulation {simulation[0]} Cumulants: {cumulants}')
-    print(f'Random Simulation Parameters: {mu, kappa, theta, sigma, rho}')
-
-    # Expansion methods
-    x = np.linspace(-2, 2, 1000)
-    gc = gram_charlier_expansion(x, *cumulants, fakasawa=True)
-    gc_haozhe = Expansion_GramCharlier(cumulants)
-
-    # true_cumulant = np.array([-0.00791667, 0.01601168, -0.00056375, 0.00088632])
-    # gc_true = gram_charlier_expansion(x, *true_cumulant)
-    # gc_true_haozhe = Expansion_GramCharlier(true_cumulant)
-
+    # print(f'Random Simulation {simulation[0]} Cumulants: {cumulants}')
+    # print(f'Random Simulation Parameters: {mu, kappa, theta, sigma, rho}')
+    
     # Theoretical density
     x_theory, density = compute_density_via_ifft_accurate(mu, kappa, theta, sigma, rho, 1/12)
+    x = np.linspace(-2, 2, 1000)
 
-    # CDFs + Normalisation (since the sum of the PDF over all space should equal 1)
-    theory_cdf = pdf_to_cdf(x_theory, density)
-    empirical_cdf = pdf_to_cdf(x, gc)
-    haozhe_cdf = pdf_to_cdf(x, gc_haozhe)
-
-    # ks_statistic, p_value = KS_test_sample_from_pdf(x_theory, density, x, gc)
-    # print(f'Henry PDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
-
-    ks_statistic, p_value = KS_test_sample_from_cdf(x_theory, theory_cdf, x, empirical_cdf)
-    print(f'KS Statistic: {ks_statistic}, P-Value: {p_value}')
-
-    cv_statistic, p_value = Cramer_von_Mises_test(x_theory, theory_cdf, x, empirical_cdf)
-    print(f' Cramer von Mises Statistic: {cv_statistic}, P-Value: {p_value}')
+    # GC with cumulants
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(gram_charlier_expansion, cumulants, True)
+        insert_into_database('GC_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with GC with cumulants for simulation {simulation[0]}')
+    
+    # GC with moments
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(gram_charlier_expansion, moments_to_cumulants(*moments), False)
+        insert_into_database('GC_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with GC with moments for simulation {simulation[0]}')
+    
+    # GC with cumulants, positivity
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(gram_charlier_expansion_positivity_constraint, cumulants_to_mvsek(*cumulants), True)
+        insert_into_database('GC_pos_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with GC with cumulants, positivity for simulation {simulation[0]}')
+    
+    # GC with moments, positivity
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(gram_charlier_expansion_positivity_constraint, moments_to_mvsek(*moments), False)
+        insert_into_database('GC_pos_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with GC with moments, positivity for simulation {simulation[0]}')
+    
+    # EW with cumulants
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(edgeworth_expansion, cumulants, True)
+        insert_into_database('EW_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with EW with cumulants for simulation {simulation[0]}')
+    
+    # EW with moments
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(edgeworth_expansion, moments_to_cumulants(*moments), False)
+        insert_into_database('EW_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with EW with moments for simulation {simulation[0]}')
+    
+    # EW with cumulants, positivity
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(edgeworth_expansion_positivity_constraint, cumulants_to_mvsek(*cumulants), True)
+        insert_into_database('EW_pos_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with EW with cumulants, positivity for simulation {simulation[0]}')
+    
+    # EW with moments, positivity
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(edgeworth_expansion_positivity_constraint, moments_to_mvsek(*moments), False)
+        insert_into_database('EW_pos_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with EW with moments, positivity for simulation {simulation[0]}')
+    
+    # CF with cumulants
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(cornish_fisher_expansion, cumulants_to_mvsek(*cumulants), False)
+        insert_into_database('CF_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with CF with cumulants for simulation {simulation[0]}')
+    
+    # CF with moments
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(cornish_fisher_expansion, moments_to_mvsek(*moments), False)
+        insert_into_database('CF_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with CF with moments for simulation {simulation[0]}')
+    
+    # SP with cumulants
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(saddlepoint_approximation, cumulants, False)
+        insert_into_database('SP_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with SP with cumulants for simulation {simulation[0]}')
+    
+    # SP with moments
+    try:
+        ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(saddlepoint_approximation, moments_to_cumulants(*moments), False)
+        insert_into_database('SP_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
+    except:
+        print(f'Error with SP with moments for simulation {simulation[0]}')
