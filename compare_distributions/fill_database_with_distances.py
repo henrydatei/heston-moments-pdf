@@ -296,7 +296,7 @@ if __name__ == '__main__':
     add_column('simulations', 'SP_mom_CV_p', 'FLOAT')
     
     results_dir = os.path.join(results_dir, f"task_{args.i}")
-    os.mkdir(results_dir, exist_ok=True)
+    os.makedirs(results_dir, exist_ok=True)
     
     with Pool(os.cpu_count()) as pool:
         results = pool.map(process_simulation, simulations)
