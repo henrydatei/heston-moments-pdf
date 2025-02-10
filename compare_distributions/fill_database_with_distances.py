@@ -1,9 +1,9 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import sys
 import os
 import sqlite3
 from tqdm import tqdm
+import logging
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -11,6 +11,15 @@ from expansion_methods.all_methods import moments_to_cumulants, moments_to_mvsek
 from heston_model_properties.theoretical_density import compute_density_via_ifft_accurate
 from simulation_database.database_utils import add_column, update_multiple_values
 from compare_distributions.distances import pdf_to_cdf, KS_test_sample_from_cdf, Cramer_von_Mises_test
+
+results_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results')
+os.makedirs(results_dir, exist_ok=True)
+
+logging.basicConfig(
+    filename=os.path.join(results_dir, 'log.txt'),
+    level=logging.INFO,
+    format='%(asctime)s - %(message)s'
+)
 
 def do_tests(expansion_method, argument, fakasawa):
     if fakasawa:
@@ -42,7 +51,7 @@ c = sqlite3.connect('simulations.db')
 cursor = c.cursor()
 
 # get all simulations and store into a list
-simulations = cursor.execute('SELECT * FROM simulations LIMIT 2').fetchall()
+simulations = cursor.execute('SELECT * FROM simulations').fetchall()
 c.close()
 
 add_column('simulations', 'GC_cum_KS_stat', 'FLOAT')
@@ -106,7 +115,6 @@ add_column('simulations', 'SP_mom_CV_stat', 'FLOAT')
 add_column('simulations', 'SP_mom_CV_p', 'FLOAT')
 
 for simulation in tqdm(simulations):
-    # print(simulation)
 
     cumulants = simulation[16:20]
     moments = simulation[20:24]
@@ -116,9 +124,6 @@ for simulation in tqdm(simulations):
     sigma = simulation[4]
     rho = simulation[5]
     v0 = simulation[6]
-
-    # print(f'Random Simulation {simulation[0]} Cumulants: {cumulants}')
-    # print(f'Random Simulation Parameters: {mu, kappa, theta, sigma, rho}')
     
     # Theoretical density
     x_theory, density = compute_density_via_ifft_accurate(mu, kappa, theta, sigma, rho, 1/12)
@@ -129,28 +134,28 @@ for simulation in tqdm(simulations):
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(gram_charlier_expansion, cumulants, True)
         insert_into_database('GC_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with GC with cumulants for simulation {simulation[0]}')
+        logging.error(f'Error with GC with cumulants for simulation {simulation[0]}')
     
     # GC with moments
     try:
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(gram_charlier_expansion, moments_to_cumulants(*moments), False)
         insert_into_database('GC_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with GC with moments for simulation {simulation[0]}')
+        logging.error(f'Error with GC with moments for simulation {simulation[0]}')
     
     # GC with cumulants, positivity
     try:
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(gram_charlier_expansion_positivity_constraint, cumulants_to_mvsek(*cumulants), True)
         insert_into_database('GC_pos_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with GC with cumulants, positivity for simulation {simulation[0]}')
+        logging.error(f'Error with GC with cumulants, positivity for simulation {simulation[0]}')
     
     # GC with moments, positivity
     try:
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(gram_charlier_expansion_positivity_constraint, moments_to_mvsek(*moments), False)
         insert_into_database('GC_pos_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with GC with moments, positivity for simulation {simulation[0]}')
+        logging.error(f'Error with GC with moments, positivity for simulation {simulation[0]}')
     
     # EW with cumulants
     try:
@@ -164,46 +169,46 @@ for simulation in tqdm(simulations):
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(edgeworth_expansion, moments_to_cumulants(*moments), False)
         insert_into_database('EW_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with EW with moments for simulation {simulation[0]}')
+        logging.error(f'Error with EW with moments for simulation {simulation[0]}')
     
     # EW with cumulants, positivity
     try:
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(edgeworth_expansion_positivity_constraint, cumulants_to_mvsek(*cumulants), True)
         insert_into_database('EW_pos_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with EW with cumulants, positivity for simulation {simulation[0]}')
+        logging.error(f'Error with EW with cumulants, positivity for simulation {simulation[0]}')
     
     # EW with moments, positivity
     try:
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(edgeworth_expansion_positivity_constraint, moments_to_mvsek(*moments), False)
         insert_into_database('EW_pos_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with EW with moments, positivity for simulation {simulation[0]}')
+        logging.error(f'Error with EW with moments, positivity for simulation {simulation[0]}')
     
     # CF with cumulants
     try:
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(cornish_fisher_expansion, cumulants_to_mvsek(*cumulants), False)
         insert_into_database('CF_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with CF with cumulants for simulation {simulation[0]}')
+        logging.error(f'Error with CF with cumulants for simulation {simulation[0]}')
     
     # CF with moments
     try:
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(cornish_fisher_expansion, moments_to_mvsek(*moments), False)
         insert_into_database('CF_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with CF with moments for simulation {simulation[0]}')
+        logging.error(f'Error with CF with moments for simulation {simulation[0]}')
     
     # SP with cumulants
     try:
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(saddlepoint_approximation, cumulants, False)
         insert_into_database('SP_cum', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with SP with cumulants for simulation {simulation[0]}')
+        logging.error(f'Error with SP with cumulants for simulation {simulation[0]}')
     
     # SP with moments
     try:
         ks_statistic, ks_p_value, cv_statistic, cv_p_value = do_tests(saddlepoint_approximation, moments_to_cumulants(*moments), False)
         insert_into_database('SP_mom', ks_statistic, ks_p_value, cv_statistic, cv_p_value, mu, kappa, theta, sigma, rho, v0)
     except:
-        print(f'Error with SP with moments for simulation {simulation[0]}')
+        logging.error(f'Error with SP with moments for simulation {simulation[0]}')
