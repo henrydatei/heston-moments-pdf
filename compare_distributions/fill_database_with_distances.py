@@ -69,7 +69,11 @@ def process_simulation(simulation):
     }
     
     # Theoretical density
-    x_theory, density = compute_density_via_ifft_accurate(mu, kappa, theta, sigma, rho, 1/12)
+    try:
+        x_theory, density = compute_density_via_ifft_accurate(mu, kappa, theta, sigma, rho, 1/12)
+    except Exception as e:
+        logging.error(f'Error with theoretical density for simulation {simulation[0]}: {e}')
+        return
     x = np.linspace(-2, 2, 1000)
 
     # GC with cumulants
@@ -80,8 +84,8 @@ def process_simulation(simulation):
         results['GC_cum_KS_p'] = ks_p_value
         results['GC_cum_CV_stat'] = cv_statistic
         results['GC_cum_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with GC with cumulants for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with GC with cumulants for simulation {simulation[0]}: {e}')
     
     # GC with moments
     try:
@@ -91,8 +95,8 @@ def process_simulation(simulation):
         results['GC_mom_KS_p'] = ks_p_value
         results['GC_mom_CV_stat'] = cv_statistic
         results['GC_mom_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with GC with moments for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with GC with moments for simulation {simulation[0]}: {e}')
     
     # GC with cumulants, positivity
     try:
@@ -102,8 +106,8 @@ def process_simulation(simulation):
         results['GC_pos_cum_KS_p'] = ks_p_value
         results['GC_pos_cum_CV_stat'] = cv_statistic
         results['GC_pos_cum_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with GC with cumulants, positivity for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with GC with cumulants, positivity for simulation {simulation[0]}: {e}')
     
     # GC with moments, positivity
     try:
@@ -113,8 +117,8 @@ def process_simulation(simulation):
         results['GC_pos_mom_KS_p'] = ks_p_value
         results['GC_pos_mom_CV_stat'] = cv_statistic
         results['GC_pos_mom_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with GC with moments, positivity for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with GC with moments, positivity for simulation {simulation[0]}: {e}')
     
     # EW with cumulants
     try:
@@ -124,8 +128,8 @@ def process_simulation(simulation):
         results['EW_cum_KS_p'] = ks_p_value
         results['EW_cum_CV_stat'] = cv_statistic
         results['EW_cum_CV_p'] = cv_p_value
-    except:
-        print(f'Error with EW with cumulants for simulation {simulation[0]}')
+    except Exception as e:
+        print(f'Error with EW with cumulants for simulation {simulation[0]}: {e}')
     
     # EW with moments
     try:
@@ -135,8 +139,8 @@ def process_simulation(simulation):
         results['EW_mom_KS_p'] = ks_p_value
         results['EW_mom_CV_stat'] = cv_statistic
         results['EW_mom_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with EW with moments for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with EW with moments for simulation {simulation[0]}: {e}')
     
     # EW with cumulants, positivity
     try:
@@ -146,8 +150,8 @@ def process_simulation(simulation):
         results['EW_pos_cum_KS_p'] = ks_p_value
         results['EW_pos_cum_CV_stat'] = cv_statistic
         results['EW_pos_cum_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with EW with cumulants, positivity for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with EW with cumulants, positivity for simulation {simulation[0]}: {e}')
     
     # EW with moments, positivity
     try:
@@ -157,8 +161,8 @@ def process_simulation(simulation):
         results['EW_pos_mom_KS_p'] = ks_p_value
         results['EW_pos_mom_CV_stat'] = cv_statistic
         results['EW_pos_mom_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with EW with moments, positivity for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with EW with moments, positivity for simulation {simulation[0]}: {e}')
     
     # CF with cumulants
     try:
@@ -168,8 +172,8 @@ def process_simulation(simulation):
         results['CF_cum_KS_p'] = ks_p_value
         results['CF_cum_CV_stat'] = cv_statistic
         results['CF_cum_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with CF with cumulants for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with CF with cumulants for simulation {simulation[0]}: {e}')
     
     # CF with moments
     try:
@@ -179,8 +183,8 @@ def process_simulation(simulation):
         results['CF_mom_KS_p'] = ks_p_value
         results['CF_mom_CV_stat'] = cv_statistic
         results['CF_mom_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with CF with moments for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with CF with moments for simulation {simulation[0]}: {e}')
     
     # SP with cumulants
     try:
@@ -190,8 +194,8 @@ def process_simulation(simulation):
         results['SP_cum_KS_p'] = ks_p_value
         results['SP_cum_CV_stat'] = cv_statistic
         results['SP_cum_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with SP with cumulants for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with SP with cumulants for simulation {simulation[0]}: {e}')
     
     # SP with moments
     try:
@@ -201,8 +205,8 @@ def process_simulation(simulation):
         results['SP_mom_KS_p'] = ks_p_value
         results['SP_mom_CV_stat'] = cv_statistic
         results['SP_mom_CV_p'] = cv_p_value
-    except:
-        logging.error(f'Error with SP with moments for simulation {simulation[0]}')
+    except Exception as e:
+        logging.error(f'Error with SP with moments for simulation {simulation[0]}: {e}')
         
     # write results to csv
     df = pd.DataFrame(results)
