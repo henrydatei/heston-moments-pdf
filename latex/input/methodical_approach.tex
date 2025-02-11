@@ -22,3 +22,4 @@
 - jede Expansions-Methode wird auf die ersten 4 realisierten Momente und die ersten 4 Kumulanten angewendet
 - für jede Simulation wird die theoretische Dichte aus der charakteristischen Funktion berechnet und mit der Dichte aus den Expansionen per Kolmogorov-Smirnov-Test und Cramer-von-Mises-Test verglichen
 - diese Tests brauchen Samples, die aus der Verteilungsfunktion gezogen werden. Damit das immer funktioniert, wird aus der Dichte eine Verteilungsfunktion durch kumulative Summation erstellt und dann alle Werte durch die Summe geteilt. Damit ist das letzte Element der Verteilungsfunktion 1.
+- Wie auch schon im Abschnitt zum Heston-Model angedeutet, führt die Formel \eqref{eq:heston_model_characteristic_function_C} zu overflow Fehlern, da Python nur mit Floats im Bereich von $10^{-308}$ bis $10^{308}$ rechnen kann. Daher wird der Term \eqref{eq:heston_model_characteristic_function_C_2} zur Berechnung verwendet.

@@ -45,10 +45,16 @@ mit
     g &= \frac{\kappa - \rho\sigma\mathrm{i}t - d}{\kappa - \rho\sigma\mathrm{i}t + d} \notag \\
     B &= \frac{\theta\kappa}{\sigma^2}\left(\tau(\kappa - \rho\sigma\mathrm{i}t - d) - 2\log\left[\frac{1-g\exp(-d\tau)}{1-g}\right]\right) \notag \\
     \gamma &= \frac{2\kappa\theta}{\sigma^2} \notag \\
-    C &= \log\left(\left[\frac{2\kappa}{\sigma^2}\right]^{\gamma}\cdot \left\lbrace \frac{2\kappa}{\sigma^2} - \frac{\kappa - \rho\sigma\mathrm{i}t - d}{\sigma^2}\cdot\frac{1 - \exp(-d\tau)}{1-g\exp(-d\tau)} \right\rbrace^{-\gamma}\right) \notag
+    \label{eq:heston_model_characteristic_function_C}
+    C &= \log\left(\left[\frac{2\kappa}{\sigma^2}\right]^{\gamma}\cdot \left\lbrace \frac{2\kappa}{\sigma^2} - \frac{\kappa - \rho\sigma\mathrm{i}t - d}{\sigma^2}\cdot\frac{1 - \exp(-d\tau)}{1-g\exp(-d\tau)} \right\rbrace^{-\gamma}\right)
 \end{align}
 und $\tau = T-t$ als Zeithorizont.
 - Eine simple inverse Fourier-Transformation ist nicht sinnvoll, da es zu numerischen Instabilitäten an den Rändern kommt (siehe \ref{fig:ifft_comparison}). Bei der simplen Methode wird $\phi(t)$ zentiert und $f(x)$ mit der Schrittweite $\Delta t$ normiert um korrekte Amplituden zu erhalten. Die andere Methode verwendet eine Randkorrektur, was die Rekonstruktion der Dichte verbessert. Zudem werden die Ergebnisse durch eine kubische Spline-Interpolation geglättet.
+- Die Formel \eqref{heston_model_characteristic_function_C} hat das Problem, dass sie zu overflow Fehlern führen kann, da der Term $\left(\frac{2\kappa}{\sigma^2}\right)^\gamma$ sehr groß werden kann und der Logarithmus dann nicht mehr gezogen werden kann. Daher wird die Formel umgeschrieben:
+\begin{align}
+    \label{eq:heston_model_characteristic_function_C_2}
+    C_{unc} = \gamma \log\left(\frac{2\kappa}{\sigma^2}\right) - \gamma \log\left(\frac{2\kappa}{\sigma^2} - \frac{\kappa - \rho\sigma t \mathrm{i} - d}{\sigma^2} \frac{1 - \exp(-d \tau)}{1 - g \exp(-d \tau)}\right)
+\end{align}
 
 \begin{figure}[h]
     \centering
