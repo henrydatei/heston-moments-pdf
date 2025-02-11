@@ -33,7 +33,9 @@ def characteristic_function(u, mu, kappa, theta, sigma, rho, t):
 
     gamma = 2 * kappa * theta / sigma**2
 
-    C_unc = np.log((2*kappa/sigma**2)**gamma * (2*kappa/sigma**2 - (kappa - rho*sigma*u*1j - d) / sigma**2 * (1 - np.exp(-d*t)) / (1 - g * np.exp(-d*t)))**(-gamma))
+    # C_unc = np.log((2*kappa/sigma**2)**gamma * (2*kappa/sigma**2 - (kappa - rho*sigma*u*1j - d) / sigma**2 * (1 - np.exp(-d*t)) / (1 - g * np.exp(-d*t)))**(-gamma))
+    C_unc = gamma * np.log(2*kappa/sigma**2) - gamma * np.log(2*kappa/sigma**2 - (kappa - rho*sigma*u*1j - d)/sigma**2 *(1 - np.exp(-d*t))/(1 - g*np.exp(-d*t)))
+
 
 
     phi = np.exp(A + B + C_unc + D)
