@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#SBATCH --mem-per-cpu=1972
+#SBATCH --mem-per-cpu=8000
 #SBATCH --nodes=1
 #SBATCH --time=24:00:00
 #SBATCH -J fill_database_with_distances
