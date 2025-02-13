@@ -22,7 +22,7 @@ fi
 
 ml --force purge 
 
-ml release/24.04 GCCcore/13.2.0 Python/3.11.5
+ml release/24.04 slurm GCCcore/13.2.0 Python/3.11.5
 
 cd /home/s4307678/heston-moments-pdf
 
