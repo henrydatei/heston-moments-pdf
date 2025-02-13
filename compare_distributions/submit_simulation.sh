@@ -1,10 +1,10 @@
 #!/bin/sh
 
-#SBATCH --mem-per-cpu=4000
+#SBATCH --mem-per-cpu=8000
 #SBATCH --nodes=1
 #SBATCH --time=24:00:00
 #SBATCH -J fill_database_with_distances
-#SBATCH --array=0-199
+#SBATCH --array=0-99
 #SBATCH --error="/home/s4307678/.out/myjob-%A_%a.out"
 #SBATCH --output="/home/s4307678/.out/myjob-%A_%a.out"
 
@@ -39,6 +39,6 @@ pip install tqdm
 # pip install yfinance
 # pip install pytorch-lightning
 
-srun python compare_distributions/fill_database_with_distances.py --i $SLURM_ARRAY_TASK_ID --chunks 200
+srun python compare_distributions/fill_database_with_distances.py --i $SLURM_ARRAY_TASK_ID --chunks 100
 
 deactivate
