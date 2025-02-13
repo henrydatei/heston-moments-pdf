@@ -20,7 +20,7 @@ else
   echo "Directory $DIR already exists."
 fi
 
-ml purge 
+ml --force purge 
 
 ml release/24.04 GCCcore/13.2.0 Python/3.11.5
 
