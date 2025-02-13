@@ -29,13 +29,13 @@ cd /home/s4307678/heston-moments-pdf
 python -m venv venv
 source venv/bin/activate
 
-pip install matplotlib
-pip install numpy
-pip install pandas
-pip install scipy
+pip install --no-cache-dir matplotlib
+pip install --no-cache-dir numpy
+pip install --no-cache-dir pandas
+pip install --no-cache-dir scipy
 # pip install seaborn
 # pip install sympy
-pip install tqdm
+pip install --no-cache-dir tqdm
 # pip install yfinance
 # pip install pytorch-lightning
 
