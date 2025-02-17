@@ -15,18 +15,18 @@ from code_from_haozhe.GramCharlier_expansion import Expansion_GramCharlier
 
 c = sqlite3.connect('simulations.db')
 cursor = c.cursor()
-random_simulation = cursor.execute('SELECT * FROM simulations WHERE max_number_of_same_prices < 10 ORDER BY RANDOM() LIMIT 1').fetchone()
+simulation = cursor.execute('SELECT * FROM simulations WHERE id = 877').fetchone()
 c.close()
 
-cumulants = random_simulation[16:20]
-mu = random_simulation[1]
-kappa = random_simulation[2]
-theta = random_simulation[3]
-sigma = random_simulation[4]
-rho = random_simulation[5]
+cumulants = simulation[16:20]
+mu = simulation[1]
+kappa = simulation[2]
+theta = simulation[3]
+sigma = simulation[4]
+rho = simulation[5]
 
-print(f'Random Simulation {random_simulation[0]} Cumulants: {cumulants}')
-print(f'Random Simulation Parameters: {mu, kappa, theta, sigma, rho}')
+print(f'Simulation {simulation[0]} Cumulants: {cumulants}')
+print(f'Simulation Parameters: {mu, kappa, theta, sigma, rho}')
 
 # Expansion methods
 x = np.linspace(-2, 2, 1000)
@@ -55,7 +55,7 @@ plt.show()
 # CDFs + Normalisation (since the sum of the PDF over all space should equal 1)
 theory_cdf = pdf_to_cdf(x_theory, density)
 empirical_cdf = pdf_to_cdf(x, gc)
-haozhe_cdf = pdf_to_cdf(x, gc_haozhe)
+# haozhe_cdf = pdf_to_cdf(x, gc_haozhe)
 
 # Plotting
 plt.plot(x_theory, theory_cdf, 'r--', label='Theoretical CDF')
@@ -67,14 +67,14 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-ks_statistic, p_value = KS_test_sample_from_pdf(x_theory, density, x, gc)
-print(f'Henry PDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
+# ks_statistic, p_value = KS_test_sample_from_pdf(x_theory, density, x, gc)
+# print(f'Henry PDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
 
 ks_statistic, p_value = KS_test_sample_from_cdf(x_theory, theory_cdf, x, empirical_cdf)
-print(f'Henry CDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
+print(f'CDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
 
-cv_statistic, p_value = Cramer_von_Mises_test(x_theory, density, x, gc)
-print(f'Henry PDF Cramer von Mises Statistic: {cv_statistic}, P-Value: {p_value}')
+# cv_statistic, p_value = Cramer_von_Mises_test(x_theory, density, x, gc)
+# print(f'PDF Cramer von Mises Statistic: {cv_statistic}, P-Value: {p_value}')
 
 # ks_statistic, p_value = KS_test(x_theory, density, x, gc_haozhe)
 # print(f'Haozhe PDF KS Statistic: {ks_statistic}, P-Value: {p_value}')
