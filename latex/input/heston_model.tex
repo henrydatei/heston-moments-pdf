@@ -3,7 +3,7 @@
 
 \subsection{Model Description}
 
-- Von Heston (1993) vorgestellt und ist ein stochastic volatility model, die Volatilität ist nicht konstant, wie z.B. beim Black-Scholes-Merton-Model, sondern folgt auch einem random process.
+The Heston model, introduced by Heston (\citeyear{hestonClosedFormSolutionOptions1993}), is a stochastic volatility model in which volatility is not constant, as in the Black-Scholes-Merton model, but instead follows a random process. The dynamics of the model are given by the following system of stochastic differential equations:
 \begin{align}
     \label{eq:heston_model_price}
     \mathrm{d}S_t &= \mu S_t\mathrm{d}t + \sqrt{v_t}S_t\mathrm{d}W_t^S \\
@@ -14,9 +14,9 @@
     \label{eq:heston_model_correlation}
     \mathbb{E}(\mathrm{d}W_t^S\mathrm{d}W_t^v) &= \rho\mathrm{d}t
 \end{align}
-wobei $\kappa$, $\theta$ und $\sigma$ strikt positiv sind, $\mathrm{d}W_t^S$ und $\mathrm{d}W_t^v$ sind increments von Brownian Motions mit der Korrelation $\rho$. $S_t$ ist der Preis eines Assests, z.B. einer Aktie, Aleihe, FX-Rate, etc. Der Prozess $X_t$ ist der Logarithmus des Preisprozesses $S_t$; $v_t$ ist der instantaneous Varianz-Prozess. Der Parameter $\mu$ ist der Drift des Preis-Prozesses.
+where $\kappa$, $\theta$, and $\sigma$ are strictly positive parameters. The terms $\mathrm{d}W_t^S$ and $\mathrm{d}W_t^v$ represent the increments of Brownian motions with correlation $\rho$. The variable $S_t$ denotes the price of an asset, such as a stock, bond, or foreign exchange rate. The process $X_t$ represents the logarithm of the price process $S_t$, while $v_t$ denotes the instantaneous variance process. The parameter $\mu$ represents the drift of the price process.
 
-- Varianz-Prozess ist ein CIR-Process (Cox-Ingersoll-Ross, Cox et al 1985) mit Mean-Reversion $\kappa$, Long-Run-Varianz $\theta$ und Volatilität $\sigma$. Die Übergangswahrscheinlichkeit von $v_t$ conditional on $v_0$ ist proportional zu einer noncentral chi-squared verteilten Zufallsvariable:
+The variance process follows a Cox-Ingersoll-Ross (CIR) process (\cite{coxTheoryTermStructure1985}) with mean reversion $\kappa$, long-run variance $\theta$, and volatility $\sigma$. The conditional transition probability of $v_t$ given $v_0$ is proportional to a noncentral chi-squared distributed random variable:
 \begin{align}
     \label{eq:heston_model_variance_transition}
     v_t\mid v_0 &\sim c\cdot \chi^2'_{\nu}(\Lambda) \\
@@ -24,22 +24,23 @@ wobei $\kappa$, $\theta$ und $\sigma$ strikt positiv sind, $\mathrm{d}W_t^S$ und
     \nu &= \frac{4\kappa\theta}{\sigma^2} \notag \\
     \Lambda &= \frac{v_0}{c}\exp(-\kappa t) \notag
 \end{align}
-$\chi^2'$ steht für eine nichtzentrale Chi-Quadrat-Verteilung mit $\nu$ Freiheitsgraden und $\Lambda$ als nichtzentralem Parameter (Okhrin et al 2022).
+where $\chi^2'$ denotes a noncentral chi-squared distribution with $\nu$ degrees of freedom and noncentrality parameter $\Lambda$ (\cite{okhrinSimulatingCoxIngersoll2022}).
 
 \subsection{Characteristic Function and Density of the Heston Model}
-- Hat eine Zufallsvariable $X$ eine Dichte $f(x)$, so kann man die charakteristische Funktion $\phi(t)$ von $X$ berechnen durch
+
+If a random variable $X$ has a density function $f(x)$, its characteristic function $\phi(t)$ is given by
 \begin{align}
     \phi(t) = \mathbb{E}(\exp(\mathrm{i}tX)) = \int_{-\infty}^{\infty} e^{\mathrm{i}tx}f(x)\mathrm{d}x \notag
 \end{align}
-- Die charakteristische Funktion für eine Zufallsvariable existiert immer, auch wenn die Dichte nicht existiert. Hat man die charakteristische Function, so kann man die Dichte durch die inverse Fourier-Transformation berechnen
+The characteristic function always exists, even if the probability density function does not. Once the characteristic function is known, the density function can be recovered via the inverse Fourier transform:
 \begin{align}
     f(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty} e^{-\mathrm{i}tx}\phi(t)\mathrm{d}t \notag
 \end{align}
-- Gatheral (2011) hat die charakteristische Funktion des Heston-Modells berechnet
+Gatheral (\citeyear{gatheralVolatilitySurfacePractitioner2011}) derives the characteristic function of the Heston model as
 \begin{align}
     \phi(t) = \exp(A + B + C) \notag
 \end{align}
-mit
+where
 \begin{align}
     A &= \mu\cdot\tau\cdot t\cdot\mathrm{i} \notag \\
     d &= \sqrt{(\rho\sigma\mathrm{i}t - \kappa)^2 - \sigma^2(-\mathrm{i}t - t^2)} \notag \\
@@ -49,9 +50,11 @@ mit
     \label{eq:heston_model_characteristic_function_C}
     C &= \log\left(\left[\frac{2\kappa}{\sigma^2}\right]^{\gamma}\cdot \left\lbrace \frac{2\kappa}{\sigma^2} - \frac{\kappa - \rho\sigma\mathrm{i}t - d}{\sigma^2}\cdot\frac{1 - \exp(-d\tau)}{1-g\exp(-d\tau)} \right\rbrace^{-\gamma}\right)
 \end{align}
-und $\tau = T-t$ als Zeithorizont.
-- Eine simple inverse Fourier-Transformation ist nicht sinnvoll, da es zu numerischen Instabilitäten an den Rändern kommt (siehe \ref{fig:ifft_comparison}). Bei der simplen Methode wird $\phi(t)$ zentiert und $f(x)$ mit der Schrittweite $\Delta t$ normiert um korrekte Amplituden zu erhalten. Die andere Methode verwendet eine Randkorrektur, was die Rekonstruktion der Dichte verbessert. Zudem werden die Ergebnisse durch eine kubische Spline-Interpolation geglättet.
-- Die Formel \eqref{heston_model_characteristic_function_C} hat das Problem, dass sie zu overflow Fehlern führen kann, da der Term $\left(\frac{2\kappa}{\sigma^2}\right)^\gamma$ sehr groß werden kann und der Logarithmus dann nicht mehr gezogen werden kann. Daher wird die Formel umgeschrieben:
+where $\tau = T-t$ represents the time horizon.
+
+A straightforward inverse Fourier transform is not suitable due to numerical instabilities at the boundaries (see Figure \ref{fig:ifft_comparison}). The simple method centers $\phi(t)$ and normalizes $f(x)$ using the step size $\Delta t$ to ensure correct amplitudes. An alternative approach employs a boundary correction, which improves the reconstruction of the density. Additionally, results are smoothed using cubic spline interpolation.
+
+Equation \eqref{eq:heston_model_characteristic_function_C} has the drawback that it can lead to overflow errors, as the term $\left(\frac{2\kappa}{\sigma^2}\right)^\gamma$ may become excessively large, making the logarithm intractable. To mitigate this issue, the equation is reformulated as
 \begin{align}
     \label{eq:heston_model_characteristic_function_C_2}
     C_{unc} = \gamma \log\left(\frac{2\kappa}{\sigma^2}\right) - \gamma \log\left(\frac{2\kappa}{\sigma^2} - \frac{\kappa - \rho\sigma t \mathrm{i} - d}{\sigma^2} \frac{1 - \exp(-d \tau)}{1 - g \exp(-d \tau)}\right)
@@ -66,31 +69,34 @@ und $\tau = T-t$ als Zeithorizont.
 
 \subsection{Simulating the Heston Model}
 
-- Heston Model is a model with continuous time, for simulation we need to discretize the time. Small timesteps require a lot of computational power, large timesteps can lead to zero or negative volatility if the so called Feller condition is not satisfied (Albrecher et al 2007). The Feller condition is satisfied if $2\kappa\theta > \sigma^2$ but Eraker et al (2003) show, that for S&P 500 index options the Feller condition is not satisfied. There are many more studies that show this result for other markets and assets (e.g. Chang et al 2021, Hu & Liu 2022).
-- Intuitivster Weg der Zeit-Diskretisierung: Euler–Maruyama Diskretisierung:
+The Heston model is a continuous-time model, and for simulation purposes, time must be discretized. Small timesteps require significant computational power, while large timesteps may lead to zero or even negative volatility if the so-called Feller condition is not satisfied (\cite{albrecherLittleHestonTrap2007}). The Feller condition holds if $2\kappa\theta > \sigma^2$, but Eraker et al. (\citeyear{erakerImpactJumpsVolatility2003}) show that for S&P 500 index options, this condition is violated. Many other studies confirm this result for various markets and asset classes (e.g., \cite{changOptionPricingDouble2021,huPricingVolatilityJump2022}).
+
+The most intuitive approach to time discretization is the Euler–Maruyama scheme:
 \begin{align}
     X_{t+\Delta} &= X_t - \frac{1}{2}v_t\Delta + \sqrt{v_t}\sqrt{\Delta}Z_{X,t} \notag \\
     v_{t+\Delta} &= v_t + \kappa(\theta - v_t)\Delta + \sigma\sqrt{v_t}\sqrt{\Delta}Z_{v,t} \notag
 \end{align}
-wobei $Z\sim\mathcal{N}(0,1)$, $\Delta = T/n$, $T$ die gesamte Zeit und $n$ die Anzahl der Schritte ist. Die Korrelation zwischen $Z_{X,t}$ und $Z_{v,t}$ kann man wie folgt simulieren (Andersen 2008): %TODO: andere Quelle finden, nicht immer nur Andersen oder Ostap
+where $Z \sim \mathcal{N}(0,1)$, $\Delta = T/n$, with $T$ representing the total time and $n$ the number of time steps. The correlation between $Z_{X,t}$ and $Z_{v,t}$ can be simulated as follows (\cite{andersenEfficientSimulationHeston2007}): %TODO: andere Quelle finden, nicht immer nur Andersen oder Ostap
 \begin{align}
     Z_{v,t} &= \Phi^{-1}(U_1) \notag \\
     Z_{X,t} &= \rho Z_{v,t} + \sqrt{1-\rho^2}\Phi^{-1}(U_2) \notag
 \end{align}
-wobei $U_1$ und $U_2$ unabhängige Zufallsvariablen sind, die gleichverteilt sind auf $[0,1]$ und $\Phi^{-1}$ die inverse Verteilungsfunktion der Standardnormalverteilung ist.
-- Bei dieser Diskretisierung sieht man auch gut das Problem der möglichen Negativität der Volatilität (Okhrin et al 2022):
+where $U_1$ and $U_2$ are independent random variables uniformly distributed on $[0,1]$, and $\Phi^{-1}$ is the inverse cumulative distribution function of the standard normal distribution.
+
+This discretization highlights the issue of potential negative volatility (\cite{okhrinSimulatingCoxIngersoll2022}):
 \begin{align}
     \mathbb{P}(v_{t+\Delta}<0 \mid v_t>0) &= \mathbb{P}\left(Z_{v,t} < \frac{-v_t-\kappa(\theta-v_t)\Delta}{\sigma\sqrt{v_t}\sqrt{\Delta}}\right) \notag \\
     &= \Phi\left(Z_{v,t} < \frac{-v_t-\kappa(\theta-v_t)\Delta}{\sigma\sqrt{v_t}\sqrt{\Delta}}\right) \notag \\
     &> 0 \notag
 \end{align}
-wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Es gibt verschiedene Methoden, um dieses Problem zu lösen, z.B. die Absorption (replace $v_t$ mit $v_t^+ = \max{0, v_t}$) oder Reflection Method (replace $v_t$ mit $\vert v_t\vert$). Alle diese Methoden ändern aber den unterliegenden Prozess, daher stimmen z.B. die Momente der Volatilität nicht mehr mit den theoretischen Momenten überein (Okhrin et al 2022, Tsoskounoglou 2024). 
-- In der Studie von Okhrin et al (2022) Andersen's QE scheme performs best in terms of speed and accuracy. Andersen (2008) approximates the noncentral chi-square distribution in \eqref{eq:heston_model_variance_transition} with a mixture of distributions, a Dirac distribution and a noncentral Gaussian distribution. Für ausreichend große Werte von $v_t$ gilt
+where $\Phi$ denotes the cumulative distribution function of the standard normal distribution. Various methods exist to address this issue, such as the absorption method (replacing $v_t$ with $v_t^+ = \max(0, v_t)$) or the reflection method (replacing $v_t$ with $\vert v_t\vert$). However, these modifications alter the underlying process, causing the moments of volatility to deviate from their theoretical values (\cite{okhrinSimulatingCoxIngersoll2022,tsoskounoglouSimulatingHestonModel2024}).
+
+In the study by Okhrin et al. (\citeyear{okhrinSimulatingCoxIngersoll2022}), Andersen's Quadratic Exponential (QE) scheme is found to perform best in terms of both speed and accuracy. Andersen (\citeyear{andersenEfficientSimulationHeston2007}) approximates the noncentral chi-square distribution in \eqref{eq:heston_model_variance_transition} using a mixture of distributions: a Dirac distribution and a noncentral Gaussian distribution. For sufficiently large values of $v_t$,
 \begin{align}
     \label{eq:qe_normal}
     v_{t+\Delta} = a(b+Z_v)^2
 \end{align}
-mit $Z_v\sim\mathcal{N}(0,1)$. Für andere Werte von $v_t$ gilt
+where $Z_v \sim \mathcal{N}(0,1)$. For smaller values of $v_t$,
 \begin{align}
     \label{eq:qe_dirac}
     v_{t+\Delta} &= \Psi^{-1}(U_v, p, \beta) \\
@@ -99,8 +105,9 @@ mit $Z_v\sim\mathcal{N}(0,1)$. Für andere Werte von $v_t$ gilt
         \beta^{-1}\ln\left(\frac{1-p}{1-u}\right) & p<u\le 1
     \end{cases} \notag
 \end{align}
-Die Parameter $a$, $b$, $p$ und $\beta$ werden über moment-matching geschätzt, vom dem einen zum anderen Schema kann man wechseln, wenn der Wert $\psi$ über einer Schelle $\psi_c$ liegt. Dann nutzt man \eqref{eq:qe_dirac}, sonst \eqref{eq:qe_normal}. Der Wert $\psi$ ist der Quotient aus $s^2$ und $m^2$, wobei $m$ der Erwartungswert von $v_{t+\Delta}$ und $s^2$ die Varianz von $v_{t+\Delta}$ ist.
-- Für den Preisprozess schlägt Andersen (2008) folgendes Schema vor:
+The parameters $a$, $b$, $p$, and $\beta$ are estimated using moment matching. The transition between the two approximation schemes is determined by a threshold $\psi_c$: if the ratio $\psi = s^2 / m^2$ (where $m$ and $s^2$ are the mean and variance of $v_{t+\Delta}$, respectively) exceeds $\psi_c$, then \eqref{eq:qe_dirac} is used; otherwise, \eqref{eq:qe_normal} is applied.
+
+For the price process, Andersen (\citeyear{andersenEfficientSimulationHeston2007}) proposes the following discretization scheme:
 \begin{align}
     \ln(S_{t+\Delta}) &= \ln(S_t) + K_0 + K_1v_t + K_2v_{t+\Delta} + \sqrt{K_3v_t + K_4v_{t+\Delta}}\cdot Z \notag \\
     K_0 &= -\frac{\rho\kappa\theta}{\sigma}\Delta \notag \\
@@ -109,4 +116,4 @@ Die Parameter $a$, $b$, $p$ und $\beta$ werden über moment-matching geschätzt,
     K_3 &= \xi_1\Delta(1-\rho^2) \notag \\
     K_4 &= \xi_2\Delta(1-\rho^2) \notag
 \end{align}
-wobei $Z$ standardnormalverteilt ist und $\xi_1$ und $\xi_2$ gewisse Konstanten sind, im Paper wird $\xi_1=\xi_2=0.5$ vorgeschlagen.
+where $Z$ is standard normally distributed, and $\xi_1$ and $\xi_2$ are constants. The paper suggests $\xi_1 = \xi_2 = 0.5$.
