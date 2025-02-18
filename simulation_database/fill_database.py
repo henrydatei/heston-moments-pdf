@@ -48,9 +48,9 @@ theta_step = 0.05
 sigma_min = 0.01
 sigma_max = 1
 sigma_step = 0.05
-mu_min = -0.1
-mu_max = 0.1
-mu_step = 0.01
+# mu_min = -0.1
+# mu_max = 0.1
+# mu_step = 0.01
 rho_min = -0.9
 rho_max = 0.9
 rho_step = 0.1
@@ -59,7 +59,7 @@ v0s = np.arange(v0_min, v0_max, v0_step)
 kappas = np.arange(kappa_min, kappa_max, kappa_step)
 thetas = np.arange(theta_min, theta_max, theta_step)
 sigmas = np.arange(sigma_min, sigma_max, sigma_step)
-mus = np.arange(mu_min, mu_max, mu_step)
+# mus = np.arange(mu_min, mu_max, mu_step)
 rhos = np.arange(rho_min, rho_max, rho_step)
 
 # Short local test
