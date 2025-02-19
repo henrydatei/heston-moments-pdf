@@ -8,9 +8,6 @@
 #SBATCH --error="/home/s4307678/.out/myjob-%A_%a.out"
 #SBATCH --output="/home/s4307678/.out/myjob-%A_%a.out"
 
-# Wait for a few seconds before starting the job
-sleep $((SLURM_ARRAY_TASK_ID*30))
-
 # Directory path
 DIR="/home/s4307678/.out/"
 
@@ -41,6 +38,10 @@ pip install --no-cache-dir scipy
 pip install --no-cache-dir tqdm
 # pip install yfinance
 # pip install pytorch-lightning
+
+cp simulations.db simulations_${SLURM_ARRAY_TASK_ID}.db
+
+trap "rm -f simulations_${SLURM_ARRAY_TASK_ID}.db" EXIT
 
 srun python compare_distributions/fill_database_with_distances.py --i $SLURM_ARRAY_TASK_ID --chunks 30
 

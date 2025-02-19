@@ -223,7 +223,7 @@ if __name__ == '__main__':
     parser.add_argument("--chunks", type=int, help="Gesamtanzahl der Chunks", default=1000000)
     args = parser.parse_args()
     
-    c = sqlite3.connect('simulations.db')
+    c = sqlite3.connect(f'simulations_{args.i}.db')
     cursor = c.cursor()
 
     total_rows = c.execute("SELECT COUNT(*) FROM simulations").fetchone()[0]
