@@ -1,20 +1,6 @@
-from scipy.spatial.distance import jensenshannon
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy import stats
-import sys
-import os
-import pandas as pd
 from scipy.interpolate import interp1d
-import sqlite3
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from expansion_methods.all_methods import scipy_mvsek_to_cumulants, gram_charlier_expansion
-from heston_model_properties.theoretical_density import compute_density_via_ifft_accurate
-from simulation_database.database_utils import add_column
-
-from code_from_haozhe.GramCharlier_expansion import Expansion_GramCharlier
 
 def pdf_to_cdf(x, pdf, normalize=True):
     dx = x[1] - x[0]
@@ -52,4 +38,11 @@ def Cramer_von_Mises_test(x_1, cdf_1, x_2, cdf_2):
     samples_2 = sample_from_cdf(x_2, cdf_2, 1000)
 
     res = stats.cramervonmises_2samp(samples_1, samples_2)
+    return res.statistic, res.pvalue
+
+def Andersen_Darling_test(x_1, cdf_1, x_2, cdf_2):
+    samples_1 = sample_from_cdf(x_1, cdf_1, 1000)
+    samples_2 = sample_from_cdf(x_2, cdf_2, 1000)
+
+    res = stats.anderson_ksamp([samples_1, samples_2])
     return res.statistic, res.pvalue
