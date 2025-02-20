@@ -1,35 +1,32 @@
 \section{Expansion Methods}
 \label{sec:expansion_methods}
 
-- expansion methods are series that approximate a probability density function
-- usually they are not true densities, since they can go below zero for certain parameters
-- for some parameters, they are densities, we'll explore this in the following sections and how to get from a parameter set which gives not a density to a parameter set which gives a density
+Expansion methods are series approximations of a probability density function. In general, these approximations are not true densities, as they can take negative values for certain parameter choices. However, for some parameter sets, they do define valid probability densities. In the following sections, we will explore the conditions under which expansion methods yield proper densities and how to transform a parameter set that does not correspond to a valid density into one that does.
 
 \subsection{Gram-Charlier Expansion}
-- entdeckt von Gram 1883 und Charlier 1914
-- zwei Arten von Serien: Gram-Charlier A und Gram-Charlier B:
+The Gram-Charlier expansion was introduced by Gram (\citeyear{gramUeberEntwickelungReeller1883}) and Charlier (\citeyear{charlierContributionsMathematicalTheory1914}). There are two types of expansions: Gram-Charlier A and Gram-Charlier B, which are defined as
 \begin{align}
     f_{GC,A} &\approx f(x) + \sum_{k=3}^n a_k f^{(k)}(x) \notag \\
     f_{GC,B} &\approx \psi(x)\sum_{m=0}^n b_mg_m(x) \notag
 \end{align}
-- auch wenn die Expansion für jede Dichte $f$ und $\psi$ geht, so ist für den Typ A $f$ die Dichte der Standardnormalverteilung
+Although these expansions can be applied to any density function $f$ and $\psi$, for Gram-Charlier Type A, the density $f$ is typically the standard normal distribution
 \begin{align}
     f(x) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2}{2}\right) \notag
 \end{align}
-und für den Typ B $\psi$ die Wahrscheinlichkeitsfunktion der Poisson-Verteilung (Mitropol'skii 2020)
+and for Gram-Charlier Type B, $\psi$ corresponds to the probability mass function of the Poisson distribution (\cite{mitropolskiiGramCharlierSeries2020}):
 \begin{align}
     \psi(x) = \frac{\lambda^x}{x!}\exp(-\lambda) \notag
 \end{align}
-- $f^{(k)}$ ist die $k$-te Ableitung der Dichte $f$ und es existieren Polynome $H_k$, die folgende Gleichung erfüllen:
+The term $f^{(k)}$ represents the $k$-th derivative of the density function $f$. There exist polynomials $H_k$ that satisfy
 \begin{align}
     f^{(k)}(x) = (-1)^k f(x)H_k(x) \notag
 \end{align}
-- Die Polynome $H_k$ sind als Hermite-Polynome (Laplace 1811, Laplace 1812, Chebychef 1860, Hermite 1864) bekannt und haben folgende Eigenschaften (Abramowitz & Stegun 1968, p. 771ff):
+These polynomials, known as Hermite polynomials, were studied by Laplace (\citeyear{laplaceMemoireIntegralesDefinies1811,laplaceTheorieAnalytiqueProbabilites1812}), Chebyshev (\citeyear{chebyshevDeveloppementFonctionsSeule1860}), and Hermite (\citeyear{hermiteNouveauDeveloppementSerie1864}). They have the following properties (\cite{abramowitzHandbookMathematicalFunctions1968}, p. 771ff):
 \begin{align}
     H_{n+1} &= x\cdot H_n(x) - H'_n(x) \notag \\
     H'_n(x) &= n\cdot H_{n-1}(x) \notag \\
 \end{align}
-Damit lassen sich die Hermite-Polynome rekursiv berechnen und die ersten Polynome sind:
+Using these recurrence relations, the first few Hermite polynomials can be computed as
 \begin{align}
     H_{n+1}(x) &= x\cdot H_n(x) - nH_{n-1}(x) \notag \\
     H_0(x) &= 1 \notag \\
@@ -40,27 +37,29 @@ Damit lassen sich die Hermite-Polynome rekursiv berechnen und die ersten Polynom
     H_5(x) &= x^5-10x^3+15x \notag \\
     H_6(x) &= x^6-15x^4+45x^2-15 \notag
 \end{align}
-- Koeffizienten $a_k$ können als Momente $r_k$ der Dichte $f$ definiert werden und so erhält man die ersten Terme der Gram-Charlier A Expansion:
+The coefficients $a_k$ in the expansion can be expressed in terms of the moments $r_k$ of the density $f$. This leads to the first terms of the Gram-Charlier A expansion:
 \begin{align}
     \label{eq:gc_a_expansion_kappa}
     f(x)_{GC,A} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right)\right]
 \end{align}
-dabei sind $\mu$, $\sigma^2$, $\kappa_3$ und $\kappa_4$ die ersten 4 Cumulants der zu approximierenden Verteilung. Aufgrund von \eqref{eq:cumulants_1} und \eqref{eq:cumulants_2} entsprechend $\mu$ und $\sigma^2$ den ersten beiden Cumulants $\kappa_1$ und $\kappa_2$.
-- Die ersten Terme der Gram-Charlier B Expansion sind:
+where $\mu$, $\sigma^2$, $\kappa_3$, and $\kappa_4$ represent the first four cumulants of the target distribution. Based on Equations \eqref{eq:cumulants_1} and \eqref{eq:cumulants_2}, $\mu$ and $\sigma^2$ correspond to the first two cumulants $\kappa_1$ and $\kappa_2$.
+
+The first terms of the Gram-Charlier B expansion are given by
 \begin{align}
     f(x)_{GC,B} \approx \frac{\lambda^x}{x!}\exp(-\lambda) \left(1 + \frac{\mu_2 - \lambda}{\lambda^2}\left[\frac{x^{[2]}}{2} - \lambda x^{[1]} + \frac{\lambda^2}{2}\right] + \frac{\mu_3 - 3\mu_2 + 2\lambda}{\lambda^3}\left[\frac{x^{[3]}}{6} - \frac{\lambda}{2}x^{[2]} + \frac{\lambda^2}{2}x^{[1]} - \frac{\lambda^3}{6}\right]\right) \notag
 \end{align}
-wobei $\mu_i$ die zentralen Momente der zu approximierenden Verteilung sind und $x^{[i]} = x(x-1)\dots (x-i+1)$ (Mitropol'skii 2020). Da Typ B aber nur diskrete Werte von $x$ zulässt, ist die Anwendung auf stetige Verteilungen nicht möglich. Wir betrachten daher im weiteren Verlauf der Arbeit nur den Typ A.
-- Die Gram-Charlier Expansion ist keine asympotische Expansion, weil es nicht möglich ist, den Fehler der Approximation zu ermitteln. Die Edgeworth Expansion ist allerdings eine asympotische Expansion (Cramer 1999, Section 17.6) und wird daher bevorzugt. Eine asymptotische Expansion ist eine Serie von Funktionen $f_n$, die nach einer endlichen Anzahl von Termen eine Approximation einer Funktion in einem bestimmten Punkt $\xi$ (oftmals infinte) darstellt, wenn das Argument $x$ gegen $\xi$ läuft:
+where $\mu_i$ are the central moments of the target distribution, and $x^{[i]} = x(x-1)\dots (x-i+1)$ (\cite{mitropolskiiGramCharlierSeries2020}). However, since Gram-Charlier Type B only allows discrete values for $x$, it cannot be applied to continuous distributions. Therefore, we focus exclusively on Gram-Charlier Type A in this work.
+
+The Gram-Charlier expansion is not an asymptotic expansion, as it does not allow for a well-defined approximation error. The Edgeworth expansion, however, is an asymptotic expansion (\cite{cramerMathematicalMethodsStatistics1999}, Section 17.6) and is therefore preferred. An asymptotic expansion consists of a series of functions $f_n$ that, after a finite number of terms, approximate a function at a specific point $\xi$ (often infinite) as $x$ approaches $\xi$:
 \begin{align}
     f_{n+1}(x) = \mathcal{o}(f_n(x)) \quad x\to\xi \notag
 \end{align}
-- Unter Umständen kann die Gram-Charlier Expansion aber auch negativ werden, was für eine Dichte nicht zulässig ist. Jondeau & Rockinger (2001) haben untersucht, für welche Parameter die Gram-Charlier Expansion eine Dichte ist. Nutzung von \eqref{eq:cumulants_3} und \eqref{eq:cumulants_4} kann man \eqref{eq:gc_a_expansion_kappa} umschreiben zu mit $z = \frac{x-\mu}{\sigma}$:
+Furthermore, the Gram-Charlier expansion can take negative values, which is not permissible for a probability density function. Jondeau \& Rockinger (\citeyear{jondeauGramCharlierDensities2001}) analyzed the conditions under which the expansion remains a valid density. By using Equations \eqref{eq:cumulants_3} and \eqref{eq:cumulants_4}, Equation \eqref{eq:gc_a_expansion_kappa} can be rewritten in terms of the skewness $\gamma_1$ and excess kurtosis $\gamma_2^*$, defining $z = \frac{x-\mu}{\sigma}$:
 \begin{align}
     \label{eq:gc_a_expansion_s_ek}
     f(x)_{GC,A} \approx \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{z^2}{2}\right) \left[1 + \frac{\gamma_1}{6}H_3(z) + \frac{\gamma_2^*}{24}H_4(z)\right]
 \end{align}
-- Um herauszufinden, wann die Gram-Charlier Expansion gerade noch so eine Dichte ist, muss:
+To determine when the Gram-Charlier expansion remains a valid density, the following condition must hold:
 \begin{align}
     1 + \frac{\gamma_1}{6}He_3(z) + \frac{\gamma_2^*}{24}He_4(z) &= 0 \notag \\
     \frac{\gamma_1}{6}He_3(z) &= -1 - \frac{\gamma_2^*}{24}He_4(z) \notag \\
@@ -68,7 +67,11 @@ wobei $\mu_i$ die zentralen Momente der zu approximierenden Verteilung sind und 
     \gamma_1 &= -\frac{6}{He_3(z)} - \frac{He_4(z)}{4\cdot He_3(z)}\gamma_2^* \notag \\
     \gamma_1 &= \frac{z^4-6z^2+3}{12z-4z^3}\cdot \gamma_2^* + \frac{24}{12z-4z^3} \notag
 \end{align}
-Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockinger (2001) ist, dass diese Gleichung die Form $\gamma_1 = a(z)\cdot\gamma_2^* + b(z)$ hat. For two $z$, $z_1$ and $z_2$, we get two lines $\gamma_1 = a(z_1)\cdot \gamma_2^* + b(z_1)$ and $\gamma_1 = a(z_2)\cdot \gamma_2^* + b(z_2)$. The intersection of this lines is one point of the boundary if $z_1$ and $z_2$ are infinitesimal close together (see \ref{fig:gram_charlier_boundary_lines_20_vs_1000}). Two lines $f(x) = a+bx$ and $g(x) = cx+d$ intersect at $x = \frac{d-b}{a-c}$ and $y = \frac{ad-bc}{a-c}$ and iterating from $z_1=-10$ to $z_{1000}=-\sqrt{3}$ for 1000 steps (stepsize $\Delta z$), calculating $a(z_i)$, $b(z_i)$, $a(z_i+\Delta z)$ and $b(z_i+\Delta z)$, find intersection gives approximately a point $(\gamma_1, \gamma_2^*)$ of the boundary. For completeness adding to more points $(0,4)$ and $(0,0)$ (see \ref{fig:gram_charlier_boundary}).
+This leads to a boundary condition for the skewness and excess kurtosis, illustrated in Figures \ref{fig:gram_charlier_boundary_lines_20_vs_1000} and \ref{fig:gram_charlier_boundary}.
+
+Using a bisection algorithm and a logistic mapping, Jondeau \& Rockinger (\citeyear{jondeauGramCharlierDensities2001}) construct a piecewise linear boundary, ensuring that any unconstrained pair $(\tilde{\gamma_1}, \tilde{\gamma_2^*}) \in \mathbb{R}^2$ is mapped to a constrained pair within the positivity region $\mathcal{D}$. Finding a closed-form expression for the boundary is computationally difficult; even with 24 hours on a high-performance computer using Python's SymPy library, no explicit solution was found.
+
+A comparison between constrained and unconstrained parameters for four distributions—standard normal, lognormal, $t$-distribution, and non-central $t$-distribution—is presented in Table \ref{table:distributions_theoretical_moments} and Figures \ref{fig:gc_expansion} and \ref{fig:gc_positivity_expansion}. The results highlight the necessity of positivity constraints, which, however, distort the expansion, particularly for cases where no constraints were originally required (e.g., the standard normal distribution). The logistic mapping shifts the excess kurtosis from 0 to 2, mapping the unconstrained pair $(\tilde{\gamma_1}, \tilde{\gamma_2^*}) = (0,0)$ to the constrained pair $(\gamma_1, \gamma_2^*) = (0,2)$.
 
 \begin{figure}[h]
     \centering
@@ -84,9 +87,6 @@ Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockin
     \caption{Approximation (1000 steps) of the positivity boundary of the Gram-Charlier Expansion. For simplicity, only the part above the x-axis is shown. The boundary is symmetric to the x-axis.}
     \label{fig:gram_charlier_boundary}
 \end{figure}
-
-- Using a bisection algorithm and a logisitc map, they make the boundary piecewise linear and find for each unconstraint pair $(\tilde{\gamma_1}, \tilde{\gamma_2^*})\in\mathbb{R}^2$ a constraint pair in the positivity region $(\gamma_1, \gamma_2^*)\in \mathcal{D}$.
-- Finding a closed form expression for the boundary is difficult, even with 24 hours on a high performancce computer and Python's sympy library I was not able to find one.
 
 \begin{table}[h]
     \centering
@@ -116,24 +116,22 @@ Das ist wohldefiniert, solange $z\neq\pm\sqrt{3}$. Die Idee von Jondeau & Rockin
     \label{fig:gc_positivity_expansion}
 \end{figure}
 
-- Vergleich von constraint und unconstraint Parametern und dem Einfluss auf die Gram-Charlier Expansion. Test von 4 Verteilungen: Standardnormal, lognormal, t-Verteilung und Non-Central-T-Verteilung. Die Parameter und daraus resultierenden theoretischen Momente und Cumulants sind in Tabelle \ref{table:distributions_theoretical_moments} angegeben. Die Ergebnisse sind in Abbildung \ref{fig:gc_expansion} und Abbildung \ref{fig:gc_positivity_expansion} dargestelt. Man sieht sehr deutlich dass die positivity constraints notwendig sind, diese aber auch die Expansion verzerren, auch wenn, wie bei der Standardnormalverteilung, keine constraints notwendig gewesen wären. insbesondere hier wird durch die logisitic map eine Excess Kurtosis von 0 auf den Wert 2 gebracht, sodass das unconstrainte Paar $(\tilde{\gamma_1}, \tilde{\gamma_2^*}) = (0,0)$ zum constrainten Paar $(\gamma_1, \gamma_2^*) = (0,2)$ wird.
-
 \subsection{Edgeworth Expansion}
-- beschrieben von Edgeworth 1907, er schlägt unter anderem vor, die Approximation bis zum 6. Term zu berechnen um das oben angesprochene Problem der asympotischen Expansion zu umgehen. Eine formelle Darstellung der ersten Terme findet sich z.B. in Brenn & Anfinsen (2017):
+- beschrieben von Edgeworth \citeyear{edgeworthRepresentationStatisticalFrequency1907}, er schlägt unter anderem vor, die Approximation bis zum 6. Term zu berechnen um das oben angesprochene Problem der asympotischen Expansion zu umgehen. Eine formelle Darstellung der ersten Terme findet sich z.B. in Brenn & Anfinsen (\citeyear{brennRevisitGramCharlierEdgeworth2017}):
 \begin{align}
     f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_5}{120\sigma^5}H_5\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_6 + 10\kappa_3^2}{720\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)\right] \notag
 \end{align}
-In dieser Arbeit nur Betrachtung der ersten 4 Cumulants, daher reduziert sich der Ausdruck auf:
+Since this work only considers the first four cumulants, the expression simplifies to:
 \begin{align}
     \label{eq:ew_expansion_short}
     f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_3^2}{72\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)\right]
 \end{align}
-- Using same method as Jondeau & Rockinger (2001) to find the positivity boundary of the Edgeworth Expansion, we have to rewrite \eqref{eq:ew_expansion_short} with $z = \frac{x-\mu}{\sigma}$:
+Following the approach of Jondeau & Rockinger (\citeyear{jondeauGramCharlierDensities2001}) for the Gram-Charlier expansion, we determine the positivity boundary for the Edgeworth expansion by rewriting Equation \eqref{eq:ew_expansion_short} using $z = \frac{x-\mu}{\sigma}$:
 \begin{align}
     \label{eq:ew_expansion_s_ek}
     f(x)_{GC,A} \approx \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{z^2}{2}\right) \left[1 + \frac{\gamma_1}{6}H_3(z) + \frac{\gamma_2^*}{24}H_4(z) + \frac{\gamma_1^2}{72}He_6(z)\right]
 \end{align}
-And then solve the equation $1 + \frac{\gamma_1}{6}He_3(z) + \frac{\gamma_2^*}{24}He_4(z) + \frac{\gamma_1^2}{72}He_6(z)=0$ for $\gamma_1$:
+To ensure the expansion remains a valid density, we solve for skewness $\gamma_1$ in the equation:
 \begin{align}
     0 &= 1+\frac{\gamma_1}{6}He_3(z) + \frac{\gamma_2^*}{24}He_4(z) + \frac{\gamma_1^2}{72}He_6(z) \\
     0 &= \frac{72}{He_6(z)} + 12\gamma_1\frac{He_3(z)}{He_6(z)} + 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + \gamma_1^2 \notag \\
@@ -142,7 +140,7 @@ And then solve the equation $1 + \frac{\gamma_1}{6}He_3(z) + \frac{\gamma_2^*}{2
     -\frac{72}{He_6(z)} - 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2} &= \left(\gamma_1+6\frac{He_3(z)}{He_6(z)}\right)^2 \notag \\
     \gamma_1 &= \pm\sqrt{-\frac{72}{He_6(z)} - 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2}} - 6\frac{He_3(z)}{He_6(z)} \notag
 \end{align} %TODO: drüberlesen, ob alle s durch gamma_1 und alle k durch gamma_2^* ersetzt wurden
-This holds as longs as $He_6(z)\neq 0$ which has 6 solutions:
+This equation is valid as long as $H_6(z) \neq 0$, which occurs at six points:
 \begin{align}
     z_{1/2} &= \pm \sqrt{5-\frac{5^{2/3}\left(1+i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1-i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 0.6167 \notag\\
     z_{3/4} &= \pm \sqrt{5-\frac{5^{2/3}\left(1-i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1+i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 1.8892 \notag \\
@@ -180,24 +178,26 @@ This holds as longs as $He_6(z)\neq 0$ which has 6 solutions:
     \label{fig:ew_boundary_intersections_7}
 \end{figure}
 
-- Plot the lines $\gamma_1(\gamma_2^*, z)$ for many values of $z$ and skipping over the 6 singularities, we get \ref{fig:ew_boundary_lines}, much smaller than the GC boundary, for $\gamma_1 = 0$ excess kurtosis can be between 0 and 4. This is the same as for Gram-Charlier boundary because when skewness is 0, Gram-Charlier and Edgeworth expansion are the same. As for Gram-Charlier expansion, the boundary is the envelope of the lines $\gamma_1(\gamma_2^*, z)$, we get it by calculating the intersection of the two parabolas $\gamma_1(\gamma_2^*, z)$ and $\gamma_1(\gamma_2^*, z+\Delta z)$. These lines are parabolas and have the form $\gamma_1 = \sqrt{a(z) + b(z)\cdot \gamma_2^*} + c(z)$. For two different $z$, the parabolas $\gamma_{1,1} = \sqrt{a+b\gamma_2^*}+c$ and $\gamma_{1,2}=\sqrt{d+e\gamma_2^*}+f$ have the two intersections
+The positivity boundary for the Edgeworth expansion is determined by plotting the lines $\gamma_1(\gamma_2^*, z)$ for many values of $z$, skipping over the six singularities. Figure \ref{fig:ew_boundary_lines} shows that the positivity region for the Edgeworth expansion is smaller than for the Gram-Charlier expansion. For $\gamma_1 = 0$, the excess kurtosis is constrained between 0 and 4, which matches the boundary of the Gram-Charlier expansion since both expansions are identical when skewness is zero.
+
+As with the Gram-Charlier expansion, the positivity boundary is given by the envelope of the lines $\gamma_1(\gamma_2^*, z)$. We obtain this by computing the intersections of pairs of parabolic equations. These intersections are shown in Figures \ref{fig:ew_boundary_intersections_1} to \ref{fig:ew_boundary_intersections_7}.
 \begin{align}
     \gamma_{2,1}^* &= \frac{2(b - e)^2(-c + f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)} \notag \\
     \gamma_{1,1} &= c + \sqrt{a + b \cdot \left(\frac{2(b - e)^2(-c + f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)}\right)} \notag \\
     \gamma_{2,2}^* &= \frac{2(b - e)^2(c - f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)} \notag \\
     \gamma_{1,2} &= c + \sqrt{a + b \cdot \left(\frac{2(b - e)^2(c - f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)}\right)} \notag
 \end{align}
-- For a plot of intersections (red dot is intersection 1, blue is intersection 2), see \ref{fig:ew_boundary_intersections_1}. Weil es immer zwei Schnittpunkte gibt, funktioniert die Methode von Jondeau & Rockinger (2001) nicht so gut. Daher Durchführung folgender Schritte, um die Positivitätsregion zu finden:
+Since each $\gamma_1(\gamma_2^*, z)$ equation is a parabola, the positivity region can be computed by:
 \begin{enumerate}
-    \item boundary gets described mostly by red dots, so ignore second intersection. The envelope is symmetric around the $x$-axis and since we have for the boundary lines a second solution of the form $\gamma_1=-\sqrt{a(z)+b(z)\cdot \gamma_2^*}+c(z)$ which have the same intersection $\gamma_2^*$ and $-\gamma_1$, we can take the absolute of $\gamma_1$ for the red intersections and later mirror it around the $x$-axis.
-    \item If we zoom out, we see many more intersection points which are not part of the boundary (\ref{fig:ew_boundary_intersections_3}). We know from the previous images that $\gamma_2^*$ is somewhat between 0 and 4 and $\gamma_1$ between -1 and 1, so we restrict the intersection points to have $\gamma_2^*\in (-0.1,4.1)$ and $\vert \gamma_1\vert \in [0,1)$ (\ref{fig:ew_boundary_intersections_4})
-    \item The amount of points around $\gamma_2^*=0$ and going up too $\gamma_1=1$ are from intersections from boundary lines where $z$ is smaller than the negative third singularity, so leaving this out. The points around $\gamma_2^*=4$ are hard to filter out, they come from $\vert z\vert$ around 1.8 and 1.67 and I filtered them out by removing all $z$ where $z\in (1.8-0.035, 1.8+0.035)$ or $z\in (1.67-0.015,1.67+0.015)$
-    \item I noticed that the boundary lines are extremly steep at this points, almost vertical and I get rounding errors, even when I use Python's float datatype which maps to IEEE-754 double precision with 64 bits where 52 bits are used for the fraction which equals about 16 decimal digits (Python Docs, Leonardo.Z (2013)). In general I am worried about computational accuracy since some points are at $\gamma_2^*>4$, ie. one point is at $(\gamma_2^*, \gamma_1) = (4.01, 0.222)$, but if I try to solve the following equation for $z$:
+    \item Ignoring the second intersection for each $z$-value (since the first intersection defines the boundary). The boundary is symmetric around the $x$-axis, so we only compute the upper half and mirror it afterward.
+    \item Filtering out non-relevant points: Figure \ref{fig:ew_boundary_intersections_3} shows many extraneous intersection points. Based on previous results, we restrict the solutions to $\gamma_2^* \in (-0.1,4.1)$ and $\vert \gamma_1\vert \in [0,1)$. (\ref{fig:ew_boundary_intersections_4})
+    \item Removing points from non-relevant boundary lines: The lower-boundary artifacts arise from $z$-values smaller than the third singularity; these are removed. The upper-boundary artifacts come from $\vert z \vert$ around 1.8 and 1.67, and are filtered out by removing all $z$ in the ranges $(1.8-0.035, 1.8+0.035)$ and $(1.67-0.015,1.67+0.015)$.
+    \item Computational accuracy is a concern since some points lie slightly outside the expected range (e.g., one point is at $(\gamma_2^*, \gamma_1) = (4.01, 0.222)$). Testing this point in the Edgeworth expansion shows that it does not satisfy the positivity condition:
     \begin{align}
         1 + \frac{0.222}{6}He_3(z) + \frac{4.01}{24}He_4(z) + \frac{0.222^2}{72}He_6(z)<0 \notag
     \end{align}
-    I find a solution: $-1.84611<z<-1.75826$. If this point is inside the boundary, there should be no solution, the Edgeworth expansion gives a density, but this is not the case. So to be on the safe side, I remove every intersection point that has not $\gamma_2^*\in [0,4]$. This is a very conservative approach, but I want to be sure that I do not have any false positives.
-    \item I added $(0,0)$ and $(4,0)$ to the boundary points, the next and second last bondary points are $(3.7795\cdot 10^{-6}, 0.1378)$ and $(3.9775, 0.3009)$. A linear interpolation between these points gives the boundary (\ref{fig:ew_boundary_intersections_7}).
+    gives a solution: $-1.84611<z<-1.75826$. This might be due to Python's float datatype which maps to IEEE-754 double precision with 64 bits where 52 bits are used for the fraction which equals about 16 decimal digits (\cite{pythonfoundation15FloatingPointArithmetic,leonardo.zAnswerHowCan2013}) To be conservative, we remove any intersection with $\gamma_2^* \notin [0,4]$.
+    \item Adding the points $(0,0)$ and $(4,0)$ completes the positivity region. A linear interpolation between the closest computed boundary points results in the final positivity boundary (Figure \ref{fig:ew_boundary_intersections_7}).
 \end{enumerate}
 
 \begin{figure}[h]
@@ -214,19 +214,19 @@ This holds as longs as $He_6(z)\neq 0$ which has 6 solutions:
     \label{fig:ew_positivity_expansion}
 \end{figure}
 
-- Wir vergleichen wieder die constraint und unconstraint Parameter und den Einfluss auf die Edgeworth Expansion anhand der selben Verteilungen wie bei der Gram-Charlier Expansion (\ref{table:distributions_theoretical_moments}). Die Ergebnisse sind in Abbildung \ref{fig:ew_expansion} und Abbildung \ref{fig:ew_positivity_expansion} dargestelt. Die Schlussfolgerungen sind die selben wie bei der Gram Charlier Expansion: Man sieht sehr deutlich dass die positivity constraints notwendig sind, diese aber auch die Expansion verzerren, auch wenn, wie bei der Standardnormalverteilung, keine constraints notwendig gewesen wären.
+As with the Gram-Charlier expansion, we compare the constrained and unconstrained parameters for four distributions: standard normal, lognormal, $t$-distribution, and non-central $t$-distribution (see Table \ref{table:distributions_theoretical_moments}). The results, shown in Figures \ref{fig:ew_expansion} and \ref{fig:ew_positivity_expansion}, lead to the same conclusion as in the Gram-Charlier case: Positivity constraints are necessary, but they also distort the expansion and even when constraints are not needed (e.g., for the standard normal distribution), applying the positivity constraints artificially increases excess kurtosis from 0 to 2.
 
 \subsection{Cornish-Fisher Expansion}
 
-- beschrieben von Cornish und Fisher (1938)
-- asympotische Expansion
-- approximiert Quantile einer Verteilung basierend auf den Cumulants
-- Sei $z_p$ das $p$-Quantil der Normalverteilung mit mean $\mu$ und variance $\sigma^2$, dann kann man das $p$-Quantil einer Zufallsvariable $X$, $x_p$, approximieren mit (wie üblich, Darstellung nur der ersten Terme) (Abramowitz & Stegun 1968, p. 935):
+The Cornish-Fisher expansion, introduced by Cornish and Fisher (\citeyear{cornishMomentsCumulantsSpecification1938}), is an asymptotic expansion that approximates the quantiles of a probability distribution based on its cumulants.
+
+Given that $z_p$ is the $p$-quantile of a normal distribution with mean $\mu$ and variance $\sigma^2$, the $p$-quantile of a random variable $X$, denoted as $x_p$, can be approximated as follows (only the first terms shown, as it is common practice) (\cite{abramowitzHandbookMathematicalFunctions1968}, p. 935):
 \begin{align}
     x_p \approx z_p + \frac{\gamma_1}{6}He_2(z_p) + \frac{\gamma_2^*}{24}He_3(z_p) - \frac{\gamma_1^2}{36}(2\cdot He_3(z_p) + He_1(z_p)) \notag
 \end{align}
-- Um die Dichte zu erhalten, kann man die $x_p$ numerisch berechnen und ableiten.
-- Abuora & Maillard (2016) stellen fest, dass die Parameter $\gamma_1$ und $\gamma_2^*$ nicht der Skewness und Excess Kurtosis der approximierten Verteilung entsprechen. Sie bezeichnen die Parameter mit $s = \gamma_1$ und $k = \gamma_2^*$ und geben Gleichungen an, um die tatsächliche Skewness $s^*$ und Excess Kurtosis $k^*$ der approximierten Verteilung zu berechnen:
+To obtain the probability density function (PDF), the quantiles $x_p$ can be numerically computed and differentiated.
+
+Aboura & Maillard (\citeyear{abouraOptionPricingSkewness2016}) point out that the parameters $\gamma_1$ and $\gamma_2^*$ do not correspond to the skewness and excess kurtosis of the approximated distribution. Instead, they denote these parameters as $s = \gamma_1$ and $k = \gamma_2^*$ and provide equations to compute the actual skewness $s^*$ and excess kurtosis $k^*$ of the approximated distribution:
 \begin{align}
     s^* &= \frac{M_3}{M_{2}^{3/2}} \notag \\
     k^* &= \frac{M_4}{M_{2}^2} - 3 \notag \\
@@ -235,8 +235,9 @@ This holds as longs as $He_6(z)\neq 0$ which has 6 solutions:
     M_3 &= s - \frac{76}{216}s^3 + \frac{85}{1296}s^5 + \frac{1}{4}ks - \frac{13}{144}ks^3 + \frac{1}{32}k^2s \\
     M_4 &= 3 + k + \frac{7}{16}k^2 + \frac{3}{32}k^3 + \frac{31}{3072}k^4 - \frac{7}{216}s^4 - \frac{25}{486}s^6 + \frac{21665}{559872}s^8 \notag
 \end{align}
-- Maillard (2018) veröffentlicht dann die Umkehrung des Prozesses: Kennt man die tatsächliche Skewness und Excess Kurtosis, so kann man die Parameter $s$ und $k$ berechnen. Eine Tabelle findet sich in seinem Paper im Appendix.
-- In Abuora & Maillard (2016) wird auch ermittelt, wie die Domain of validity der Cornish-Fisher Expansion aussieht. Es stellt sich heraus, dass diese recht groß ist, selbst eine Excess Kurtosis von über 40 ist möglich und teilweise Skewness größer als $\pm 3$. Wenn man außerhalb der Domain of validity ist, dann sieht man das nicht direkt in der Dichte, sondern in den Quantilen, die dann negativ werden (siehe \ref{fig:cf_expansion} und \ref{fig:cf_expansion_cdf}).
+Later, Maillard (\citeyear{maillardUserGuideCornish2018}) published the inverse transformation, allowing one to compute the parameters $s$ and $k$ given the actual skewness and excess kurtosis. A corresponding table can be found in the appendix of his paper.
+
+Aboura & Maillard (\citeyear{abouraOptionPricingSkewness2016}) also investigate the domain of validity for the Cornish-Fisher expansion. Their findings suggest that the expansion is valid for a wide range of parameters—even an excess kurtosis above 40 and skewness exceeding $\pm3$ are possible. However, when operating outside the validity domain, the issue is not immediately apparent in the probability density function itself. Instead, it becomes visible in the quantiles, which can turn negative (see Figures \ref{fig:cf_expansion} and \ref{fig:cf_expansion_cdf}).
 
 \begin{figure}[h]
     \centering
@@ -254,35 +255,34 @@ This holds as longs as $He_6(z)\neq 0$ which has 6 solutions:
 
 \subsection{Saddlepoint Approximation}
 
-- vorgeschlagen von Daniels (1954), allerdings nur Dichte, Verteilungsfunktion von Lugannani & Rice (1980).
-- basiert auf der moment generating function und provides a highly accurate approximation formula.
-- Sei $M(t)$ die moment generating function und $K(t) = \log(M(t))$ die cumulant generating function. Dann ist die Approximation der Dichte $f(x)$ gegeben durch:
+The Saddlepoint Approximation, introduced by Daniels (\citeyear{danielsSaddlepointApproximationsStatistics1954}), provides an accurate method for approximating probability densities. While Daniels initially derived the density function, the cumulative distribution function (CDF) was later introduced by Lugannani & Rice (\citeyear{lugannaniSaddlePointApproximation1980}). This method is based on the moment generating function (MGF) and offers a highly precise approximation formula. Given that $M(t)$ is the moment generating function and $K(t) = \log(M(t))$ is the cumulant generating function, the approximation of the density function $f(x)$ is given by:
 \begin{align}
     \label{eq:sp_approximation}
     f(x)_{SP} \approx \frac{1}{\sqrt{2\pi\cdot K''(s)}}\exp(K(s) - s\cdot x)
 \end{align}
-wobei $s$ die Lösung der Gleichung $K'(s)=x$ ist.
-- Aus Definition von Cumulants ist bekannt:
+where $s$ is the solution of the equation $K'(s) = x$.
+
+By definition, the cumulant generating function $K(s)$ can be approximated as:
 \begin{align}
     K(s) \approx \kappa_1 s + \frac{\kappa_2 s^2}{2} + \frac{\kappa_3 s^3}{6} + \frac{\kappa_4 s^4}{24}
 \end{align}
-Mit Ableitungen
+with its first and second derivatives:
 \begin{align}
     K'(s) &= \kappa_1 + \kappa_2 s + \frac{\kappa_3 s^2}{2} + \frac{\kappa_4 s^3}{6} \notag \\
     K''(s) &= \kappa_2 + \kappa_3 s + \frac{\kappa_4 s^2}{2} \notag
 \end{align}
-Solving $K'(s)=z$ for $s$ gives folgende Fälle:
+To find $s$, we solve the equation $K'(s) = x$ under different conditions:
 \begin{enumerate}
-    \item if $\kappa_4=0$, $\kappa_3=0$, $\kappa_2=0$ and $\kappa_1\neq 0$: no solution exists
-    \item if $\kappa_4=0$, $\kappa_3=0$ and $\kappa_2\neq 0$:
+    \item If $\kappa_4 = 0$, $\kappa_3 = 0$, $\kappa_2 = 0$, and $\kappa_1 \neq 0$: No real solution exists.
+    \item If $\kappa_4 = 0$, $\kappa_3 = 0$, and $\kappa_2 \neq 0$: A direct solution is given by:
     \begin{align}
         s = \frac{z-\kappa_1}{\kappa_2} \notag
     \end{align}
-    \item if $\kappa_4=0$ and $\kappa_3\neq 0$:
+    \item If $\kappa_4 = 0$ and $\kappa_3 \neq 0$: The equation becomes quadratic, yielding two solutions:
     \begin{align}
         s = \frac{\pm\sqrt{-2\kappa_1\kappa_3 + 2\kappa_3 z + \kappa_2^2} - \kappa_2}{\kappa_3} \notag
     \end{align}
-    \item if $\kappa_4\neq 0$ then 3 solutions exist, 2 of them are complex, 1 is real:
+    \item If $\kappa_4 \neq 0$, then three solutions exist, two of which are complex, and one is real which is given by
     \begin{align}
         s = \frac{1}{3\sqrt[3]{2}\kappa_4}\left[\left(\sqrt{(-162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3)^2 + 4(18\kappa_4\kappa_2 - 9\kappa_3^2)^3} - 162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3\right)^{1/3}\right] - \frac{\sqrt[3]{2}(18\kappa_4\kappa_2 - 9\kappa_3^2)}{3\kappa_4\left(\sqrt{(-162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3)^2 + 4(18\kappa_4\kappa_2 - 9\kappa_3^2)^3} - 162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3\right)^{1/3}} - \frac{\kappa_3}{\kappa_4} \notag
     \end{align}
@@ -295,4 +295,4 @@ Solving $K'(s)=z$ for $s$ gives folgende Fälle:
     \label{fig:sp_approximation}
 \end{figure}
 
-- Die Saddlepoint Approximation schafft es gut, die gewählten Verteilungen (\ref{table:distributions_theoretical_moments}) zu approximieren, siehe \ref{fig:sp_approximation}. insbesondere scheint es dabei keine Probleme mit Negativität zu geben. Das liegt, daran, dass der $\exp(\cdot)$-Term in \eqref{eq:sp_approximation} immer positiv ist und die Wurzel im Nenner entweder positiv oder komplex ist; in diesem Fall existiert die Saddlepoint Approximation nicht.
+The Saddlepoint Approximation successfully approximates the chosen distributions (see Table \ref{table:distributions_theoretical_moments}), as shown in Figure \ref{fig:sp_approximation}. The key advantages of this method are the high accuracy: The Saddlepoint method provides excellent approximations, even in cases where other expansions (such as Gram-Charlier or Edgeworth) fail. Furthermore there are no issues with negativity: The Saddlepoint Approximation does not produce negative densities. This is because the $\exp(\cdot)$ term in Equation \eqref{eq:sp_approximation} is always positive, and the denominator involves a square root, which is either positive or complex. If complex, the approximation does not exist, rather than producing invalid results.
