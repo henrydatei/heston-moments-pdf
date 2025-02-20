@@ -226,13 +226,13 @@ if __name__ == '__main__':
     c = sqlite3.connect(f'simulations_{args.i}.db')
     cursor = c.cursor()
 
-    total_rows = c.execute("SELECT COUNT(*) FROM simulations").fetchone()[0]
+    total_rows = c.execute("SELECT COUNT(*) FROM simulations WHERE GC_cum_AD_stat IS NULL").fetchone()[0]
     rows_per_chunk = math.ceil(total_rows / args.chunks)
 
     start_index = args.i * rows_per_chunk
     end_index = min(start_index + rows_per_chunk, total_rows)
 
-    query = f"SELECT * FROM simulations LIMIT {rows_per_chunk} OFFSET {start_index}"
+    query = f"SELECT * FROM simulations WHERE GC_cum_AD_stat IS NULL LIMIT {rows_per_chunk} OFFSET {start_index}"
     simulations = cursor.execute(query).fetchall()
     c.close()
     
