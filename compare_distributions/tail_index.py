@@ -13,7 +13,8 @@ from expansion_methods.all_methods import gram_charlier_expansion
 from compare_distributions.distances import pdf_to_cdf
 from heston_model_properties.theoretical_density import compute_density_via_ifft_accurate
 
-c.execute('select * from simulations where id = 877')
+# c.execute('select * from simulations where id = 877')
+c.execute('select * from simulations where id = 346638')
 simulation = c.fetchone()
 cumulants = simulation[16:20]
 moments = simulation[20:24]
@@ -29,6 +30,8 @@ expansion = gram_charlier_expansion(x, *cumulants, fakasawa=True)
 x_theory, density = compute_density_via_ifft_accurate(mu, kappa, theta, sigma, rho, 1/12)
 empirical_cdf = pdf_to_cdf(x, expansion)
 theory_cdf = pdf_to_cdf(x_theory, density)
+print(theory_cdf)
+
 
 # Hill Plot
 k_min = 10

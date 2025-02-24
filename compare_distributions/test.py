@@ -15,7 +15,7 @@ from code_from_haozhe.GramCharlier_expansion import Expansion_GramCharlier
 
 c = sqlite3.connect('simulations.db')
 cursor = c.cursor()
-simulation = cursor.execute('SELECT * FROM simulations WHERE id = 877').fetchone()
+simulation = cursor.execute('SELECT * FROM simulations WHERE id = 346638').fetchone()
 c.close()
 
 cumulants = simulation[16:20]
