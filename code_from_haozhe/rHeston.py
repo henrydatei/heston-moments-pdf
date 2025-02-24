@@ -1,6 +1,10 @@
 import numpy as np
 import yaml
 
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 """
 RHeston: Enhanced Stochastic Volatility Model with Randomized Parameter Sampling
 
@@ -68,7 +72,7 @@ model.get_random_param_set_fellercond()
 data = model.rPar_rQE(n=100, M=5)
 """
 
-from Heston import Heston
+from .Heston import Heston
 
 ### Child class, that allow for random sampling of the parameters
 class RHeston(Heston):

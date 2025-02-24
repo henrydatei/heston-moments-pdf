@@ -10,7 +10,7 @@ from datetime import datetime
 import os
 
 from SimHestonQE import Heston_QE
-from Moments import MomentsCIR,getSkFromMoments,getKuFromMoments, MomentsBates
+from code_from_haozhe.Moments_from_r_code import MomentsCIR,getSkFromMoments,getKuFromMoments, MomentsBates
 from RealizedMomentsEstimator_MonthOverlap import rMoments, rMoments_nc
 
 # # Check theoretical moments 

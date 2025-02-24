@@ -3,6 +3,10 @@ import numpy as np
 from scipy.stats import norm
 import yaml
 
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 class Heston:
     def __init__(self, kappa=1, theta=0.5, sigma=0.5, rho=0, lambda_=0, muj=0, vj=0, mu=0, S0=100, T = 1, yaml_path = None):
         if yaml_path:
@@ -78,12 +82,12 @@ class Heston:
     #         return None                
 
     def _create_moments(self):
-        from moments import Moments
+        from .moments import Moments
         #print(f"Imported Moments: {Moments}")
         return Moments(self)  # Create an instance of Moments
     
     def _create_sampling(self):
-        from sampling import Sampling
+        from .sampling import Sampling
         #print(f"Imported Sampling: {Sampling}")
         return Sampling(self)  # Create an instance of Sampling
 

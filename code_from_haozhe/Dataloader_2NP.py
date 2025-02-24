@@ -2,7 +2,7 @@ import pickle
 import numpy as np
 import pandas as pd
 import os
-from Moments import MomentsCIR,getSkFromMoments,getKuFromMoments, MomentsBates
+from code_from_haozhe.Moments_from_r_code import MomentsCIR,getSkFromMoments,getKuFromMoments, MomentsBates
 
 with open('NP_diff_Heston_1y_6m_kappa3_10yburnout_mu0095_v0019.pickle', 'rb') as file:
      rm = pickle.load(file)

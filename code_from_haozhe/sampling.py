@@ -1,6 +1,5 @@
 import numpy as np
 from scipy.stats import norm
-from pytorch_lightning import seed_everything
 
 class Sampling:
     
@@ -11,7 +10,7 @@ class Sampling:
     # v - CIR process, can be given in order to get only prices with the given spot vola
     # Z_v - used for other simulation methods in order to have a noise for the CIR process
     def rQE(self, n, TT, M = 1, v0 = None, v = None, Z_v = None, gam1 = 0.5, gam2 = 0.5):
-        #seed_everything(seed=33)
+        np.random.seed(0)
         mu = self.heston_instance.mu
         theta = self.heston_instance.theta
         kappa = self.heston_instance.kappa
