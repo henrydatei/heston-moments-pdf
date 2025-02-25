@@ -1,7 +1,7 @@
-\section{Methodological Approach and Implementation}
+\chapter{Methodological Approach and Implementation}
 \label{sec:methodical_approach}
 
-\subsection{Simulation}
+\section{Simulation}
 - all die in den vorherigen Kapiten vorgestellten Methoden wurden in Python implementiert
 - Simulation von $n=1$ Paths des Heston-Models mit dem QE schema von Andersen (2008). Da hier über die Länge der Zeit eine Mittelung der Ergebnisse stattfindet, ist es nicht notwendig mehrere Pfade zu simulieren.
 - Parameter der Simulation:
@@ -20,7 +20,7 @@
 - Das Sammeln der Ergebnisse erfolgt in einer CSV-Datei und Log-Datei (insgesamt 50 Jobs à 256 Worker = 12800 Batches), um die parallele Schreibbelastung in einer Datei zu minimieren. Die einzelenen Daten werden dann zentral in einer Datenbank zusammengeführt.
 - Zudem wurden für jede Simulation der theoretische Mean, Varince, Skewness und Kurtosis der Returns (\cite{okhrinDistributionalPropertiesContinuous2023}) berechnet. Diese hängen nur von den Parametern des Modells ab und sind durch einfache Grundrechenoperationen miteinander verknüpft, sodass die Berechnung sehr schnell direkt in der Datenbank durchgeführt werden kann.
 
-\subsection{Calculating Results}
+\section{Calculating Results}
 - für jede Simulation werden die Gram-Charlier Expansion, die Gram-Charlier Expansion mit positivity constraint, die Edgeworth Expansion und die Edgeworth Expansion mit positivity constraint, die Cornish-Fisher Expansion und die Saddlepoint Approximation berechnet
 - jede Expansions-Methode wird auf die ersten 4 realisierten Momente und die ersten 4 Kumulanten angewendet
 - für jede Simulation wird die theoretische Dichte aus der charakteristischen Funktion berechnet und mit der Dichte aus den Expansionen per Kolmogorov-Smirnov-Test und Cramer-von-Mises-Test verglichen

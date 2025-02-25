@@ -1,7 +1,7 @@
-\section{The First 4 Moments}
+\chapter{The First 4 Moments}
 \label{sec:moments}
 
-\subsection{Moments and central moments}
+\section{Moments and central moments}
 
 For a random variable $X$, the expectation, also referred to as the first moment, is given by
 \begin{align}
@@ -25,7 +25,7 @@ which is also known as the centered second moment. The variance is estimated usi
 \begin{align}
     \hat{\sigma}^2 = \frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2\notag
 \end{align}
-where the denominator $n-1$ represents Bessel's correction, which improves the estimation of variance \cite{radziwillStatisticsEasierWay2017}. Analogously, the $r$-th moment is given by
+where the denominator $n-1$ represents Bessel's correction, which improves the estimation of variance (\cite{radziwillStatisticsEasierWay2017}). Analogously, the $r$-th moment is given by
 \begin{align}
     \mathbb{E}(X^r)\notag
 \end{align}
@@ -39,20 +39,20 @@ Skewness measures the asymmetry of a distribution and is defined as the standard
     \gamma_1 &= \frac{\mathbb{E}((X-\mu)^3)}{\sigma^3} \\
     &= \frac{\mathbb{E}(X^3) - 3\mathbb{E}(X)\mathbb{E}(X^2) + 2\mathbb{E}(X)^3}{\sigma^3} \notag
 \end{align}
-Different methods exist for estimating skewness, such as those proposed by \cite{joanesComparingMeasuresSample1998}:
+Different methods exist for estimating skewness, such as those proposed by Joanes \& Gill (\citeyear{joanesComparingMeasuresSample1998}):
 \begin{align}
     b_1 &= \frac{\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^3}{\left[\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2\right]^{3/2}} \notag \\
     g_1 &= \frac{\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^3}{\left[\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^2\right]^{3/2}} \notag \\
     G_1 &= \frac{n^2}{(n-1)(n-2)}b_1 = \frac{\sqrt{n(n-1)}}{n-2}g_1 \notag \\
     \hat{\gamma}_1 &= \frac{n}{(n-1)(n-2)}\sum_{i=1}^n \left(\frac{x_i-\bar{x}}{\hat{\sigma}}\right)^3 \notag
 \end{align}
-where $b_1$ and $g_1$ are estimators of the population skewness, while $G_1$ and $\hat{\gamma}_1$ estimate the skewness of a sample. The estimator $G_1$ is implemented in statistical software such as Excel, SAS, and SPSS \cite{doaneMeasuringSkewnessForgotten2011}. Kurtosis measures the tailedness of a distribution and is defined as the standardized fourth moment:
+where $b_1$ and $g_1$ are estimators of the population skewness, while $G_1$ and $\hat{\gamma}_1$ estimate the skewness of a sample. The estimator $G_1$ is implemented in statistical software such as Excel, SAS, and SPSS (\cite{doaneMeasuringSkewnessForgotten2011}). Kurtosis measures the tailedness of a distribution and is defined as the standardized fourth moment:
 \begin{align}
     \label{eq:definition_kurtosis}
     \gamma_2 = \frac{\mathbb{E}((X-\mu)^4)}{\sigma^4} \\
     &= \frac{\mathbb{E}(X^4) - 4\mathbb{E}(X^3)\mathbb{E}(X) + 6\mathbb{E}(X^2)\mathbb{E}(X)^2 - 3\mathbb{E}(X)^4}{\sigma^4} \notag
 \end{align}
-Various estimation methods for kurtosis exist, such as those presented by \cite{joanesComparingMeasuresSample1998}:
+Various estimation methods for kurtosis exist, such as those presented by Joanes \& Gill (\citeyear{joanesComparingMeasuresSample1998}):
 \begin{align}
     g_2 &= \frac{\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^4}{\left[\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^2\right]^2} \notag \\
     \hat{\gamma}_2 &= \frac{n(n+1)}{(n-1)(n-2)(n-3)}\sum_{i=1}^n \left(\frac{x_i-\bar{x}}{\hat{\sigma}}\right)^4 \notag
@@ -64,7 +64,7 @@ where $g_2$ estimates the kurtosis of a population and $G_2$ estimates the kurto
 \end{align}
 This adjustment is motivated by the fact that for a standard normally distributed variable $X$, the kurtosis is $\gamma_2 = 3$ and the excess kurtosis is $\gamma_2^* = 0$. In general, due to the high powers involved in the definitions of skewness and kurtosis, these estimators are highly sensitive to outliers. In the following, the term moments will be used broadly to include related measures such as variance, skewness, and kurtosis.
 
-\subsection{Cumulants}
+\section{Cumulants}
 
 Throughout this work, the concept of cumulants will also be used, which provide an alternative representation of moments. The $r$-th cumulant is defined as the coefficient of $t^r$ in the logarithm of the moment generating function of $X$. The moment generating function of $X$ is given by
 \begin{align}
@@ -86,8 +86,8 @@ From this definition, the first four cumulants are given by
     \kappa_4 &= \gamma_2^*\sigma^4
 \end{align}
 
-\subsection{Estimating the Moments of Low-Frequency Data using High-Frequency Data}
-For the pricing of financial derivatives, it is crucial to know the moments of returns, particularly those of monthly or quarterly returns \cite{barroRareDisastersAsset2006}. However, estimating the moments of such low-frequency returns can be challenging due to the limited number of observations available \cite{neubergerSkewnessStockMarket2021}. Today, financial markets operate continuously, making it possible to obtain daily or even minute-level returns without difficulty. For example, the German stock index DAX is calculated every second \cite{boersefrankfurtFunktioniertBoerse}. There are several approaches to estimating the moments of monthly or quarterly returns based on the moments of daily returns. One such method is proposed by \cite{amayaDoesRealizedSkewness2015}. In this approach, the $i$-th intraday log return $r_{t,i}$ for day $t$ is computed as
+\section{Estimating the Moments of Low-Frequency Data using High-Frequency Data}
+For the pricing of financial derivatives, it is crucial to know the moments of returns, particularly those of monthly or quarterly returns (\cite{barroRareDisastersAsset2006}). However, estimating the moments of such low-frequency returns can be challenging due to the limited number of observations available (\cite{neubergerSkewnessStockMarket2021}). Today, financial markets operate continuously, making it possible to obtain daily or even minute-level returns without difficulty. For example, the German stock index DAX is calculated every second (\cite{boersefrankfurtFunktioniertBoerse}). There are several approaches to estimating the moments of monthly or quarterly returns based on the moments of daily returns. One such method is proposed by Amaya et al. (\citeyear{amayaDoesRealizedSkewness2015}). In this approach, the $i$-th intraday log return $r_{t,i}$ for day $t$ is computed as
 \begin{align}
     r_{t,i} = \log(P_{t,i/N}) - \log(P_{t,(i-1)/N})\notag
 \end{align}
@@ -95,12 +95,12 @@ where $p$ represents the natural logarithm of the price, and $N$ denotes the num
 \begin{align}
     \hat{\sigma}^2_t = \sum_{i=1}^{N}r_{t,i}^2\notag
 \end{align}
-This idea is not new and was first introduced by \cite{andersenAnsweringSkepticsYes1998}. Building upon this approach, the daily realized skewness and kurtosis can be computed as
+This idea is not new and was first introduced by Andersen \& Bollerslev (\citeyear{andersenAnsweringSkepticsYes1998}). Building upon this approach, the daily realized skewness and kurtosis can be computed as
 \begin{align}
     \hat{\gamma}_1 = \frac{\sqrt{N}\cdot \sum_{i=1}^{N}r_{t,i}^3}{\hat{\sigma}_t^3}\notag\\
     \hat{\gamma}_2 = \frac{N\cdot \sum_{i=1}^{N}r_{t,i}^4}{\hat{\sigma}_t^4}\notag
 \end{align}
-To transition from daily realized moments to weekly or monthly moments, a moving average approach is applied. \cite{choeHighMomentVariations2014} use variation processes to estimate low-frequency moments, specifically the quadratic variation of a semimartingale $X$:
+To transition from daily realized moments to weekly or monthly moments, a moving average approach is applied. Choe \& Lee (\citeyear{choeHighMomentVariations2014}) use variation processes to estimate low-frequency moments, specifically the quadratic variation of a semimartingale $X$:
 \begin{align}
     \label{eq:quadratic_variation}
     [X]_t = X_t^2 - 2\int_0^tX_u\,\mathrm{d}X_u
@@ -125,7 +125,7 @@ From these, the moments follow:
     \mathbb{E}(R_T^3) = \frac{3}{2}\mathbb{E}([R,R^2]_T)\notag\\
     \mathbb{E}(R_T^4) = \frac{3}{2}\mathbb{E}([R^2]_T)\notag
 \end{align}
-The estimation of low-frequency variance follows the same approach as \cite{andersenAnsweringSkepticsYes1998} and \cite{amayaDoesRealizedSkewness2015}. \cite{neubergerSkewnessStockMarket2021} propose a novel method that only requires log prices to be martingales and stationary, meaning there is no drift. Under these conditions, they define new moment measures that approximate the standard definitions:
+The estimation of low-frequency variance follows the same approach as Andersen \& Bollerslev (\citeyear{andersenAnsweringSkepticsYes1998}) and Amaya et al. (\citeyear{amayaDoesRealizedSkewness2015}). Neuberger \& Payne (\citeyear{neubergerSkewnessStockMarket2021}) propose a novel method that only requires log prices to be martingales and stationary, meaning there is no drift. Under these conditions, they define new moment measures that approximate the standard definitions:
 \begin{align}
     var^L(r) &= \mathbb{E}(x^{(2L)}(r))\text{, where } x^{(2L)}(r) = 2(e^r-1-r) \notag \\
     var^E(r) &= \mathbb{E}(x^{(2E)}(r))\text{, where } x^{(2E)}(r) = 2(re^r-e^r+1) \notag \\
@@ -152,22 +152,22 @@ where
     \label{eq:x1}
     x^{(1)} &= e^r-1
 \end{align}
-where equation \eqref{eq:x1} originates from \cite{neubergerRealizedSkewness2012}. In \cite{neubergerRealizedSkewness2012}, the aggregation property is also introduced: if $g$ is a real function, $X$ is a process, and for times $0\le s\le t\le u\le T$,
+where equation \eqref{eq:x1} originates from Neuberger (\citeyear{neubergerRealizedSkewness2012}). In Neuberger (\citeyear{neubergerRealizedSkewness2012}), the aggregation property is also introduced: if $g$ is a real function, $X$ is a process, and for times $0\le s\le t\le u\le T$,
 \begin{align}
     \mathbb{E}_s(g(X_u-X_s)) = \mathbb{E}_s(g(X_u-X_t)) + \mathbb{E}_t(g(X_t-X_s))\notag
 \end{align}
-then the pair $(g,X)$ satisfies the aggregation property. This property is used, for instance, in estimating low-frequency variance by summing high-frequency variance. \cite{fukasawaRealizedCumulantsMartingales2021} build on this idea and derive formulas for realized cumulants that also satisfy the aggregation property.
+then the pair $(g,X)$ satisfies the aggregation property. This property is used, for instance, in estimating low-frequency variance by summing high-frequency variance. Fukasawa \& Matsushita (\citeyear{fukasawaRealizedCumulantsMartingales2021}) build on this idea and derive formulas for realized cumulants that also satisfy the aggregation property.
 
-\subsection{The First 4 Moments of the Heston Model}
+\section{The First 4 Moments of the Heston Model}
 
 Care must be taken with notation, as symbols such as $\mu$ and $\sigma$ previously denoted the mean and variance but are now used to represent the drift and volatility of the Heston model (see Equations \eqref{eq:heston_model_price} and \eqref{eq:heston_model_variance}). The noncentral moments are denoted by $\mu_1$ through $\mu_4$, while the central and standardized moments are denoted by $\zeta_1$ through $\zeta_4$.
 
-Fortunately, moments for returns and other related measures have been derived. \cite{okhrinSimulatingCoxIngersoll2022} provide the unconditional noncentral moments for the log-return $r_t = \log(S_t) - \log(S_0)$:
+Fortunately, moments for returns and other related measures have been derived. Okhrin et al. (\citeyear{okhrinSimulatingCoxIngersoll2022}) provide the unconditional noncentral moments for the log-return $r_t = \log(S_t) - \log(S_0)$:
 \begin{align}
     \mu_1 &= \left(\mu - \frac{\theta}{2}\right)t\notag \\
     \mu_2 &= \frac{1}{4\kappa^3}\left(\exp(-\kappa t)\left[\exp(\kappa t)\left\lbrace\kappa^3 t(t(\theta-2\mu)^2 + 4\theta) - 4\kappa^2\rho\sigma t\theta + \kappa\sigma\theta(4\rho + \sigma t) - \sigma^2\theta\right\rbrace + \sigma\theta(\sigma-4\kappa\rho)\right]\right) \notag
 \end{align}
-The expressions for $\mu_3$ and $\mu_4$ are too lengthy to be included here but can be found in \cite{okhrinSimulatingCoxIngersoll2022}. The corresponding unconditional central and standardized moments are then given by:
+The expressions for $\mu_3$ and $\mu_4$ are too lengthy to be included here but can be found in Okhrin et al. (\citeyear{okhrinSimulatingCoxIngersoll2022}). The corresponding unconditional central and standardized moments are then given by:
 \begin{align}
     \zeta_1 &= \mu_1\notag \\
     \zeta_2 &= \mathbb{E}\left[(r_t-\mu_1)^2\right] \notag \\
@@ -176,13 +176,13 @@ The expressions for $\mu_3$ and $\mu_4$ are too lengthy to be included here but 
     &= \frac{3\kappa\sigma\theta\exp(\kappa t/2)(\sigma - 2\kappa\rho)}{\zeta_2^{3/2}}[4\kappa^2\{\exp(\kappa t)(\rho\sigma t+1) + \rho\sigma t - 1\} - 4\kappa^3 t\exp(\kappa t) - \kappa\sigma\{\exp(\kappa t)(8\rho + \sigma t) - 8\rho + \sigma t\} + 2\sigma^2(\exp(\kappa t)-1)] \notag \\
     \zeta_4 &= \mathbb{E}\left[\left(\frac{r_t-\mu_1}{\zeta_1^{1/2}}\right)^4\right] \notag
 \end{align}
-The expression for $\zeta_4$ is omitted here but can be found in \cite{okhrinSimulatingCoxIngersoll2022}.
+The expression for $\zeta_4$ is omitted here but can be found in Okhrin et al. (\citeyear{okhrinSimulatingCoxIngersoll2022}).
 
-\cite{zhaoRelationPhysicalRiskneutral2013} and \cite{zhangSkewnessImpliedHeston2017} analyze moments for the continuously compounded return $R_t^T = \ln\left(\frac{S_T}{S_t}\right)$ and derive the conditional central variance:
+Zhao et al. (\citeyear{zhaoRelationPhysicalRiskneutral2013}) and Zhang et al.  (\citeyear{zhangSkewnessImpliedHeston2017}) analyze moments for the continuously compounded return $R_t^T = \ln\left(\frac{S_T}{S_t}\right)$ and derive the conditional central variance:
 \begin{align}
     \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^2 = \frac{1}{4}\text{Var}_t(\int_t ^T v_s\,\mathrm{d}s) + SW_{t,T} - \mathbb{E}_t(\int_t^T \sqrt{v_s}\,\mathrm{d}B_s(\int_t^T v_s\,\mathrm{d}s-\mathbb{E}_t(\int_t^T v_s\,\mathrm{d}s)))
 \end{align}
-where $v_t$ represents the variance at time $t$, $SW$ is the variance swap rate (the expectation of realized variance), and $B_t$ is a Brownian motion. \cite{zhangSkewnessImpliedHeston2017} further elaborate:
+where $v_t$ represents the variance at time $t$, $SW$ is the variance swap rate (the expectation of realized variance), and $B_t$ is a Brownian motion. Zhang et al. (\citeyear{zhangSkewnessImpliedHeston2017}) further elaborate:
 \begin{align}
     \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^2 &= \int_t^T \mathbb{E}_t(v_s)\,\mathrm{d}s - \rho\sigma\int_t^T \frac{1-\exp(-\kappa(T-s))}{\kappa}\mathbb{E}_t(v_s)\,\mathrm{d}s + \frac{1}{4}\left(\sigma^2\int_t^T\frac{(1-\exp(-\kappa(T-s)))^2}{\kappa^2}\mathbb{E}_t(v_s) \,\mathrm{d}s\right) \notag
 \end{align}
@@ -203,7 +203,7 @@ where $X_T$ and $Y_T$ are defined as
 \end{align}
 where $B^S$ and $B^v$ are the Brownian motions associated with price and volatility, respectively.
 
-\cite{dunnEstimatingOptionPrices2014} derive the unconditional noncentral moments for the return $Q_{t+1}=\frac{S_{t+1}}{S_t}$:
+Dunn et al. (\citeyear{dunnEstimatingOptionPrices2014}) derive the unconditional noncentral moments for the return $Q_{t+1}=\frac{S_{t+1}}{S_t}$:
 \begin{align}
     \mathbb{E}(Q_{t+1}) &= \mu_1 = 1+\mu  \notag \\
     \mathbb{E}(Q_{t+1}^2) &= \mu_2 = (\mu +1)^2+\theta \notag \\

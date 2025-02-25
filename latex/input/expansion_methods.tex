@@ -1,9 +1,9 @@
-\section{Expansion Methods}
+\chapter{Expansion Methods}
 \label{sec:expansion_methods}
 
 Expansion methods are series approximations of a probability density function. In general, these approximations are not true densities, as they can take negative values for certain parameter choices. However, for some parameter sets, they do define valid probability densities. In the following sections, we will explore the conditions under which expansion methods yield proper densities and how to transform a parameter set that does not correspond to a valid density into one that does.
 
-\subsection{Gram-Charlier Expansion}
+\section{Gram-Charlier Expansion}
 The Gram-Charlier expansion was introduced by Gram (\citeyear{gramUeberEntwickelungReeller1883}) and Charlier (\citeyear{charlierContributionsMathematicalTheory1914}). There are two types of expansions: Gram-Charlier A and Gram-Charlier B, which are defined as
 \begin{align}
     f_{GC,A} &\approx f(x) + \sum_{k=3}^n a_k f^{(k)}(x) \notag \\
@@ -116,7 +116,7 @@ A comparison between constrained and unconstrained parameters for four distribut
     \label{fig:gc_positivity_expansion}
 \end{figure}
 
-\subsection{Edgeworth Expansion}
+\section{Edgeworth Expansion}
 - beschrieben von Edgeworth \citeyear{edgeworthRepresentationStatisticalFrequency1907}, er schlägt unter anderem vor, die Approximation bis zum 6. Term zu berechnen um das oben angesprochene Problem der asympotischen Expansion zu umgehen. Eine formelle Darstellung der ersten Terme findet sich z.B. in Brenn \& Anfinsen (\citeyear{brennRevisitGramCharlierEdgeworth2017}):
 \begin{align}
     f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_5}{120\sigma^5}H_5\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_6 + 10\kappa_3^2}{720\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)\right] \notag
@@ -216,7 +216,7 @@ Since each $\gamma_1(\gamma_2^*, z)$ equation is a parabola, the positivity regi
 
 As with the Gram-Charlier expansion, we compare the constrained and unconstrained parameters for four distributions: standard normal, lognormal, $t$-distribution, and non-central $t$-distribution (see Table \ref{table:distributions_theoretical_moments}). The results, shown in Figures \ref{fig:ew_expansion} and \ref{fig:ew_positivity_expansion}, lead to the same conclusion as in the Gram-Charlier case: Positivity constraints are necessary, but they also distort the expansion and even when constraints are not needed (e.g., for the standard normal distribution), applying the positivity constraints artificially increases excess kurtosis from 0 to 2.
 
-\subsection{Cornish-Fisher Expansion}
+\section{Cornish-Fisher Expansion}
 
 The Cornish-Fisher expansion, introduced by Cornish and Fisher (\citeyear{cornishMomentsCumulantsSpecification1938}), is an asymptotic expansion that approximates the quantiles of a probability distribution based on its cumulants.
 
@@ -253,7 +253,7 @@ Aboura \& Maillard (\citeyear{abouraOptionPricingSkewness2016}) also investigate
     \label{fig:cf_expansion_cdf}
 \end{figure}
 
-\subsection{Saddlepoint Approximation}
+\section{Saddlepoint Approximation}
 
 The Saddlepoint Approximation, introduced by Daniels (\citeyear{danielsSaddlepointApproximationsStatistics1954}), provides an accurate method for approximating probability densities. While Daniels initially derived the density function, the cumulative distribution function (CDF) was later introduced by Lugannani \& Rice (\citeyear{lugannaniSaddlePointApproximation1980}). This method is based on the moment generating function (MGF) and offers a highly precise approximation formula. Given that $M(t)$ is the moment generating function and $K(t) = \log(M(t))$ is the cumulant generating function, the approximation of the density function $f(x)$ is given by:
 \begin{align}
