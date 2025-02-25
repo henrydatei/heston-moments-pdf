@@ -19,12 +19,12 @@ where $\kappa$, $\theta$, and $\sigma$ are strictly positive parameters. The ter
 The variance process follows a Cox-Ingersoll-Ross (CIR) process (\cite{coxTheoryTermStructure1985}) with mean reversion $\kappa$, long-run variance $\theta$, and volatility $\sigma$. The conditional transition probability of $v_t$ given $v_0$ is proportional to a noncentral chi-squared distributed random variable:
 \begin{align}
     \label{eq:heston_model_variance_transition}
-    v_t\mid v_0 &\sim c\cdot \chi^2'_{\nu}(\Lambda) \\
+    v_t\mid v_0 &\sim c\cdot \chi^{2'}_{\nu}(\Lambda) \\
     c &= \sigma^2\left(1 - \exp(-\kappa t)\right)(4\kappa)^{-1} \notag \\
     \nu &= \frac{4\kappa\theta}{\sigma^2} \notag \\
     \Lambda &= \frac{v_0}{c}\exp(-\kappa t) \notag
 \end{align}
-where $\chi^2'$ denotes a noncentral chi-squared distribution with $\nu$ degrees of freedom and noncentrality parameter $\Lambda$ (\cite{okhrinSimulatingCoxIngersoll2022}).
+where $\chi^{2'}$ denotes a noncentral chi-squared distribution with $\nu$ degrees of freedom and noncentrality parameter $\Lambda$ (\cite{okhrinSimulatingCoxIngersoll2022}).
 
 \subsection{Characteristic Function and Density of the Heston Model}
 
@@ -69,7 +69,7 @@ Equation \eqref{eq:heston_model_characteristic_function_C} has the drawback that
 
 \subsection{Simulating the Heston Model}
 
-The Heston model is a continuous-time model, and for simulation purposes, time must be discretized. Small timesteps require significant computational power, while large timesteps may lead to zero or even negative volatility if the so-called Feller condition is not satisfied (\cite{albrecherLittleHestonTrap2007}). The Feller condition holds if $2\kappa\theta > \sigma^2$, but Eraker et al. (\citeyear{erakerImpactJumpsVolatility2003}) show that for S&P 500 index options, this condition is violated. Many other studies confirm this result for various markets and asset classes (e.g., \cite{changOptionPricingDouble2021,huPricingVolatilityJump2022}).
+The Heston model is a continuous-time model, and for simulation purposes, time must be discretized. Small timesteps require significant computational power, while large timesteps may lead to zero or even negative volatility if the so-called Feller condition is not satisfied (\cite{albrecherLittleHestonTrap2007}). The Feller condition holds if $2\kappa\theta > \sigma^2$, but Eraker et al. (\citeyear{erakerImpactJumpsVolatility2003}) show that for S\&P 500 index options, this condition is violated. Many other studies confirm this result for various markets and asset classes (e.g., \cite{changOptionPricingDouble2021,huPricingVolatilityJump2022}).
 
 The most intuitive approach to time discretization is the Euler–Maruyama scheme:
 \begin{align}

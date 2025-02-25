@@ -117,7 +117,7 @@ A comparison between constrained and unconstrained parameters for four distribut
 \end{figure}
 
 \subsection{Edgeworth Expansion}
-- beschrieben von Edgeworth \citeyear{edgeworthRepresentationStatisticalFrequency1907}, er schlägt unter anderem vor, die Approximation bis zum 6. Term zu berechnen um das oben angesprochene Problem der asympotischen Expansion zu umgehen. Eine formelle Darstellung der ersten Terme findet sich z.B. in Brenn & Anfinsen (\citeyear{brennRevisitGramCharlierEdgeworth2017}):
+- beschrieben von Edgeworth \citeyear{edgeworthRepresentationStatisticalFrequency1907}, er schlägt unter anderem vor, die Approximation bis zum 6. Term zu berechnen um das oben angesprochene Problem der asympotischen Expansion zu umgehen. Eine formelle Darstellung der ersten Terme findet sich z.B. in Brenn \& Anfinsen (\citeyear{brennRevisitGramCharlierEdgeworth2017}):
 \begin{align}
     f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_5}{120\sigma^5}H_5\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_6 + 10\kappa_3^2}{720\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)\right] \notag
 \end{align}
@@ -126,7 +126,7 @@ Since this work only considers the first four cumulants, the expression simplifi
     \label{eq:ew_expansion_short}
     f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_3^2}{72\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)\right]
 \end{align}
-Following the approach of Jondeau & Rockinger (\citeyear{jondeauGramCharlierDensities2001}) for the Gram-Charlier expansion, we determine the positivity boundary for the Edgeworth expansion by rewriting Equation \eqref{eq:ew_expansion_short} using $z = \frac{x-\mu}{\sigma}$:
+Following the approach of Jondeau \& Rockinger (\citeyear{jondeauGramCharlierDensities2001}) for the Gram-Charlier expansion, we determine the positivity boundary for the Edgeworth expansion by rewriting Equation \eqref{eq:ew_expansion_short} using $z = \frac{x-\mu}{\sigma}$:
 \begin{align}
     \label{eq:ew_expansion_s_ek}
     f(x)_{GC,A} \approx \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{z^2}{2}\right) \left[1 + \frac{\gamma_1}{6}H_3(z) + \frac{\gamma_2^*}{24}H_4(z) + \frac{\gamma_1^2}{72}He_6(z)\right]
@@ -226,7 +226,7 @@ Given that $z_p$ is the $p$-quantile of a normal distribution with mean $\mu$ an
 \end{align}
 To obtain the probability density function (PDF), the quantiles $x_p$ can be numerically computed and differentiated.
 
-Aboura & Maillard (\citeyear{abouraOptionPricingSkewness2016}) point out that the parameters $\gamma_1$ and $\gamma_2^*$ do not correspond to the skewness and excess kurtosis of the approximated distribution. Instead, they denote these parameters as $s = \gamma_1$ and $k = \gamma_2^*$ and provide equations to compute the actual skewness $s^*$ and excess kurtosis $k^*$ of the approximated distribution:
+Aboura \& Maillard (\citeyear{abouraOptionPricingSkewness2016}) point out that the parameters $\gamma_1$ and $\gamma_2^*$ do not correspond to the skewness and excess kurtosis of the approximated distribution. Instead, they denote these parameters as $s = \gamma_1$ and $k = \gamma_2^*$ and provide equations to compute the actual skewness $s^*$ and excess kurtosis $k^*$ of the approximated distribution:
 \begin{align}
     s^* &= \frac{M_3}{M_{2}^{3/2}} \notag \\
     k^* &= \frac{M_4}{M_{2}^2} - 3 \notag \\
@@ -237,7 +237,7 @@ Aboura & Maillard (\citeyear{abouraOptionPricingSkewness2016}) point out that th
 \end{align}
 Later, Maillard (\citeyear{maillardUserGuideCornish2018}) published the inverse transformation, allowing one to compute the parameters $s$ and $k$ given the actual skewness and excess kurtosis. A corresponding table can be found in the appendix of his paper.
 
-Aboura & Maillard (\citeyear{abouraOptionPricingSkewness2016}) also investigate the domain of validity for the Cornish-Fisher expansion. Their findings suggest that the expansion is valid for a wide range of parameters—even an excess kurtosis above 40 and skewness exceeding $\pm3$ are possible. However, when operating outside the validity domain, the issue is not immediately apparent in the probability density function itself. Instead, it becomes visible in the quantiles, which can turn negative (see Figures \ref{fig:cf_expansion} and \ref{fig:cf_expansion_cdf}).
+Aboura \& Maillard (\citeyear{abouraOptionPricingSkewness2016}) also investigate the domain of validity for the Cornish-Fisher expansion. Their findings suggest that the expansion is valid for a wide range of parameters—even an excess kurtosis above 40 and skewness exceeding $\pm3$ are possible. However, when operating outside the validity domain, the issue is not immediately apparent in the probability density function itself. Instead, it becomes visible in the quantiles, which can turn negative (see Figures \ref{fig:cf_expansion} and \ref{fig:cf_expansion_cdf}).
 
 \begin{figure}[h]
     \centering
@@ -255,7 +255,7 @@ Aboura & Maillard (\citeyear{abouraOptionPricingSkewness2016}) also investigate 
 
 \subsection{Saddlepoint Approximation}
 
-The Saddlepoint Approximation, introduced by Daniels (\citeyear{danielsSaddlepointApproximationsStatistics1954}), provides an accurate method for approximating probability densities. While Daniels initially derived the density function, the cumulative distribution function (CDF) was later introduced by Lugannani & Rice (\citeyear{lugannaniSaddlePointApproximation1980}). This method is based on the moment generating function (MGF) and offers a highly precise approximation formula. Given that $M(t)$ is the moment generating function and $K(t) = \log(M(t))$ is the cumulant generating function, the approximation of the density function $f(x)$ is given by:
+The Saddlepoint Approximation, introduced by Daniels (\citeyear{danielsSaddlepointApproximationsStatistics1954}), provides an accurate method for approximating probability densities. While Daniels initially derived the density function, the cumulative distribution function (CDF) was later introduced by Lugannani \& Rice (\citeyear{lugannaniSaddlePointApproximation1980}). This method is based on the moment generating function (MGF) and offers a highly precise approximation formula. Given that $M(t)$ is the moment generating function and $K(t) = \log(M(t))$ is the cumulant generating function, the approximation of the density function $f(x)$ is given by:
 \begin{align}
     \label{eq:sp_approximation}
     f(x)_{SP} \approx \frac{1}{\sqrt{2\pi\cdot K''(s)}}\exp(K(s) - s\cdot x)
@@ -290,7 +290,7 @@ To find $s$, we solve the equation $K'(s) = x$ under different conditions:
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{img/sp_approximation.png}
+    \includegraphics[width=0.8\textwidth]{img/saddle_approximation.png}
     \caption{Saddlepoint Approximation of different distributions}
     \label{fig:sp_approximation}
 \end{figure}
