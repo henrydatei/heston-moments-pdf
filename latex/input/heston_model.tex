@@ -105,7 +105,7 @@ where $Z_v \sim \mathcal{N}(0,1)$. For smaller values of $v_t$,
         \beta^{-1}\ln\left(\frac{1-p}{1-u}\right) & p<u\le 1
     \end{cases} \notag
 \end{align}
-The parameters $a$, $b$, $p$, and $\beta$ are estimated using moment matching. The transition between the two approximation schemes is determined by a threshold $\psi_c$: if the ratio $\psi = s^2 / m^2$ (where $m$ and $s^2$ are the mean and variance of $v_{t+\Delta}$, respectively) exceeds $\psi_c$, then \eqref{eq:qe_dirac} is used; otherwise, \eqref{eq:qe_normal} is applied.
+The parameters $a$, $b$, $p$, and $\beta$ are estimated using moment matching and $U_v$ is drawn from a uniform distribution. The transition between the two approximation schemes is determined by a threshold $\psi_c$: if the ratio $\psi = s^2 / m^2$ (where $m$ and $s^2$ are the mean and variance of $v_{t+\Delta}$, respectively) exceeds $\psi_c$, then \eqref{eq:qe_dirac} is used; otherwise, \eqref{eq:qe_normal} is applied.
 
 For the price process, Andersen (\citeyear{andersenEfficientSimulationHeston2007}) proposes the following discretization scheme:
 \begin{align}
