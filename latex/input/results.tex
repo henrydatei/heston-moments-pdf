@@ -35,8 +35,29 @@
     \label{fig:max_number_of_same_prices_ratio_D}
 \end{figure}
 
-- Untersuchung, woher diese Fehler kommen: Dazu bestimmen des Anteils der Simulationen, die korrekt in Abhängigkeit eines jeden einzelnen Parameters des Heston-Modells (siehe Abbildung \ref{fig:max_number_of_same_prices_ratio_parameters}). Man erkennt, dass mit zunehmendem $\sigma$ die Fehler zunehmen, während mit zunehmendem $\theta$ und $\kappa$ die Fehler abnehmen. Die Parameter $\mu$, $\rho$ und $v_0$ haben keinen Einfluss auf die Fehlerhäufigkeit. Das legt nahe, dass die Fehler mit der Feller condition zusammenhängen. Deshalb untersucht man nun die Fehlerhäufigkeit und den Wert $D = 2\kappa\theta - \sigma^2$. Ist dieser Wert positiv, so ist die Feller condition erfüllt, je negativer er ist, desto weniger erfüllt ist die Feller condition. Abbildung \ref{fig:max_number_of_same_prices_ratio_D} zeigt, dass, sobald die Feller condition nicht mehr erfüllt ist, die Fehlerhäufigkeit stark zunimmt. Wenn die Feller condition erfüllt ist, so sind 99.90\% der Simulationen korrekt, ist die Feller condition nicht erfüllt, so sind es nur 25.48\%. Insgesamt erfüllen 57.80\% der Simulationen die Feller condition.
+- Untersuchung, woher diese Fehler kommen: Dazu bestimmen des Anteils der Simulationen, die korrekt in Abhängigkeit eines jeden einzelnen Parameters des Heston-Modells (siehe Abbildung \ref{fig:max_number_of_same_prices_ratio_parameters}). Man erkennt, dass mit zunehmendem $\sigma$ die Fehler zunehmen, während mit zunehmendem $\theta$ und $\kappa$ die Fehler abnehmen. Die Parameter $\mu$, $\rho$ und $v_0$ haben keinen Einfluss auf die Fehlerhäufigkeit. Das legt nahe, dass die Fehler mit der Feller condition zusammenhängen. Deshalb untersuche ich nun die Fehlerhäufigkeit und den Wert $D = 2\kappa\theta - \sigma^2$. Ist dieser Wert positiv, so ist die Feller condition erfüllt, je negativer er ist, desto weniger erfüllt ist die Feller condition. Abbildung \ref{fig:max_number_of_same_prices_ratio_D} zeigt, dass, sobald die Feller condition nicht mehr erfüllt ist, die Fehlerhäufigkeit stark zunimmt. Wenn die Feller condition erfüllt ist, so sind 99.90\% der Simulationen korrekt, ist die Feller condition nicht erfüllt, so sind es nur 25.48\%. Insgesamt erfüllen 57.80\% der Simulationen die Feller condition.
 
 \section{Comparing Distributions with the Kolmogorov-Smirnov-Test}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/GC_cum_KS_p_value_histogram.png}
+    \caption{Distribution of p values of the Kolmogorov-Smirnov-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density without invalid simulations}
+    \label{fig:GC_cum_KS_p_value_histogram}
+\end{figure}
+
+- In Abbildung \ref{fig:GC_cum_KS_p_value_histogram} sieht man die Verteilung der p values des Kolmogorov-Smirnov-Tests für die Gram-Charlier Expansion mit Kumulanten im Vergleich zur theoretischen Dichte. Dabei wurden alle Simulationen entfernt, bei denen der selbe Preis mehr als einmal vorkommt. Ein p Wert von über 5\% bedeutet, dass es keine signifikanten Unterschiede zwischen den beiden Verteilungen gibt, die Gram-Charlier Expansion auf Basis von Kumulanten approximiert die theoretische Dichte also gut genug. Man sieht, dass dies für einige Parameterkombinationen nicht der Fall ist; insgesamt für 52.48\% der Simulationen. Für restliche Expansionsmethoden siehe Tabelle \ref{tab:KS_p_value_percentage}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|c|c|c|c|c|c}
+        & \textbf{Gram-Charlier} & \textbf{GC+} & \textbf{Edgeworth} & \textbf{EW+} & \textbf{Cornish-Fisher} & \textbf{Saddlepoint} \\
+        \hline
+        \textbf{Cumulants} & 52.48\% & 47.63\% & 52.14\% & 47.64\% & 35.85\% & 45.36\% \\
+        \textbf{Moments} & 37.35\% & 21.24\% & 36.02\% & 23.27\% & 44.90\% & 40.92\%
+    \end{tabular}
+    \caption{Percentage of simulations where the p-value of the Kolmogorov-Smirnov-Test against the theoretical density is above 5\%. Invalid simulations are excluded. GC+ and EW+ stand for the Gram-Charlier Expansion with positivity constraint and the Edgeworth Expansion with positivity constraint, respectively.}
+    \label{tab:KS_p_value_percentage}
+\end{table}
 
 \section{Comparing the Tails of the Distributions}
