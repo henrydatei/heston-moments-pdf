@@ -5,7 +5,7 @@
 #SBATCH --nodes=1
 #SBATCH --time=24:00:00
 #SBATCH -J fill_database
-#SBATCH --array=0-99
+#SBATCH --array=0-9999
 #SBATCH --error="/home/s4307678/.out/myjob-%A_%a.out"
 #SBATCH --output="/home/s4307678/.out/myjob-%A_%a.out"
 
@@ -40,6 +40,6 @@ pip install tqdm
 # pip install yfinance
 # pip install pytorch-lightning
 
-srun python simulation_database/fill_database.py --i $SLURM_ARRAY_TASK_ID --chunks 100
+srun python simulation_database/fill_database.py --i $SLURM_ARRAY_TASK_ID --chunks 10000
 
 deactivate

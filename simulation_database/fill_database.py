@@ -39,14 +39,14 @@ seed = 0
 v0_min = 0.01
 v0_max = 0.5
 v0_step = 0.05
-kappa_min = 0.01
-kappa_max = 1
-kappa_step = 0.1
-theta_min = 0.01
-theta_max = 1
+kappa_min = 1
+kappa_max = 5
+kappa_step = 0.05
+theta_min = 1
+theta_max = 5
 theta_step = 0.05
-sigma_min = 0.01
-sigma_max = 1
+sigma_min = 1
+sigma_max = 5
 sigma_step = 0.05
 # mu_min = -0.1
 # mu_max = 0.1
@@ -180,15 +180,15 @@ def main():
     
     # existing_combinations = load_existing_combinations()
 
-    # parameter_list = [
-    #     (i, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin)
-    #     for v0 in v0s for kappa in kappas for theta in thetas
-    #     for sigma in sigmas for mu in mus for rho in rhos
-    # ]
-    
     parameter_list = [
-        (i, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin) for v0, kappa, theta, sigma, mu, rho in missing_combinations()
+        (i, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin)
+        for v0 in v0s for kappa in kappas for theta in thetas
+        for sigma in sigmas for mu in mus for rho in rhos
     ]
+    
+    # parameter_list = [
+    #     (i, start_date, end_date, time_points, T, S0, paths, v0, kappa, theta, sigma, mu, rho, burnin) for v0, kappa, theta, sigma, mu, rho in missing_combinations()
+    # ]
 
     chunk_size = len(parameter_list) // num_chunks
     start_index = i * chunk_size
