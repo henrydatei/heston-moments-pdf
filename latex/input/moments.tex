@@ -49,7 +49,7 @@ Different methods exist for estimating skewness, such as those proposed by Joane
 where $b_1$ and $g_1$ are estimators of the population skewness, while $G_1$ and $\hat{\gamma}_1$ estimate the skewness of a sample. The estimator $G_1$ is implemented in statistical software such as Excel, SAS, and SPSS (\cite{doaneMeasuringSkewnessForgotten2011}). Kurtosis measures the tailedness of a distribution and is defined as the standardized fourth moment:
 \begin{align}
     \label{eq:definition_kurtosis}
-    \gamma_2 = \frac{\mathbb{E}((X-\mu)^4)}{\sigma^4} \\
+    \gamma_2 &= \frac{\mathbb{E}((X-\mu)^4)}{\sigma^4} \\
     &= \frac{\mathbb{E}(X^4) - 4\mathbb{E}(X^3)\mathbb{E}(X) + 6\mathbb{E}(X^2)\mathbb{E}(X)^2 - 3\mathbb{E}(X)^4}{\sigma^4} \notag
 \end{align}
 Various estimation methods for kurtosis exist, such as those presented by Joanes \& Gill (\citeyear{joanesComparingMeasuresSample1998}):
@@ -122,8 +122,8 @@ equations \eqref{eq:quadratic_variation} and \eqref{eq:quadratic_covariation} ca
 \end{align}
 From these, the moments follow:
 \begin{align}
-    \mathbb{E}(R_T^3) = \frac{3}{2}\mathbb{E}([R,R^2]_T)\notag\\
-    \mathbb{E}(R_T^4) = \frac{3}{2}\mathbb{E}([R^2]_T)\notag
+    \mathbb{E}(R_T^3) &= \frac{3}{2}\mathbb{E}([R,R^2]_T)\notag\\
+    \mathbb{E}(R_T^4) &= \frac{3}{2}\mathbb{E}([R^2]_T)\notag
 \end{align}
 The estimation of low-frequency variance follows the same approach as Andersen \& Bollerslev (\citeyear{andersenAnsweringSkepticsYes1998}) and Amaya et al. (\citeyear{amayaDoesRealizedSkewness2015}). Neuberger \& Payne (\citeyear{neubergerSkewnessStockMarket2021}) propose a novel method that only requires log prices to be martingales and stationary, meaning there is no drift. Under these conditions, they define new moment measures that approximate the standard definitions:
 \begin{align}
@@ -164,34 +164,73 @@ Care must be taken with notation, as symbols such as $\mu$ and $\sigma$ previous
 
 Fortunately, moments for returns and other related measures have been derived. Okhrin et al. (\citeyear{okhrinSimulatingCoxIngersoll2022}) provide the unconditional noncentral moments for the log-return $r_t = \log(S_t) - \log(S_0)$:
 \begin{align}
-    \mu_1 &= \left(\mu - \frac{\theta}{2}\right)t\notag \\
-    \mu_2 &= \frac{1}{4\kappa^3}\left(\exp(-\kappa t)\left[\exp(\kappa t)\left\lbrace\kappa^3 t(t(\theta-2\mu)^2 + 4\theta) - 4\kappa^2\rho\sigma t\theta + \kappa\sigma\theta(4\rho + \sigma t) - \sigma^2\theta\right\rbrace + \sigma\theta(\sigma-4\kappa\rho)\right]\right) \notag
+    \mu_1 &= \left(\mu - \frac{\theta}{2}\right)t \notag \\
+    \mu_2 &= \frac{1}{4\kappa^3}\Biggl\{
+        \exp(-\kappa t)\Biggl[
+            \exp(\kappa t)\Bigl\{
+                \kappa^3 t\Bigl[t(\theta-2\mu)^2 + 4\theta\Bigr] 
+                - 4\kappa^2\rho\sigma t\theta \notag \\
+            &\quad\quad + \kappa\sigma\theta(4\rho + \sigma t)
+                - \sigma^2\theta
+            \Bigr\} + \sigma\theta(\sigma-4\kappa\rho)
+        \Biggr]
+    \Biggr\} \notag
 \end{align}
 The expressions for $\mu_3$ and $\mu_4$ are too lengthy to be included here but can be found in Okhrin et al. (\citeyear{okhrinSimulatingCoxIngersoll2022}). The corresponding unconditional central and standardized moments are then given by:
 \begin{align}
-    \zeta_1 &= \mu_1\notag \\
+    \zeta_1 &= \mu_1 \notag \\
     \zeta_2 &= \mathbb{E}\left[(r_t-\mu_1)^2\right] \notag \\
-    &= \frac{\theta[-4\kappa^2\rho\sigma t + 4\kappa^3 t + \sigma\exp(-\kappa t)(\sigma - 4\kappa\rho) + 4\kappa\sigma\rho + \kappa\sigma^2 t - \sigma^2]}{4\kappa^3} \notag \\
+    &=\frac{\theta}{4\kappa^3}\Biggl[
+        -4\kappa^2\rho\sigma t + 4\kappa^3 t + \sigma\exp(-\kappa t)(\sigma - 4\kappa\rho) \notag\\
+    &\quad\quad + 4\kappa\sigma\rho + \kappa\sigma^2 t - \sigma^2
+    \Biggr] \notag \\
     \zeta_3 &= \mathbb{E}\left[\left(\frac{r_t-\mu_1}{\zeta_1^{1/2}}\right)^3\right] \notag \\
-    &= \frac{3\kappa\sigma\theta\exp(\kappa t/2)(\sigma - 2\kappa\rho)}{\zeta_2^{3/2}}[4\kappa^2\{\exp(\kappa t)(\rho\sigma t+1) + \rho\sigma t - 1\} - 4\kappa^3 t\exp(\kappa t) - \kappa\sigma\{\exp(\kappa t)(8\rho + \sigma t) - 8\rho + \sigma t\} + 2\sigma^2(\exp(\kappa t)-1)] \notag \\
+    &=\frac{3\kappa\sigma\theta\exp(\kappa t/2)(\sigma - 2\kappa\rho)}{\zeta_2^{3/2}}
+    \Biggl[
+        4\kappa^2\Bigl\{\exp(\kappa t)(\rho\sigma t+1) + \rho\sigma t - 1\Bigr\} \notag\\
+    &\quad\quad - 4\kappa^3 t\exp(\kappa t) \notag\\
+    &\quad\quad - \kappa\sigma\Bigl\{\exp(\kappa t)(8\rho + \sigma t) - 8\rho + \sigma t\Bigr\} \notag\\
+    &\quad\quad + 2\sigma^2\Bigl(\exp(\kappa t)-1\Bigr)
+    \Biggr] \notag \\
     \zeta_4 &= \mathbb{E}\left[\left(\frac{r_t-\mu_1}{\zeta_1^{1/2}}\right)^4\right] \notag
 \end{align}
 The expression for $\zeta_4$ is omitted here but can be found in Okhrin et al. (\citeyear{okhrinSimulatingCoxIngersoll2022}).
 
 Zhao et al. (\citeyear{zhaoRelationPhysicalRiskneutral2013}) and Zhang et al.  (\citeyear{zhangSkewnessImpliedHeston2017}) analyze moments for the continuously compounded return $R_t^T = \ln\left(\frac{S_T}{S_t}\right)$ and derive the conditional central variance:
 \begin{align}
-    \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^2 = \frac{1}{4}\text{Var}_t(\int_t ^T v_s\,\mathrm{d}s) + SW_{t,T} - \mathbb{E}_t(\int_t^T \sqrt{v_s}\,\mathrm{d}B_s(\int_t^T v_s\,\mathrm{d}s-\mathbb{E}_t(\int_t^T v_s\,\mathrm{d}s)))
-\end{align}
+    \mathbb{E}_t\Bigl(R_t^T-\mathbb{E}_t(R_t^T)\Bigr)^2 
+    &= \frac{1}{4}\text{Var}_t\Biggl(\int_t ^T v_s\,\mathrm{d}s\Biggr) + SW_{t,T} \notag\\[1ex]
+    &\quad - \mathbb{E}_t\Biggl(
+        \int_t^T \sqrt{v_s}\,\mathrm{d}B_s
+        \Biggl[\int_t^T v_s\,\mathrm{d}s-\mathbb{E}_t\Biggl(\int_t^T v_s\,\mathrm{d}s\Biggr)\Biggr]
+    \Biggr) \notag
+\end{align}    
 where $v_t$ represents the variance at time $t$, $SW$ is the variance swap rate (the expectation of realized variance), and $B_t$ is a Brownian motion. Zhang et al. (\citeyear{zhangSkewnessImpliedHeston2017}) further elaborate:
 \begin{align}
-    \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^2 &= \int_t^T \mathbb{E}_t(v_s)\,\mathrm{d}s - \rho\sigma\int_t^T \frac{1-\exp(-\kappa(T-s))}{\kappa}\mathbb{E}_t(v_s)\,\mathrm{d}s + \frac{1}{4}\left(\sigma^2\int_t^T\frac{(1-\exp(-\kappa(T-s)))^2}{\kappa^2}\mathbb{E}_t(v_s) \,\mathrm{d}s\right) \notag
+    \mathbb{E}_t\Bigl(R_t^T-\mathbb{E}_t(R_t^T)\Bigr)^2 &= \int_t^T \mathbb{E}_t(v_s)\,\mathrm{d}s \notag\\[1ex]
+    &\quad - \rho\sigma\int_t^T \frac{1-\exp(-\kappa(T-s))}{\kappa}\mathbb{E}_t(v_s)\,\mathrm{d}s \notag\\[1ex]
+    &\quad + \frac{1}{4}\Biggl(\sigma^2\int_t^T\frac{\Bigl(1-\exp(-\kappa(T-s))\Bigr)^2}{\kappa^2}\mathbb{E}_t(v_s) \,\mathrm{d}s\Biggr) \notag
 \end{align}
+    
 Using the expected instantaneous variance $\mathbb{E}_t(v_s) = \theta + (v_t - \theta)\exp(-\kappa(s-t))$, Mathematica yields the following results:
 \begin{align}
-    \int_t^T\mathbb{E}_t(V_s)\,\mathrm{d}s &= \frac{v_t - \theta + \exp(\kappa(t-T))(-v_t+\theta) - t \theta\kappa + T\theta\kappa}{\kappa} \notag \\
-    \rho\sigma\int_t^T \frac{1-\exp(-\kappa(T-s))}{\kappa}\mathbb{E}_t(v_s)\,\mathrm{d}s &= \frac{\exp(-T\kappa)[\exp(t\kappa)(-v_t+2\theta+(t-T)(v_t-\theta)\kappa) + \exp(T\kappa)(v_t+\theta(-2-t\kappa + T\kappa))]\rho\sigma}{\kappa^2} \notag \\
-    \sigma^2\int_t^T\frac{(1-\exp(-\kappa(T-s)))^2}{\kappa^2}\mathbb{E}_t(v_s) \,\mathrm{d}s &= \frac{\exp(-2T\kappa)(\exp(2t\kappa)(-2v_t+\theta) + 4\exp((t+T)\kappa)(\theta + (t-T)(v_t-\theta)\kappa) + \exp(2T\kappa)(2v_t + \theta(-5-2t\kappa + 2T\kappa)))\sigma^2}{2\kappa^3} \notag
+    \int_t^T \mathbb{E}_t(v_s)\,\mathrm{d}s 
+    &= \frac{v_t - \theta + \exp\bigl(\kappa(t-T)\bigr)(-v_t+\theta) - t \theta\kappa + T\theta\kappa}{\kappa} \notag \\[1ex]
+    \rho\sigma\int_t^T \frac{1-\exp\bigl(-\kappa(T-s)\bigr)}{\kappa}\mathbb{E}_t(v_s)\,\mathrm{d}s 
+    &= \frac{\exp(-T\kappa)\,\rho\sigma}{\kappa^2} \Biggl[
+        \exp(t\kappa)\Bigl(-v_t+2\theta+(t-T)
+        \notag\\[1ex]
+    &\quad\quad\times \Bigl[(v_t-\theta)\,\kappa\Bigr]\Bigr) \notag\\[1ex]
+    &\quad\quad + \exp(T\kappa)\Bigl(v_t+\theta(-2-t\kappa+T\kappa)\Bigr)
+    \Biggr] \notag \\[1ex]
+    \sigma^2\int_t^T\frac{\bigl(1-\exp\bigl(-\kappa(T-s)\bigr)\bigr)^2}{\kappa^2}\mathbb{E}_t(v_s) \,\mathrm{d}s 
+    &= \frac{\exp(-2T\kappa)\,\sigma^2}{2\kappa^3} \Biggl[
+        \exp(2t\kappa)(-2v_t+\theta) \notag\\[1ex]
+    &\quad\quad + 4\exp\bigl((t+T)\kappa\bigr)\Bigl(\theta+(t-T)(v_t-\theta)\kappa\Bigr) \notag\\[1ex]
+    &\quad\quad + \exp(2T\kappa)\Bigl(2v_t+\theta(-5-2t\kappa+2T\kappa)\Bigr)
+    \Biggr] \notag
 \end{align}
+    
 The third conditional central moment is given by
 \begin{align}
     \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^3 &= \mathbb{E}_t(X_T^3) - \frac{3}{2}\mathbb{E}_t(X_T^2Y_T) + \frac{3}{4}\mathbb{E}_t(X_TY_T^2) - \frac{1}{8}\mathbb{E}_t(Y_T^3) \notag
@@ -206,10 +245,18 @@ where $B^S$ and $B^v$ are the Brownian motions associated with price and volatil
 Dunn et al. (\citeyear{dunnEstimatingOptionPrices2014}) derive the unconditional noncentral moments for the return $Q_{t+1}=\frac{S_{t+1}}{S_t}$:
 \begin{align}
     \mathbb{E}(Q_{t+1}) &= \mu_1 = 1+\mu  \notag \\
-    \mathbb{E}(Q_{t+1}^2) &= \mu_2 = (\mu +1)^2+\theta \notag \\
-    \mathbb{E}(Q_{t+1}^3) &= \mu_3 = (\mu +1)^3+3\theta+3\mu\theta \notag \\
-    \mathbb{E}(Q_{t+1}^4) &= \mu_4 = \frac{1}{\kappa (\kappa -2)}(\kappa^2\mu^4 + 4\kappa^2\mu^3 + 6\kappa^2\mu^2\theta - 2\kappa\mu^4 + 6\kappa^2\mu^2 + 12\kappa^2\mu\theta + 3\kappa^2\theta^2 - 8\kappa\mu^3 - 12\kappa\mu^2\theta + 4\kappa^2\mu + 6\kappa^2\theta - 12\kappa\mu^2 - 24\kappa\mu\theta - 6\kappa\theta^2 - 3\sigma^2\theta + \kappa^2 - 8\kappa\mu - 12\kappa\theta - 2\kappa) \notag
+    \mathbb{E}(Q_{t+1}^2) &= \mu_2 = (\mu+1)^2+\theta \notag \\
+    \mathbb{E}(Q_{t+1}^3) &= \mu_3 = (\mu+1)^3+3\theta+3\mu\theta \notag \\
+    \mathbb{E}(Q_{t+1}^4) &= \mu_4 \notag \\
+    &=\frac{1}{\kappa(\kappa-2)}\Biggl(
+        \kappa^2\mu^4 + 4\kappa^2\mu^3 + 6\kappa^2\mu^2\theta - 2\kappa\mu^4 \notag\\[1ex]
+    &\quad\quad +\, 6\kappa^2\mu^2 + 12\kappa^2\mu\theta + 3\kappa^2\theta^2 - 8\kappa\mu^3 \notag\\[1ex]
+    &\quad\quad -\, 12\kappa\mu^2\theta + 4\kappa^2\mu + 6\kappa^2\theta - 12\kappa\mu^2 \notag\\[1ex]
+    &\quad\quad -\, 24\kappa\mu\theta - 6\kappa\theta^2 - 3\sigma^2\theta + \kappa^2 \notag\\[1ex]
+    &\quad\quad -\, 8\kappa\mu - 12\kappa\theta - 2\kappa
+    \Biggr) \notag
 \end{align}
+    
 Using Equations \eqref{eq:definition_variance}, \eqref{eq:definition_skewness}, and \eqref{eq:definition_kurtosis}, the central and standardized moments follow as
 \begin{align}
     \zeta_1 &= 1+\mu \notag \\

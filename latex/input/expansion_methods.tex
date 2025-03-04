@@ -40,14 +40,19 @@ Using these recurrence relations, the first few Hermite polynomials can be compu
 The coefficients $a_k$ in the expansion can be expressed in terms of the moments $r_k$ of the density $f$. This leads to the first terms of the Gram-Charlier A expansion:
 \begin{align}
     \label{eq:gc_a_expansion_kappa}
-    f(x)_{GC,A} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right)\right]
+    f(x)_{GC,A} \approx &\, \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \notag\\[1ex]
+    &\, \times \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right)
+    + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right)\right]
 \end{align}
 where $\mu$, $\sigma^2$, $\kappa_3$, and $\kappa_4$ represent the first four cumulants of the target distribution. Based on Equations \eqref{eq:cumulants_1} and \eqref{eq:cumulants_2}, $\mu$ and $\sigma^2$ correspond to the first two cumulants $\kappa_1$ and $\kappa_2$.
 
 The first terms of the Gram-Charlier B expansion are given by
 \begin{align}
-    f(x)_{GC,B} \approx \frac{\lambda^x}{x!}\exp(-\lambda) \left(1 + \frac{\mu_2 - \lambda}{\lambda^2}\left[\frac{x^{[2]}}{2} - \lambda x^{[1]} + \frac{\lambda^2}{2}\right] + \frac{\mu_3 - 3\mu_2 + 2\lambda}{\lambda^3}\left[\frac{x^{[3]}}{6} - \frac{\lambda}{2}x^{[2]} + \frac{\lambda^2}{2}x^{[1]} - \frac{\lambda^3}{6}\right]\right) \notag
-\end{align}
+    f(x)_{GC,B} \approx &\; \frac{\lambda^x}{x!}\exp(-\lambda) \notag\\[1ex]
+    &\; \times \Biggl( 1 
+       + \frac{\mu_2 - \lambda}{\lambda^2}\Bigl[\frac{x^{[2]}}{2} - \lambda x^{[1]} + \frac{\lambda^2}{2}\Bigr] \notag\\[1ex]
+    &\quad + \frac{\mu_3 - 3\mu_2 + 2\lambda}{\lambda^3}\Bigl[\frac{x^{[3]}}{6} - \frac{\lambda}{2}x^{[2]} + \frac{\lambda^2}{2}x^{[1]} - \frac{\lambda^3}{6}\Bigr] \Biggr) \notag
+\end{align}    
 where $\mu_i$ are the central moments of the target distribution, and $x^{[i]} = x(x-1)\dots (x-i+1)$ (\cite{mitropolskiiGramCharlierSeries2020}). However, since Gram-Charlier Type B only allows discrete values for $x$, it cannot be applied to continuous distributions. Therefore, we focus exclusively on Gram-Charlier Type A in this work.
 
 The Gram-Charlier expansion is not an asymptotic expansion, as it does not allow for a well-defined approximation error. The Edgeworth expansion, however, is an asymptotic expansion (\cite{cramerMathematicalMethodsStatistics1999}, Section 17.6) and is therefore preferred. An asymptotic expansion consists of a series of functions $f_n$ that, after a finite number of terms, approximate a function at a specific point $\xi$ (often infinite) as $x$ approaches $\xi$:
@@ -90,15 +95,15 @@ A comparison between constrained and unconstrained parameters for four distribut
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{l|l|l|l|l|l|l|l|l}
-        Distribution & Parameters & $\mu$ & $\sigma^2$ & $\kappa_3$ & $\gamma_1$ & $\kappa_4$ & $\gamma_2^*$ \\
+    \begin{tabular}{l|l|l|l|l|l|l|l}
+        Distribution & $\mu$ & $\sigma^2$ & $\kappa_3$ & $\gamma_1$ & $\kappa_4$ & $\gamma_2^*$ \\
         \hline
-        Standardnormal & $\mu=0$, $\sigma=1$ & 0 & 1 & 0 & 0 & 0 & 0 \\
-        Lognormal & $\mu=0$, $\sigma = 0.5$ & 1.1331 & 0.3647 & 0.3855 & 1.7502 & 0.7845 & 5.8984 \\
-        t-Distribution & $\nu=5$ & 0 & 1.6667 & 0 & 0 & 16.6667 & 6 \\
-        Non-Central t-Distribution & $\nu=5$, $\mu=0.5$ & 0.5947 & 1.7297 & 1.5357 & 0.6751 & 21.5969 & 7.2189
+        $\mathcal{N}(\mu=0,\sigma1)$ & 0 & 1 & 0 & 0 & 0 & 0 \\
+        $\mathcal{L}(\mu=0, \sigma=0.5)$ & 1.1331 & 0.3647 & 0.3855 & 1.7502 & 0.7845 & 5.8984 \\
+        $\mathcal{T}(\nu=5)$ & 0 & 1.6667 & 0 & 0 & 16.6667 & 6 \\
+        $\mathcal{NCT}(\nu=5, \mu=0.5)$ & 0.5947 & 1.7297 & 1.5357 & 0.6751 & 21.5969 & 7.2189
     \end{tabular}
-    \caption{Distribution parameters and theoretical moments and cumulants.}
+    \caption{Distribution parameters and theoretical moments and cumulants. $\mathcal{N}$ stands for the Normal distribution, $\mathcal{L}$ for the Lognormal distribution, $\mathcal{T}$ for the Student's $t$-distribution, and $\mathcal{NCT}$ for the Non-Central $t$-distribution.}
     \label{table:distributions_theoretical_moments}
 \end{table}
 
@@ -117,29 +122,35 @@ A comparison between constrained and unconstrained parameters for four distribut
 \end{figure}
 
 \section{Edgeworth Expansion}
-- beschrieben von Edgeworth \citeyear{edgeworthRepresentationStatisticalFrequency1907}, er schlägt unter anderem vor, die Approximation bis zum 6. Term zu berechnen um das oben angesprochene Problem der asympotischen Expansion zu umgehen. Eine formelle Darstellung der ersten Terme findet sich z.B. in Brenn \& Anfinsen (\citeyear{brennRevisitGramCharlierEdgeworth2017}):
+Originally introduced by Edgeworth \citeyear{edgeworthRepresentationStatisticalFrequency1907}, who suggested computing the approximation up to the sixth term to mitigate the issues associated with asymptotic expansions. A formal representation of the first terms can be found in Brenn \& Anfinsen (\citeyear{brennRevisitGramCharlierEdgeworth2017}).
 \begin{align}
-    f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_5}{120\sigma^5}H_5\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_6 + 10\kappa_3^2}{720\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)\right] \notag
+    f(x)_{EW} \approx &\; \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \notag\\[1ex]
+    &\; \times \Biggl[ 1 
+        + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) \notag\\[1ex]
+    &\quad + \frac{\kappa_5}{120\sigma^5}H_5\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_6 + 10\kappa_3^2}{720\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)
+    \Biggr] \notag
 \end{align}
+    
 Since this work only considers the first four cumulants, the expression simplifies to:
 \begin{align}
+    f(x)_{EW} \approx {} & \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\notag\\[1ex]
+    & \quad \times \Biggl[ 1 
+       + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) \notag\\[1ex]
     \label{eq:ew_expansion_short}
-    f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \left[1 + \frac{\kappa_3}{6\sigma^3}H_3\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_4}{24\sigma^4}H_4\left(\frac{x-\mu}{\sigma}\right) + \frac{\kappa_3^2}{72\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)\right]
-\end{align}
+    & \quad \quad + \frac{\kappa_3^2}{72\sigma^6}H_6\left(\frac{x-\mu}{\sigma}\right)
+    \Biggr]
+\end{align}    
+
 Following the approach of Jondeau \& Rockinger (\citeyear{jondeauGramCharlierDensities2001}) for the Gram-Charlier expansion, we determine the positivity boundary for the Edgeworth expansion by rewriting Equation \eqref{eq:ew_expansion_short} using $z = \frac{x-\mu}{\sigma}$:
 \begin{align}
     \label{eq:ew_expansion_s_ek}
-    f(x)_{GC,A} \approx \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{z^2}{2}\right) \left[1 + \frac{\gamma_1}{6}H_3(z) + \frac{\gamma_2^*}{24}H_4(z) + \frac{\gamma_1^2}{72}He_6(z)\right]
+    f(x)_{EW} \approx \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{z^2}{2}\right) \left[1 + \frac{\gamma_1}{6}H_3(z) + \frac{\gamma_2^*}{24}H_4(z) + \frac{\gamma_1^2}{72}He_6(z)\right]
 \end{align}
 To ensure the expansion remains a valid density, we solve for skewness $\gamma_1$ in the equation:
 \begin{align}
     0 &= 1+\frac{\gamma_1}{6}He_3(z) + \frac{\gamma_2^*}{24}He_4(z) + \frac{\gamma_1^2}{72}He_6(z) \\
-    0 &= \frac{72}{He_6(z)} + 12\gamma_1\frac{He_3(z)}{He_6(z)} + 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + \gamma_1^2 \notag \\
-    -\frac{72}{He_6(z)} - 3\gamma_2^*\frac{He_4(z)}{He_6(z)} &=  12\gamma_1\frac{He_3(z)}{He_6(z)} + \gamma_1^2 \notag \\
-    -\frac{72}{He_6(z)} - 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2} &= 12\gamma_1\frac{He_3(z)}{He_6(z)} + \gamma_1^2 + 36\frac{He_3(z)^2}{He_6(z)^2} \notag \\
-    -\frac{72}{He_6(z)} - 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2} &= \left(\gamma_1+6\frac{He_3(z)}{He_6(z)}\right)^2 \notag \\
     \gamma_1 &= \pm\sqrt{-\frac{72}{He_6(z)} - 3\gamma_2^*\frac{He_4(z)}{He_6(z)} + 36\frac{He_3(z)^2}{He_6(z)^2}} - 6\frac{He_3(z)}{He_6(z)} \notag
-\end{align} %TODO: drüberlesen, ob alle s durch gamma_1 und alle k durch gamma_2^* ersetzt wurden
+\end{align}
 This equation is valid as long as $H_6(z) \neq 0$, which occurs at six points:
 \begin{align}
     z_{1/2} &= \pm \sqrt{5-\frac{5^{2/3}\left(1+i\sqrt{3}\right)}{\sqrt[3]{2\left(2+i\sqrt{6}\right)}} - \frac{\left(1-i\sqrt{3}\right)\sqrt[3]{5\left(2+i\sqrt{6}\right)}}{2^{2/3}}} = \pm 0.6167 \notag\\
@@ -180,24 +191,19 @@ This equation is valid as long as $H_6(z) \neq 0$, which occurs at six points:
 
 The positivity boundary for the Edgeworth expansion is determined by plotting the lines $\gamma_1(\gamma_2^*, z)$ for many values of $z$, skipping over the six singularities. Figure \ref{fig:ew_boundary_lines} shows that the positivity region for the Edgeworth expansion is smaller than for the Gram-Charlier expansion. For $\gamma_1 = 0$, the excess kurtosis is constrained between 0 and 4, which matches the boundary of the Gram-Charlier expansion since both expansions are identical when skewness is zero.
 
-As with the Gram-Charlier expansion, the positivity boundary is given by the envelope of the lines $\gamma_1(\gamma_2^*, z)$. We obtain this by computing the intersections of pairs of parabolic equations. These intersections are shown in Figures \ref{fig:ew_boundary_intersections_1} to \ref{fig:ew_boundary_intersections_7}.
-\begin{align}
-    \gamma_{2,1}^* &= \frac{2(b - e)^2(-c + f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)} \notag \\
-    \gamma_{1,1} &= c + \sqrt{a + b \cdot \left(\frac{2(b - e)^2(-c + f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)}\right)} \notag \\
-    \gamma_{2,2}^* &= \frac{2(b - e)^2(c - f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)} \notag \\
-    \gamma_{1,2} &= c + \sqrt{a + b \cdot \left(\frac{2(b - e)^2(c - f)\sqrt{-ab e + ae^2 + b^2 d + b c^2 e - 2 b c ef - bd e + b e f^2} + (b^2 - 2be + e^2)(-ab + ae + bc^2 - 2bcf + bd + bf^2 + c^2e - 2cef - de + ef^2)}{(b - e)^2(b^2 - 2be + e^2)}\right)} \notag
-\end{align}
+As with the Gram-Charlier expansion, the positivity boundary is given by the envelope of the lines $\gamma_1(\gamma_2^*, z)$. We obtain this by computing the intersections of pairs of parabolic equations. The equations are to long to be displayed here, you can find them in the corresponding GitHub repository\footnote{\url{https://github.com/henrydatei/heston-moments-pdf}}. These intersections are shown in Figures \ref{fig:ew_boundary_intersections_1} to \ref{fig:ew_boundary_intersections_7}.
+
 Since each $\gamma_1(\gamma_2^*, z)$ equation is a parabola, the positivity region can be computed by:
 \begin{enumerate}
     \item Ignoring the second intersection for each $z$-value (since the first intersection defines the boundary). The boundary is symmetric around the $x$-axis, so we only compute the upper half and mirror it afterward.
-    \item Filtering out non-relevant points: Figure \ref{fig:ew_boundary_intersections_3} shows many extraneous intersection points. Based on previous results, we restrict the solutions to $\gamma_2^* \in (-0.1,4.1)$ and $\vert \gamma_1\vert \in [0,1)$. (\ref{fig:ew_boundary_intersections_4})
+    \item Filtering out non-relevant points: Figure \ref{fig:ew_boundary_intersections_3} shows many extraneous intersection points. Based on previous results, we restrict the solutions to $\gamma_2^* \in (-0.1,4.1)$ and $\vert \gamma_1\vert \in [0,1)$. (see Figure \ref{fig:ew_boundary_intersections_4})
     \item Removing points from non-relevant boundary lines: The lower-boundary artifacts arise from $z$-values smaller than the third singularity; these are removed. The upper-boundary artifacts come from $\vert z \vert$ around 1.8 and 1.67, and are filtered out by removing all $z$ in the ranges $(1.8-0.035, 1.8+0.035)$ and $(1.67-0.015,1.67+0.015)$.
     \item Computational accuracy is a concern since some points lie slightly outside the expected range (e.g., one point is at $(\gamma_2^*, \gamma_1) = (4.01, 0.222)$). Testing this point in the Edgeworth expansion shows that it does not satisfy the positivity condition:
     \begin{align}
         1 + \frac{0.222}{6}He_3(z) + \frac{4.01}{24}He_4(z) + \frac{0.222^2}{72}He_6(z)<0 \notag
     \end{align}
     gives a solution: $-1.84611<z<-1.75826$. This might be due to Python's float datatype which maps to IEEE-754 double precision with 64 bits where 52 bits are used for the fraction which equals about 16 decimal digits (\cite{pythonfoundation15FloatingPointArithmetic,leonardo.zAnswerHowCan2013}) To be conservative, we remove any intersection with $\gamma_2^* \notin [0,4]$.
-    \item Adding the points $(0,0)$ and $(4,0)$ completes the positivity region. A linear interpolation between the closest computed boundary points results in the final positivity boundary (Figure \ref{fig:ew_boundary_intersections_7}).
+    \item Adding the points $(0,0)$ and $(4,0)$ completes the positivity region. A linear interpolation between the closest computed boundary points results in the final positivity boundary (see Figure \ref{fig:ew_boundary_intersections_7}).
 \end{enumerate}
 
 \begin{figure}[h]
@@ -284,8 +290,10 @@ To find $s$, we solve the equation $K'(s) = x$ under different conditions:
     \end{align}
     \item If $\kappa_4 \neq 0$, then three solutions exist, two of which are complex, and one is real which is given by
     \begin{align}
-        s = \frac{1}{3\sqrt[3]{2}\kappa_4}\left[\left(\sqrt{(-162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3)^2 + 4(18\kappa_4\kappa_2 - 9\kappa_3^2)^3} - 162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3\right)^{1/3}\right] - \frac{\sqrt[3]{2}(18\kappa_4\kappa_2 - 9\kappa_3^2)}{3\kappa_4\left(\sqrt{(-162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3)^2 + 4(18\kappa_4\kappa_2 - 9\kappa_3^2)^3} - 162\kappa_4^2\kappa_1 + 162\kappa_4^2 x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3\right)^{1/3}} - \frac{\kappa_3}{\kappa_4} \notag
-    \end{align}
+        s &= \frac{1}{3\sqrt[3]{2}\kappa_4}\,\sqrt[3]{\Delta} - \frac{\sqrt[3]{2}\,(18\kappa_4\kappa_2-9\kappa_3^2)}{3\kappa_4\,\sqrt[3]{\Delta}} - \frac{\kappa_3}{\kappa_4} \notag \\
+        \Delta &:= \sqrt{(-162\kappa_4^2\kappa_1 + 162\kappa_4^2x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3)^2 + 4(18\kappa_4\kappa_2 - 9\kappa_3^2)^3} \notag\\[1ex]
+        &\quad - 162\kappa_4^2\kappa_1 + 162\kappa_4^2x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3 \notag
+    \end{align}        
 \end{enumerate}
 
 \begin{figure}[h]
