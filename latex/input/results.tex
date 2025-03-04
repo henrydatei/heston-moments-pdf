@@ -36,6 +36,7 @@
 \end{figure}
 
 - Untersuchung, woher diese Fehler kommen: Dazu bestimmen des Anteils der Simulationen, die korrekt in Abhängigkeit eines jeden einzelnen Parameters des Heston-Modells (siehe Abbildung \ref{fig:max_number_of_same_prices_ratio_parameters}). Man erkennt, dass mit zunehmendem $\sigma$ die Fehler zunehmen, während mit zunehmendem $\theta$ und $\kappa$ die Fehler abnehmen. Die Parameter $\mu$, $\rho$ und $v_0$ haben keinen Einfluss auf die Fehlerhäufigkeit. Das legt nahe, dass die Fehler mit der Feller condition zusammenhängen. Deshalb untersuche ich nun die Fehlerhäufigkeit und den Wert $D = 2\kappa\theta - \sigma^2$. Ist dieser Wert positiv, so ist die Feller condition erfüllt, je negativer er ist, desto weniger erfüllt ist die Feller condition. Abbildung \ref{fig:max_number_of_same_prices_ratio_D} zeigt, dass, sobald die Feller condition nicht mehr erfüllt ist, die Fehlerhäufigkeit stark zunimmt. Wenn die Feller condition erfüllt ist, so sind 99.90\% der Simulationen korrekt, ist die Feller condition nicht erfüllt, so sind es nur 25.48\%. Insgesamt erfüllen 57.80\% der Simulationen die Feller condition.
+- Im Folgenden werden einige Expansionsmethoden weiter untersucht, gestartet wird mit der Gram-Charlier-Expansion, da sie die einfachste Methode ist.
 
 \section{Investigating the Results for the Gram-Charlier-Expansion}
 
