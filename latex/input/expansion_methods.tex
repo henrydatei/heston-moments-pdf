@@ -57,7 +57,7 @@ where $\mu_i$ are the central moments of the target distribution, and $x^{[i]} =
 
 The Gram-Charlier expansion is not an asymptotic expansion, as it does not allow for a well-defined approximation error. The Edgeworth expansion, however, is an asymptotic expansion (\cite{cramerMathematicalMethodsStatistics1999}, Section 17.6) and is therefore preferred. An asymptotic expansion consists of a series of functions $f_n$ that, after a finite number of terms, approximate a function at a specific point $\xi$ (often infinite) as $x$ approaches $\xi$:
 \begin{align}
-    f_{n+1}(x) = \mathcal{o}(f_n(x)) \quad x\to\xi \notag
+    f_{n+1}(x) = o(f_n(x)) \quad x\to\xi \notag
 \end{align}
 Furthermore, the Gram-Charlier expansion can take negative values, which is not permissible for a probability density function. Jondeau \& Rockinger (\citeyear{jondeauGramCharlierDensities2001}) analyzed the conditions under which the expansion remains a valid density. By using Equations \eqref{eq:cumulants_3} and \eqref{eq:cumulants_4}, Equation \eqref{eq:gc_a_expansion_kappa} can be rewritten in terms of the skewness $\gamma_1$ and excess kurtosis $\gamma_2^*$, defining $z = \frac{x-\mu}{\sigma}$:
 \begin{align}
