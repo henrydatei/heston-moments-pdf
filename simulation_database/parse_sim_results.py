@@ -216,9 +216,49 @@ def calc_theoretical_kurtosis():
     # kurtosis = (3 * sigma2 * (- 4 * kappa * rho + sigma)**2 * theta * (sigma2 + 2 * kappa * theta) + 12 * exp_kappa_t * sigma * theta * (7 * sigma**5 - kappa * sigma**3 * (56 * rho*sigma - 5 * sigma2 * T + theta) + kappa2 * sigma2 * (- 40 * rho * sigma2 * T + sigma**3 * T**2 + 8 * rho * theta + sigma * (24 + 136 * rho**2 + T * theta)) - 4 * kappa3 * sigma * (24 * rho**3 * sigma - 3 * sigma2 * T + 4 * rho**2 * (- 6 * sigma2 * T + theta) + 2 * rho * sigma * (12 + sigma2 * T**2 + T * theta)) - 4 * kappa**5 * rho * T * (- 8 * rho * sigma + 4 * rho**2 * sigma2 * T + theta_lambdaj_vj) + kappa4 * sigma * (8 - 48 * rho * sigma * T - 64 * rho**3 * sigma * T + 4 * rho**2 * (16 + 5 * sigma2 * T**2 + 4 * T * theta) + T * theta_lambdaj_vj)) + exp_kappa_t**2 * (- 87 * sigma**6 * theta + 6 * kappa * sigma**4 * theta * (116 * rho * sigma + 5 * sigma2 * T + theta) + 6 * kappa3 * sigma2 * theta * (192 * rho**3 * sigma + 16 * rho**2 * (6 * sigma2 * T + theta) + 16 * rho * sigma * (12 + T * theta) + sigma2 * T * (24 + T*theta)) - 12 * kappa2 * sigma**3 * theta * (20 * rho * sigma2 * T + 4 * rho * theta + sigma * (24 + 140 * rho**2 + T * theta)) - 48 * kappa**6 * rho * sigma * T**2 * theta * theta_lambdaj_vj - 12 * kappa4 * sigma2 * theta * (8 + 32 * rho**3 * sigma * T + 16 * rho**2 * (4 + T * theta) + 4 * rho * sigma * T * (12 + T * theta) + T * theta_lambdaj_vj) + 2 * kappa7 * T * (3 * T * theta_lambdaj_vj**2) + 12 * kappa**5 * sigma * T * theta * (4 * rho * theta_lambdaj_vj + sigma * (8 + 8 * rho**2 * (4 + T * theta) + T * theta_lambdaj_vj)))) / (2 * exp_kappa_t**2 * kappa7 * (((- 1 + 1 / exp_kappa_t) * sigma2 * theta - 4 * kappa2 * rho * sigma * T * theta + kappa * sigma * ((4 - 4 / exp_kappa_t) * rho + sigma * T) * theta + kappa3 * T * theta_lambdaj_vj) / kappa3)**2)
     add_column('simulations', 'theoretical_kurtosis', 'REAL')
     cursor.execute('''     
-        UPDATE simulations SET theoretical_kurtosis = (
-            (3 * sigma*sigma * (- 4 * kappa * rho + sigma)*(- 4 * kappa * rho + sigma) * theta * (sigma*sigma + 2 * kappa * theta) + 12 * exp(kappa * 1/12) * sigma * theta * (7 * sigma*sigma*sigma*sigma*sigma - kappa * sigma*sigma*sigma * (56 * rho*sigma - 5 * sigma*sigma * 1/12 + theta) + kappa*kappa * sigma*sigma * (- 40 * rho * sigma*sigma * 1/12 + sigma*sigma*sigma * 1/12*1/12 + 8 * rho * theta + sigma * (24 + 136 * rho*rho + 1/12 * theta)) - 4 * kappa*kappa*kappa * sigma * (24 * rho*rho*rho * sigma - 3 * sigma*sigma * 1/12 + 4 * rho*rho * (- 6 * sigma*sigma * 1/12 + theta) + 2 * rho * sigma * (12 + sigma*sigma * 1/12*1/12 + 1/12 * theta)) - 4 * kappa*kappa*kappa*kappa*kappa * rho * 1/12 * (- 8 * rho * sigma + 4 * rho*rho * sigma*sigma * 1/12 + 4 * theta) + kappa*kappa*kappa*kappa * sigma * (8 - 48 * rho * sigma * 1/12 - 64 * rho*rho*rho * sigma * 1/12 + 4 * rho*rho * (16 + 5 * sigma*sigma * 1/12*1/12 + 4 * 1/12 * theta) + 1/12 * 4 * theta)) + exp(kappa * 1/12) * exp(kappa * 1/12) * (- 87 * sigma*sigma*sigma*sigma*sigma*sigma * theta + 6 * kappa * sigma*sigma*sigma*sigma * theta * (116 * rho * sigma + 5 * sigma*sigma * 1/12 + theta) + 6 * kappa*kappa*kappa * sigma*sigma * theta * (192 * rho*rho*rho * sigma + 16 * rho*rho * (6 * sigma*sigma * 1/12 + theta) + 16 * rho * sigma * (12 + 1/12 * theta) + sigma*sigma * 1/12 * (24 + 1/12*theta)) - 12 * kappa*kappa * sigma*sigma*sigma * theta * (20 * rho * sigma*sigma * 1/12 + 4 * rho * theta + sigma * (24 + 140 * rho*rho + 1/12 * theta)) - 48 * kappa*kappa*kappa*kappa*kappa*kappa * rho * sigma * 1/12*1/12 * theta * 4 * theta - 12 * kappa*kappa*kappa*kappa * sigma*sigma * theta * (8 + 32 * rho*rho*rho * sigma * 1/12 + 16 * rho*rho * (4 + 1/12 * theta) + 4 * rho * sigma * 1/12 * (12 + 1/12 * theta) + 1/12 * 4 * theta) + 2 * kappa*kappa*kappa*kappa*kappa*kappa*kappa * 1/12 * (3 * 1/12 * 4 * theta * 4 * theta) + 12 * kappa*kappa*kappa*kappa*kappa * sigma * 1/12 * theta * (4 * rho * 4 * theta + sigma * (8 + 8 * rho*rho * (4 + 1/12 * theta) + 1/12 * 4 * theta)))) / (2 * exp(kappa * 1/12) * exp(kappa * 1/12) * kappa*kappa*kappa*kappa*kappa*kappa*kappa * (((- 1 + 1 / (exp(kappa * 1/12))) * sigma*sigma * theta - 4 * kappa*kappa * rho * sigma * 1/12 * theta + kappa * sigma * ((4 - 4 / (exp(kappa * 1/12))) * rho + sigma * 1/12) * theta + kappa*kappa*kappa * 1/12 * 4 * theta) / (kappa * kappa * kappa))*(((- 1 + 1 / (exp(kappa * 1/12))) * sigma*sigma * theta - 4 * kappa*kappa * rho * sigma * 1/12 * theta + kappa * sigma * ((4 - 4 / (exp(kappa * 1/12))) * rho + sigma * 1/12) * theta + kappa*kappa*kappa * 1/12 * 4 * theta) / (kappa * kappa * kappa)))
-        )
+        UPDATE simulations
+        SET theoretical_kurtosis =
+        (
+            (
+                3 * pow(sigma,2) * pow(-4*kappa*rho + sigma,2) * theta * (pow(sigma,2) + 2*kappa*theta)
+                +
+                12 * exp(kappa*(1.0/12.0)) * sigma * theta *
+                (
+                7 * pow(sigma,5)
+                - kappa * pow(sigma,3) * (56*rho*sigma - 5*pow(sigma,2)*(1.0/12.0) + theta)
+                + pow(kappa,2) * pow(sigma,2) * (-40*rho*pow(sigma,2)*(1.0/12.0) + pow(sigma,3)*pow(1.0/12.0,2) + 8*rho*theta + sigma*(24 + 136*pow(rho,2) + (1.0/12.0)*theta))
+                - 4 * pow(kappa,3) * sigma * (24*pow(rho,3)*sigma - 3*pow(sigma,2)*(1.0/12.0) + 4*pow(rho,2)*(-6*pow(sigma,2)*(1.0/12.0) + theta) + 2*rho*sigma*(12 + pow(sigma,2)*pow(1.0/12.0,2) + (1.0/12.0)*theta))
+                - 4 * pow(kappa,5) * rho * (1.0/12.0) * (-8*rho*sigma + 4*pow(rho,2)*pow(sigma,2)*(1.0/12.0) + 4*theta)
+                + pow(kappa,4) * sigma * (8 - 48*rho*sigma*(1.0/12.0) - 64*pow(rho,3)*sigma*(1.0/12.0) + 4*pow(rho,2)*(16 + 5*pow(sigma,2)*pow(1.0/12.0,2) + 4*(1.0/12.0)*theta) + (1.0/12.0)*4*theta)
+                )
+                +
+                pow(exp(kappa*(1.0/12.0)),2) *
+                (
+                -87 * pow(sigma,6) * theta
+                + 6 * kappa * pow(sigma,4) * theta * (116*rho*sigma + 5*pow(sigma,2)*(1.0/12.0) + theta)
+                + 6 * pow(kappa,3) * pow(sigma,2) * theta * (192*pow(rho,3)*sigma + 16*pow(rho,2)*(6*pow(sigma,2)*(1.0/12.0) + theta) + 16*rho*sigma*(12 + (1.0/12.0)*theta) + pow(sigma,2)*(1.0/12.0)*(24 + (1.0/12.0)*theta))
+                - 12 * pow(kappa,2) * pow(sigma,3) * theta * (20*rho*pow(sigma,2)*(1.0/12.0) + 4*rho*theta + sigma*(24 + 140*pow(rho,2) + (1.0/12.0)*theta))
+                - 48 * pow(kappa,6) * rho * sigma * pow(1.0/12.0,2) * theta * (4*theta)
+                - 12 * pow(kappa,4) * pow(sigma,2) * theta * (8 + 32*pow(rho,3)*sigma*(1.0/12.0) + 16*pow(rho,2)*(4 + (1.0/12.0)*theta) + 4*rho*sigma*(1.0/12.0)*(12 + (1.0/12.0)*theta) + (1.0/12.0)*4*theta)
+                + 2 * pow(kappa,7) * (1.0/12.0) * (3*(1.0/12.0)*pow(4*theta,2))
+                + 12 * pow(kappa,5) * sigma * (1.0/12.0) * theta * (4*rho*(4*theta) + sigma*(8 + 8*pow(rho,2)*(4 + (1.0/12.0)*theta) + (1.0/12.0)*4*theta))
+                )
+            )
+            /
+            (
+                2 * pow(exp(kappa*(1.0/12.0)),2) * pow(kappa,7) *
+                pow(
+                (
+                    ((-1 + 1/exp(kappa*(1.0/12.0))) * pow(sigma,2) * theta
+                    - 4 * pow(kappa,2) * rho * sigma*(1.0/12.0)*theta
+                    + kappa * sigma * ((4 - 4/exp(kappa*(1.0/12.0)))*rho + sigma*(1.0/12.0))*theta
+                    + pow(kappa,3)*(1.0/12.0)*4*theta)
+                    / pow(kappa,3)
+                ), 2
+                )
+            )
+        );
+
     ''')
     conn.commit()
 
@@ -227,7 +267,7 @@ if __name__ == "__main__":
     # parse_log_file('/Users/henryhaustein/Downloads/heston-moments-pdf/simulation_database/results/log.txt')
     # round_numbers()
     # check_feller_condition()
-    calc_theoretical_mean()
-    calc_theoretical_variance()
-    calc_theoretical_skewness()
+    # calc_theoretical_mean()
+    # calc_theoretical_variance()
+    # calc_theoretical_skewness()
     calc_theoretical_kurtosis()
