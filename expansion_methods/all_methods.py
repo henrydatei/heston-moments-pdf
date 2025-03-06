@@ -44,6 +44,9 @@ def hermite_polynomial(n, x):
     else:
         return x * hermite_polynomial(n-1, x) - (n-1) * hermite_polynomial(n-2, x)
     
+def normal_expansion(x, mean, variance):
+    return norm.pdf(x, loc = mean, scale = np.sqrt(variance))
+    
 def gram_charlier_expansion(x, mean, variance, third_cumulant, fourth_cumulant, fakasawa = False):
     z = (x - mean) / np.sqrt(variance)
     if fakasawa:
