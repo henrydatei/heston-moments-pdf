@@ -37,7 +37,24 @@
 
 - Untersuchung, woher diese Fehler kommen: Dazu bestimmen des Anteils der Simulationen, die korrekt in Abhängigkeit eines jeden einzelnen Parameters des Heston-Modells (siehe Abbildung \ref{fig:max_number_of_same_prices_ratio_parameters}). Man erkennt, dass mit zunehmendem $\sigma$ die Fehler zunehmen, während mit zunehmendem $\theta$ und $\kappa$ die Fehler abnehmen. Die Parameter $\mu$, $\rho$ und $v_0$ haben keinen Einfluss auf die Fehlerhäufigkeit. Das legt nahe, dass die Fehler mit der Feller condition zusammenhängen. Deshalb untersuche ich nun die Fehlerhäufigkeit und den Wert $D = 2\kappa\theta - \sigma^2$. Ist dieser Wert positiv, so ist die Feller condition erfüllt, je negativer er ist, desto weniger erfüllt ist die Feller condition. Abbildung \ref{fig:max_number_of_same_prices_ratio_D} zeigt, dass, sobald die Feller condition nicht mehr erfüllt ist, die Fehlerhäufigkeit stark zunimmt. Wenn die Feller condition erfüllt ist, so sind 99.90\% der Simulationen korrekt, ist die Feller condition nicht erfüllt, so sind es nur 25.48\%. Insgesamt erfüllen 57.80\% der Simulationen die Feller condition.
 - Im Folgenden wird untersucht, in welchen Szenrien welche Expansionsmethoden die theoretische Verteilung am besten approximieren. Für gegebene Level an Skewness und Kurtosis wird analysiert, wie gut sich die Gram-Charlier-Expansion eignet. Nutzung der Gram-Charlier-Expansion, da dies die einfachste Methode ist. In einem zweiten Teil wird dann untersucht, inwiefern es Unterschiede in den Expansionsmethoden gibt, wie sie die Verteilung allgemein approximieren und wie sie die Tails approximieren können. Zudem wird dabei auch auf die Feller condition eingegangen, wie diese die Ergebnisse beeinflusst.
-- In der Auswertung fokussieren wir uns nur auf Simulationen mit $\mu=0$, da bei $\mu=0.05$ sehr viele Simulationen fehlerhaft sind.
+- In der Auswertung fokussieren wir uns nur auf Simulationen mit $\mu=0$, da bei $\mu=0.05$ sehr viele Simulationen fehlerhaft sind. Zudem betrachten wir nur Simulationen, in denen die Feller condition erfüllt ist, da bei nicht erfüllter Feller condition insbesondere die Werte für die theoretische Skewness und theoretische Kurtosis extreme Werte annehmen (siehe Abbildung \ref{fig:kde_theoretical_skewness_kurtosis_feller_false}).
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/kde_theoretical_skewness_feller_false.png}
+        \caption{Theretical Skewness}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/kde_theoretical_kurtosis_feller_false.png}
+        \caption{Theoretical Kurtosis}
+    \end{subfigure}
+    \caption{Kernel density estimation of the theoretical skewness and kurtosis for simulations where the Feller condition is not fulfilled}
+    \label{fig:kde_theoretical_skewness_kurtosis_feller_false}
+\end{figure}
 
 \section{Investigating the Results for the Gram-Charlier-Expansion with respect to Skewness und Kurtosis}
 
