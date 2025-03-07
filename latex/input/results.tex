@@ -101,8 +101,25 @@ mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto h�
 \section{Comparing the Expansion Methods}
 
 \subsection{General Approximation when the Feller Condition is fulfilled}
+- Bisher haben wir die Ergebnisse Gram-Charlier-Expansion aus vielen Perspektiven betrachtet, aber es stellt sich die Frage, ob sich Expansionsmethoden überhaupt lohnen? Dazu vergleichen wir in einem ersten Schritt, ob das hinzufügen des 3. und 4. Kumulanten die Ergebnisse verbessert, und zwar in Abhängigkeit der theoretischen Skewness und Kurtosis. Als Expansionsmethode, die nur die ersten beiden Kumulanten verwendet, wählen wir die Normalverteilung wobei die Kumulanten die Parameter $\mu$ und $\sigma$ bestimmen (see \ref{fig:gc_vs_no_theoretical_skewness_kurtosis}).
+- Man sieht, dass es sich lohnt, eine komplexere Expansionsmethode als die Normalverteilung zu nutzen, da sich die Ergebnisse für gegebene Skewness und Kurtosis verbessern.
 
-\subsection{General Approximation when the Feller Condition is not fulfilled}
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/theoretical_skewness_vs_ratio_feller_condition_true.png}
+        \caption{Theretical Skewness}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/theoretical_kurtosis_vs_ratio_feller_condition_true.png}
+        \caption{Theoretical Kurtosis}
+    \end{subfigure}
+    \caption{Ratio of simulations where the p-value of the Kolmogorov-Smirnov-Test against the theoretical density is above 5\% in relation to the theoretical skewness and kurtosis. GC stands for the Gram-Charlier-Expansion while NO stands for the Normal Distribution. Feller condition is fulfilled.}
+    \label{fig:gc_vs_no_theoretical_skewness_kurtosis}
+\end{figure}
 
 \subsection{Approximation of the Tails when the Feller Condition is fulfilled}
 - Um die Tails zu vergleichen nutzen wir den Anderson-Darling-Test. Ein Verleich mittels des Hill-Estimators zur Schätzung des Tail-Index wurde ebenfalls versucht, es war aber nicht möglich, den Parameter $k$ so zu bestimmen, sodass der Hill-Estimator sich fast nicht mehr ändert. 
@@ -122,5 +139,3 @@ mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto h�
     \caption{Pairplot for each pair of parameters for the Heston Model and the percentage of p values of the Anderson-Darling-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density above 5\%. Invalid simulations are excluded and $\mu=0.05$.}
     \label{fig:pairplot_GC_cum_AD_mu005}
 \end{figure}
-
-\subsection{Approximation of the Tails when the Feller Condition is not fulfilled}
