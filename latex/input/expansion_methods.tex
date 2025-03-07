@@ -55,6 +55,8 @@ The first terms of the Gram-Charlier B expansion are given by
 \end{align}    
 where $\mu_i$ are the central moments of the target distribution, and $x^{[i]} = x(x-1)\dots (x-i+1)$ (\cite{mitropolskiiGramCharlierSeries2020}). However, since Gram-Charlier Type B only allows discrete values for $x$, it cannot be applied to continuous distributions. Therefore, we focus exclusively on Gram-Charlier Type A in this work.
 
+\section{Gram-Charlier Expansion with Positivity Constraints}
+
 The Gram-Charlier expansion is not an asymptotic expansion, as it does not allow for a well-defined approximation error. The Edgeworth expansion, however, is an asymptotic expansion (\cite{cramerMathematicalMethodsStatistics1999}, Section 17.6) and is therefore preferred. An asymptotic expansion consists of a series of functions $f_n$ that, after a finite number of terms, approximate a function at a specific point $\xi$ (often infinite) as $x$ approaches $\xi$:
 \begin{align}
     f_{n+1}(x) = o(f_n(x)) \quad x\to\xi \notag
@@ -141,6 +143,8 @@ Since this work only considers the first four cumulants, the expression simplifi
     \Biggr]
 \end{align}    
 
+\section{Edgeworth Expansion with Positivity Constraints}
+
 Following the approach of Jondeau \& Rockinger (\citeyear{jondeauGramCharlierDensities2001}) for the Gram-Charlier expansion, we determine the positivity boundary for the Edgeworth expansion by rewriting Equation \eqref{eq:ew_expansion_short} using $z = \frac{x-\mu}{\sigma}$:
 \begin{align}
     \label{eq:ew_expansion_s_ek}
@@ -221,86 +225,3 @@ Since each $\gamma_1(\gamma_2^*, z)$ equation is a parabola, the positivity regi
 \end{figure}
 
 As with the Gram-Charlier expansion, we compare the constrained and unconstrained parameters for four distributions: standard normal, lognormal, $t$-distribution, and non-central $t$-distribution (see Table \ref{table:distributions_theoretical_moments}). The results, shown in Figures \ref{fig:ew_expansion} and \ref{fig:ew_positivity_expansion}, lead to the same conclusion as in the Gram-Charlier case: Positivity constraints are necessary, but they also distort the expansion and even when constraints are not needed (e.g., for the standard normal distribution), applying the positivity constraints artificially increases excess kurtosis from 0 to 2.
-
-\section{Cornish-Fisher Expansion}
-
-The Cornish-Fisher expansion, introduced by Cornish and Fisher (\citeyear{cornishMomentsCumulantsSpecification1938}), is an asymptotic expansion that approximates the quantiles of a probability distribution based on its cumulants.
-
-Given that $z_p$ is the $p$-quantile of a normal distribution with mean $\mu$ and variance $\sigma^2$, the $p$-quantile of a random variable $X$, denoted as $x_p$, can be approximated as follows (only the first terms shown, as it is common practice) (\cite{abramowitzHandbookMathematicalFunctions1968}, p. 935):
-\begin{align}
-    x_p \approx z_p + \frac{\gamma_1}{6}He_2(z_p) + \frac{\gamma_2^*}{24}He_3(z_p) - \frac{\gamma_1^2}{36}(2\cdot He_3(z_p) + He_1(z_p)) \notag
-\end{align}
-To obtain the probability density function (PDF), the quantiles $x_p$ can be numerically computed and differentiated.
-
-Aboura \& Maillard (\citeyear{abouraOptionPricingSkewness2016}) point out that the parameters $\gamma_1$ and $\gamma_2^*$ do not correspond to the skewness and excess kurtosis of the approximated distribution. Instead, they denote these parameters as $s = \gamma_1$ and $k = \gamma_2^*$ and provide equations to compute the actual skewness $s^*$ and excess kurtosis $k^*$ of the approximated distribution:
-\begin{align}
-    s^* &= \frac{M_3}{M_{2}^{3/2}} \notag \\
-    k^* &= \frac{M_4}{M_{2}^2} - 3 \notag \\
-    M_1 &= 0 \\
-    M_2 &= 1 + \frac{1}{96}k^2 + \frac{25}{1296}s^4 - \frac{1}{36}ks^2 \\
-    M_3 &= s - \frac{76}{216}s^3 + \frac{85}{1296}s^5 + \frac{1}{4}ks - \frac{13}{144}ks^3 + \frac{1}{32}k^2s \\
-    M_4 &= 3 + k + \frac{7}{16}k^2 + \frac{3}{32}k^3 + \frac{31}{3072}k^4 - \frac{7}{216}s^4 - \frac{25}{486}s^6 + \frac{21665}{559872}s^8 \notag
-\end{align}
-Later, Maillard (\citeyear{maillardUserGuideCornish2018}) published the inverse transformation, allowing one to compute the parameters $s$ and $k$ given the actual skewness and excess kurtosis. A corresponding table can be found in the appendix of his paper.
-
-Aboura \& Maillard (\citeyear{abouraOptionPricingSkewness2016}) also investigate the domain of validity for the Cornish-Fisher expansion. Their findings suggest that the expansion is valid for a wide range of parameters—even an excess kurtosis above 40 and skewness exceeding $\pm3$ are possible. However, when operating outside the validity domain, the issue is not immediately apparent in the probability density function itself. Instead, it becomes visible in the quantiles, which can turn negative (see Figures \ref{fig:cf_expansion} and \ref{fig:cf_expansion_cdf}).
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\textwidth]{img/cf_expansion.png}
-    \caption{Cornish-Fisher Expansion of different distributions}
-    \label{fig:cf_expansion}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\textwidth]{img/cf_expansion_cdf.png}
-    \caption{CDF of Cornish-Fisher Expansion of different distributions}
-    \label{fig:cf_expansion_cdf}
-\end{figure}
-
-\section{Saddlepoint Approximation}
-
-The Saddlepoint Approximation, introduced by Daniels (\citeyear{danielsSaddlepointApproximationsStatistics1954}), provides an accurate method for approximating probability densities. While Daniels initially derived the density function, the cumulative distribution function (CDF) was later introduced by Lugannani \& Rice (\citeyear{lugannaniSaddlePointApproximation1980}). This method is based on the moment generating function (MGF) and offers a highly precise approximation formula. Given that $M(t)$ is the moment generating function and $K(t) = \log(M(t))$ is the cumulant generating function, the approximation of the density function $f(x)$ is given by:
-\begin{align}
-    \label{eq:sp_approximation}
-    f(x)_{SP} \approx \frac{1}{\sqrt{2\pi\cdot K''(s)}}\exp(K(s) - s\cdot x)
-\end{align}
-where $s$ is the solution of the equation $K'(s) = x$.
-
-By definition, the cumulant generating function $K(s)$ can be approximated as:
-\begin{align}
-    K(s) \approx \kappa_1 s + \frac{\kappa_2 s^2}{2} + \frac{\kappa_3 s^3}{6} + \frac{\kappa_4 s^4}{24}
-\end{align}
-with its first and second derivatives:
-\begin{align}
-    K'(s) &= \kappa_1 + \kappa_2 s + \frac{\kappa_3 s^2}{2} + \frac{\kappa_4 s^3}{6} \notag \\
-    K''(s) &= \kappa_2 + \kappa_3 s + \frac{\kappa_4 s^2}{2} \notag
-\end{align}
-To find $s$, we solve the equation $K'(s) = x$ under different conditions:
-\begin{enumerate}
-    \item If $\kappa_4 = 0$, $\kappa_3 = 0$, $\kappa_2 = 0$, and $\kappa_1 \neq 0$: No real solution exists.
-    \item If $\kappa_4 = 0$, $\kappa_3 = 0$, and $\kappa_2 \neq 0$: A direct solution is given by:
-    \begin{align}
-        s = \frac{z-\kappa_1}{\kappa_2} \notag
-    \end{align}
-    \item If $\kappa_4 = 0$ and $\kappa_3 \neq 0$: The equation becomes quadratic, yielding two solutions:
-    \begin{align}
-        s = \frac{\pm\sqrt{-2\kappa_1\kappa_3 + 2\kappa_3 z + \kappa_2^2} - \kappa_2}{\kappa_3} \notag
-    \end{align}
-    \item If $\kappa_4 \neq 0$, then three solutions exist, two of which are complex, and one is real which is given by
-    \begin{align}
-        s &= \frac{1}{3\sqrt[3]{2}\kappa_4}\,\sqrt[3]{\Delta} - \frac{\sqrt[3]{2}\,(18\kappa_4\kappa_2-9\kappa_3^2)}{3\kappa_4\,\sqrt[3]{\Delta}} - \frac{\kappa_3}{\kappa_4} \notag \\
-        \Delta &:= \sqrt{(-162\kappa_4^2\kappa_1 + 162\kappa_4^2x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3)^2 + 4(18\kappa_4\kappa_2 - 9\kappa_3^2)^3} \notag\\[1ex]
-        &\quad - 162\kappa_4^2\kappa_1 + 162\kappa_4^2x + 162\kappa_4\kappa_3\kappa_2 - 54\kappa_3^3 \notag
-    \end{align}        
-\end{enumerate}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\textwidth]{img/saddle_approximation.png}
-    \caption{Saddlepoint Approximation of different distributions}
-    \label{fig:sp_approximation}
-\end{figure}
-
-The Saddlepoint Approximation successfully approximates the chosen distributions (see Table \ref{table:distributions_theoretical_moments}), as shown in Figure \ref{fig:sp_approximation}. The key advantages of this method are the high accuracy: The Saddlepoint method provides excellent approximations, even in cases where other expansions (such as Gram-Charlier or Edgeworth) fail. Furthermore there are no issues with negativity: The Saddlepoint Approximation does not produce negative densities. This is because the $\exp(\cdot)$ term in Equation \eqref{eq:sp_approximation} is always positive, and the denominator involves a square root, which is either positive or complex. If complex, the approximation does not exist, rather than producing invalid results.
