@@ -79,6 +79,8 @@
     \label{tab:KS_p_value_percentage}
 \end{table}
 
+- Weiterhin erkennt man in Tabelle \ref{tab:KS_p_value_percentage}, dass die Expansionsmethoden besser mit der Methode der Kumulanten als mit der Methode der Momente abschneiden. Die Cornish-Fisher Expansion und die Saddlepoint Approximation, die in Kapitel \ref{sec:literature} kurz angerissen worden sind, scheiden am schlechtesten ab und werden deshalb in den weiteren Untersuchungen nicht weiter betrachtet, genau so wie die Expansionsmethoden auf Basis von Momenten.
+
 - Wir untersuchen nun, ob es Zusammenhänge zwischen den Parametern des Heston-Modells und den p Werten des Kolmogorov-Smirnov-Tests gibt. Abbildung \ref{fig:pairplot_GC_cum_KS_muzero} zeigt einen Pairplot für alle Parameterkombinationen (außer $\mu$) und die p Werte des Kolmogorov-Smirnov-Tests für die Gram-Charlier Expansion
 mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto höher ist der Anteil an p values über 5\% und damit desto öfter approximiert die Gram-Charlier Expansion mit Kumulanten die theoretische Dichte gut.
 - Man sieht in den Farbverläufen, welche Parameter einen Einfluss zu haben scheinen, das trifft auf $\sigma$, $\kappa$ und $\theta$ zu. Der Parameter $\rho$ scheint eher keinen Einfluss haben, egal wie man diesen Parameter wählt und den anderen Parameter fixiert, die Farbe ändert sich nicht. Selbiges gilt für $v_0$. Man würde auch erwarten, dass $v_0$ keinen Einfluss hat, da $v_0$ die Startvolatilität ist und wir, um die unbedingten Momente und Kumulanten zu bestimmen, einen Burnin von 3 Jahren (bei 15 Jahren Simulationsdauer) verwenden. 
@@ -120,6 +122,27 @@ mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto h�
     \caption{Ratio of simulations where the p-value of the Kolmogorov-Smirnov-Test against the theoretical density is above 5\% in relation to the theoretical skewness and kurtosis. GC stands for the Gram-Charlier-Expansion while NO stands for the Normal Distribution. Feller condition is fulfilled.}
     \label{fig:gc_vs_no_theoretical_skewness_kurtosis}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/theoretical_skewness_vs_ratio_gc_ew_feller_condition_true.png}
+        \caption{Theretical Skewness}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/theoretical_kurtosis_vs_ratio_gc_ew_feller_condition_true.png}
+        \caption{Theoretical Kurtosis}
+    \end{subfigure}
+    \caption{Ratio of simulations where the p-value of the Kolmogorov-Smirnov-Test against the theoretical density is above 5\% in relation to the theoretical skewness and kurtosis. GC stands for the Gram-Charlier-Expansion, EW for the Edgeworth-Expansion. A + behind the Expansion denotes the variant with positivity constraints. Feller condition is fulfilled.}
+    \label{fig:gc_vs_ew_theoretical_skewness_kurtosis}
+\end{figure}
+
+- Ein ähnliches Bild ergibt sich im Vergleich der Gram-Charlier-Expansion und Edgeworth-Expansion mit ihren Varianten, die durch die Positivitätsbedingung eingeschränkt sind. Die Ergebnisse sind in Abbildung \ref{fig:gc_vs_ew_theoretical_skewness_kurtosis} dargestellt und man erkennt, dass die positivitätsbeschränkten Varianten deutlich schlechter abschneiden. Das liegt an dem Verzerrungseffekt, den die Positivitätsbedingung mit sich bringt. Es kann auch keine Abhängigkeit von einzelnen Parametern des Heston-Modells festgestellt werden, bei der die positivitätsbeschränkten Varianten besser abschneiden. Allerdings führen die gewählten Parameterkombinationen für die Simulation auch nie zu theoretischen Skewness- oder Kurtosis-Werten, die außerhalb des Gültigkeitsbereichs der Expansionsmethoden liegen, sodass diese negative Werte, und damit keine Dichte mehr, liefern würden.
+
+- In der Datenbank kann man nach Parameterkombinationen suchen, bei denen sich die Edgeworth-Expansion lohnt, das heißt der p value für den Kolmogorov-Smirnov-Test ist für die Edgeworth-Expansion größer als bei der Gram-Charlier-Expansion und liegt über 5\%, während zeitgleich der p value für die Gram-Charlier-Expansion unter 5\% liegt. Insgesamt werden 2866 solcher Parameterkombinationen gefunden, aus insgesamt 501713 möglichen (wie üblich wurden ungültige Simulationen entfernt). Das entspricht einem Anteil von 0.57\%.
 
 \subsection{Approximation of the Tails when the Feller Condition is fulfilled}
 - Um die Tails zu vergleichen nutzen wir den Anderson-Darling-Test. Ein Verleich mittels des Hill-Estimators zur Schätzung des Tail-Index wurde ebenfalls versucht, es war aber nicht möglich, den Parameter $k$ so zu bestimmen, sodass der Hill-Estimator sich fast nicht mehr ändert. 
