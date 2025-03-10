@@ -131,7 +131,7 @@ mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto h�
 
 \section{Comparing the Expansion Methods}
 
-\subsection{General Approximation when the Feller Condition is fulfilled}
+\subsection{General Approximation}
 - Bisher haben wir die Ergebnisse Gram-Charlier-Expansion aus vielen Perspektiven betrachtet, aber es stellt sich die Frage, ob sich Expansionsmethoden überhaupt lohnen? Dazu vergleichen wir in einem ersten Schritt, ob das hinzufügen des 3. und 4. Kumulanten die Ergebnisse verbessert, und zwar in Abhängigkeit der theoretischen Skewness und Kurtosis. Als Expansionsmethode, die nur die ersten beiden Kumulanten verwendet, wählen wir die Normalverteilung wobei die Kumulanten die Parameter $\mu$ und $\sigma$ bestimmen (see \ref{fig:gc_vs_no_theoretical_skewness_kurtosis}).
 - Man sieht, dass es sich lohnt, eine komplexere Expansionsmethode als die Normalverteilung zu nutzen, da sich die Ergebnisse für gegebene Skewness und Kurtosis verbessern.
 
@@ -173,10 +173,10 @@ mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto h�
 
 - In der Datenbank kann man nach Parameterkombinationen suchen, bei denen sich die Edgeworth-Expansion lohnt, das heißt der p value für den Kolmogorov-Smirnov-Test ist für die Edgeworth-Expansion größer als bei der Gram-Charlier-Expansion und liegt über 5\%, während zeitgleich der p value für die Gram-Charlier-Expansion unter 5\% liegt. Insgesamt werden 2866 solcher Parameterkombinationen gefunden, aus insgesamt 501713 möglichen (wie üblich wurden ungültige Simulationen entfernt). Das entspricht einem Anteil von 0.57\%.
 
-\subsection{Approximation of the Tails when the Feller Condition is fulfilled}
-- Um die Tails zu vergleichen nutzen wir den Anderson-Darling-Test. Ein Verleich mittels des Hill-Estimators zur Schätzung des Tail-Index wurde ebenfalls versucht, es war aber nicht möglich, den Parameter $k$ so zu bestimmen, sodass der Hill-Estimator sich fast nicht mehr ändert. 
+\subsection{Approximation of the Tails}
+- Um die Tails zu vergleichen nutzen wir den Anderson-Darling-Test. Ein Verleich mittels des Hill-Estimators zur Schätzung des Tail-Index wurde ebenfalls versucht, es war aber nicht möglich ein Plateau im Hill-Plot zu erkennen, was darauf hindeutet, dass die Tails nicht fat genug sind, wie z.B. in der Pareto-Verteilung. Das ist aber ein essentielles Kriterium, um den Hill-Estimator anwenden zu können. 
 
-- Persönlich hätte ich vermutet, dass sich die Ergebnisse ändern, wenn man nun einen Test verwendet, der stärker auf die Ränder der Verteilung reagiert, wie den Anderson-Darling-Test. Aber man sieht, dass es praktisch keinen Unterschied zwischen den Abbildungen \ref{fig:pairplot_GC_cum_AD_muzero} + \ref{fig:pairplot_GC_cum_AD_mu005} und den Abbildungen \ref{fig:pairplot_GC_cum_KS_muzero} + \ref{fig:pairplot_GC_cum_KS_mu005} gibt.
+- Man könnte vermuten, dass sich die Ergebnisse ändern, wenn man nun einen Test verwendet, der stärker auf die Ränder der Verteilung reagiert, wie den Anderson-Darling-Test. Aber man sieht, dass es praktisch keinen Unterschied zwischen den Abbildungen \ref{fig:pairplot_GC_cum_AD_muzero} + \ref{fig:pairplot_GC_cum_AD_mu005} und den Abbildungen \ref{fig:pairplot_GC_cum_KS_muzero} + \ref{fig:pairplot_GC_cum_KS_mu005} gibt. Das lässt den Schluss zu, dass die Gram-Charlier-Expansion auf Basis von Cumulants auch die Tails gut approximieren kann.
 
 \begin{figure}
     \centering
