@@ -79,7 +79,36 @@
     \label{tab:KS_p_value_percentage}
 \end{table}
 
-- Weiterhin erkennt man in Tabelle \ref{tab:KS_p_value_percentage}, dass die Expansionsmethoden besser mit der Methode der Kumulanten als mit der Methode der Momente abschneiden. Die Cornish-Fisher Expansion und die Saddlepoint Approximation, die in Kapitel \ref{sec:literature} kurz angerissen worden sind, scheiden am schlechtesten ab und werden deshalb in den weiteren Untersuchungen nicht weiter betrachtet, genau so wie die Expansionsmethoden auf Basis von Momenten.
+- Weiterhin erkennt man in Tabelle \ref{tab:KS_p_value_percentage}, dass die Expansionsmethoden besser mit der Methode der Kumulanten als mit der Methode der Momente abschneiden. Die Cornish-Fisher Expansion und die Saddlepoint Approximation, die in Kapitel \ref{sec:literature} kurz angerissen worden sind, scheiden am schlechtesten ab und werden deshalb in den weiteren Untersuchungen nicht weiter betrachtet, genau so wie die Expansionsmethoden auf Basis von Momenten. Der Grund, warum die Methode der Kumulanten besser abschneidet, ist, dass diese die theoretische Skewness und Kurtosis des Heston Modells besser einfangen als die Methode der Momente, wie man in Abbildung \ref{fig:theoretical_vs_real_skewness_kurtosis} sieht. Die Skewness und Kurtosis von Neuberger \& Payne (2021) sind direkt aus den Momenten berechnet, Neuberger and Payne haben es auch so in ihrem Paper beschrieben. %TODO: darauf achten, dass "einfangen" mit "capture" übersetzt wird
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/theoretical_skewness_vs_skewness_from_cumulants_feller_condition_true.png}
+        \caption{Theretical Skewness vs Skewness from Cumulants}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/theoretical_skewness_vs_NP_rskewness_feller_condition_true.png}
+        \caption{Theoretical Skewness vs Skewness from Neuberger \& Payne (2021)}
+    \end{subfigure}
+    \bigskip % https://tex.stackexchange.com/questions/475149/using-subfigure-and-creating-two-rows-of-figures
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/theoretical_kurtosis_vs_kurtosis_from_cumulants_feller_condition_true.png}
+        \caption{Theoretical Kurtosis vs Kurtosis from Cumulants}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/theoretical_kurtosis_vs_NP_rexcess_kurtosis_feller_condition_true.png}
+        \caption{Theoretical Kurtosis vs Kurtosis from Neuberger \& Payne (2021)}
+    \end{subfigure}
+    \caption{Comparison of the theoretical skewness and kurtosis with the skewness and kurtosis from the Cumulants and the real skewness and kurtosis from Neuberger \& Payne (2021) for simulations where the Feller condition is fulfilled. Invalid simulations are excluded.}
+    \label{fig:theoretical_vs_real_skewness_kurtosis}
+\end{figure}
 
 - Wir untersuchen nun, ob es Zusammenhänge zwischen den Parametern des Heston-Modells und den p Werten des Kolmogorov-Smirnov-Tests gibt. Abbildung \ref{fig:pairplot_GC_cum_KS_muzero} zeigt einen Pairplot für alle Parameterkombinationen (außer $\mu$) und die p Werte des Kolmogorov-Smirnov-Tests für die Gram-Charlier Expansion
 mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto höher ist der Anteil an p values über 5\% und damit desto öfter approximiert die Gram-Charlier Expansion mit Kumulanten die theoretische Dichte gut.
