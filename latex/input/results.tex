@@ -129,6 +129,33 @@ mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto h�
     \label{fig:GC_cum_KS_3d_p_value_sigma_kappa_theta_muzero}
 \end{figure}
 
+- Es ist sehr schwer, allgemeingültige Aussagen, welche Parameterkombinationen zu guten Ergebnissen führen, zu treffen. insbesondere grafische Visualisierungen haben das Problem, dass man nicht ausreichend Dimensionen darstellen kann. Daher Einsatz von Klassifizierungsmethoden, die nicht auf grafischer Darstellung basieren, wie z.B. die logistische Regression und Random Forest. Dazu wurden alle gültigen Simulationen genommen und in 80\% Trainings- und 20\% Testdaten aufgeteilt. Die unabhängigen Variablen $X$ sind die Parameter des Heston-Modells, die abhängige Variable $y$ ob der p-value des KS-tests größer als 5\% ist. Die Gruppen sind nicht gleich groß, 60.98\% der Simulationen haben einen p-value über 5\%. Die logistische Regression hat eine Accuracy von 79.53\%, der Random Forest, bestehend aus 100 Decision Trees, eine Accuracy von 91.59\%. Die Precision für $y=1$ beträgt 82\% bzw. 92\%. Die Precision ist relevant, weil sie den Anteil der True Positives an allen Positives angibt und ein geringer Wert hier bedeuten würde, dass Parameterkombinationen, die keine Approximation mittels Gram-Charlier zulassen würden, mit Gram-Charlier approximiert werden. Wenn auf dieser Basis Preise für Wertpapiere gefunden werden sollen, so könnte dies zu großen Verlusten führen.
+- Schaut man sich die Koeffizienten der logistischen Regression (siehe Tabelle \ref{tab:logistic_regression_coefficients}) oder den Feature Importance des Random Forests (siehe Abbildung \ref{fig:feature_importances}) an, so stellt man fest, dass $\sigma$ mit Abstand der wichtigste Parameter ist. $\theta$ und $\kappa$ sind auch wichtig, aber welcher von beiden wichtiger ist, darüber sind sich die Modelle nicht einig. Auch welche Rolle $\rho$ spielt, ist nicht klar: In der logisitischen Regression nicht, im Random Forest schon. $\mu$ und $v_0$ spielen keine Rolle. Alle Parameter sind auch statistisch signifikant.
+
+\begin{table}
+    \centering
+    \begin{tabular}{l|c}
+        \textbf{Parameter} & \textbf{Coefficient} & \textbf{Standard Error} & $z$ & $\mathbb{P}>\vert z\vert$ \\
+        \hline
+        const & -0.8708 & 0.010 & -84.332 & 0.000 \\
+        $\mu$ & -1.2841 & 0.111 & -11.568 & 0.000 \\
+        $\sigma$ & -7.2015 & 0.017 & -429.506 & 0.000 \\
+        $\kappa$ & 4.4584 & 0.014 & 318.689 & 0.000 \\
+        $\theta$ & 3.0120 & 0.013 & 237.146 & 0.000 \\
+        $\rho$ & 0.4219 & 0.005 & 78.359 & 0.000 \\
+        $v_0$ & -0.0728 & 0.019 & -3.765 & 0.000
+    \end{tabular}
+    \caption{Coefficients of the logistic regression}
+    \label{tab:logistic_regression_coefficients}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/feature_importances.png}
+    \caption{Feature Importances of the Random Forest}
+    \label{fig:feature_importances}
+\end{figure}
+
 \section{Comparing the Expansion Methods}
 
 \subsection{General Approximation}
