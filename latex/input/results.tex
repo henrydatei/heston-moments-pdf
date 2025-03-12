@@ -76,18 +76,22 @@ For the final evaluation, we focus only on simulations with $\mu=0$, as a large 
 
 Figure \ref{fig:GC_cum_KS_p_value_histogram} shows the distribution of p-values from the Kolmogorov-Smirnov test comparing the Gram-Charlier expansion based on cumulants to the theoretical density. All simulations where the same price appeared more than once have been removed.
 
-A p-value above 5\% indicates that there is no statistically significant difference between the two distributions, meaning that the Gram-Charlier expansion based on cumulants provides an adequate approximation of the theoretical density. However, the results reveal that for some parameter combinations, the approximation does not hold; overall, 52.48\% of the simulations fail to meet this threshold.
+A p-value above 5\% indicates that there is no statistically significant difference between the two distributions, meaning that the Gram-Charlier expansion based on cumulants provides an adequate approximation of the theoretical density. However, the results reveal that for some parameter combinations, the approximation does not hold; overall, only 52.48\% of the simulations are able to meet this threshold.
 
 For results on other expansion methods, see Table \ref{tab:KS_p_value_percentage}.
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{l|c|c|c|c|c|c}
-        & \textbf{Gram-Charlier} & \textbf{GC+} & \textbf{Edgeworth} & \textbf{EW+} & \textbf{Cornish-Fisher} & \textbf{Saddlepoint} \\
+    \begin{tabular}{l|c|c}
+        & \textbf{Cumulants} & \textbf{Moments} \\
         \hline
-        \textbf{Cumulants} & 52.48\% & 47.63\% & 52.14\% & 47.64\% & 35.85\% & 45.36\% \\
-        \textbf{Moments} & 37.35\% & 21.24\% & 36.02\% & 23.27\% & 44.90\% & 40.92\%
-    \end{tabular}
+        \textbf{Gram-Charlier} & 52.48\% & 37.35\% \\
+        \textbf{GC+}          & 47.63\% & 21.24\% \\
+        \textbf{Edgeworth}     & 52.14\% & 36.02\% \\
+        \textbf{EW+}          & 47.64\% & 23.27\% \\
+        \textbf{Cornish-Fisher} & 35.85\% & 44.90\% \\
+        \textbf{Saddlepoint}   & 45.36\% & 40.92\% \\
+    \end{tabular}    
     \caption{Percentage of simulations where the p-value of the Kolmogorov-Smirnov-Test against the theoretical density is above 5\%. Invalid simulations are excluded. GC+ and EW+ stand for the Gram-Charlier Expansion with positivity constraint and the Edgeworth Expansion with positivity constraint, respectively.}
     \label{tab:KS_p_value_percentage}
 \end{table}
