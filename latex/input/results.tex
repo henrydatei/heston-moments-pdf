@@ -2,8 +2,9 @@
 \label{sec:results}
 
 \section{Findings from the Simulations}
-- Wie in Vorversuchen schon bemerkt: QE-Schema produziert numerische Fehler, die sich darin zeigen, dass Preise mehrfach in der Simulation vorkommen. Bei korrekter Simulation ist der häufigste Preis im ersten Pfad im einstelligen Bereich, bei Fehlern im Hunderter- oder Tausenderbereich.
-- Abbildung \ref{fig:max_number_of_same_prices_distribution} zeigt die Verteilung, man sieht einen Peak bei 1, was darauf hindeutet, dass die meisten Simulationen korrekt sind. Man sieht aber auch, dass es einige Simulationen gibt, wo der selbe Preis bis zu 250000 mal vorkommt, hier kam es zu numerischen Fehlern. Bei diesen Simulationen stellt man fest, dass, wenn es das erste Mal zu numerischen Fehlern kommt, der Rest der Zeitreihe den selben Preis hat. Bei Simulationen mit 250000 gleichen Preises kam es also sehr früh in der Zeitreihe zu einem numerischen Fehler.
+As observed in preliminary tests, the QE scheme produces numerical errors, which manifest as repeated price values within the simulation. In a correctly executed simulation, the most frequently occurring price in the first simulated path appears only a few times. However, in cases where errors occur, this number increases to the hundreds or even thousands.
+
+Figure \ref{fig:max_number_of_same_prices_distribution} illustrates the distribution of this phenomenon. The peak at 1 indicates that most simulations were performed correctly. However, the presence of cases where the same price appears up to 250,000 times suggests significant numerical instabilities. A closer examination of these faulty simulations reveals that once a numerical error occurs for the first time, the remaining time series retains the same price value throughout. In extreme cases where the same price appears 250,000 times, the error must have occurred very early in the simulation.
 
 \begin{figure}
     \centering
@@ -12,7 +13,11 @@
     \label{fig:max_number_of_same_prices_distribution}
 \end{figure}
 
-- Für die weitere Untersuchung sollen solche Simulationen ausgeschlossen werden, da sie nicht korrekt sind. Da es durchaus möglich ist, dass es auch bei korrekter Simulation zu gleichen Preisen kommt, wird ein Schwellwert gesucht, sodass möglichst viele korrekte Simulationen in der Untersuchung bleiben. Abbildung \ref{fig:max_number_of_same_prices_cumulative_percentage} zeigt für verschiedene Schwellwerte (die maximale Anzahl an gleichen Preisen) den kumulativen Anteil der Simulationen, die diesen Schwellwert nicht überschreiten. Wählt man den Schwellwert 1, also nur Simulationen, bei denen nie ein Preis mehrfach vorkommt, verbleiben bleiben 68.40\% der Simulation. Je höher man den Schwellwert setzt, desto weniger Simulationen fallen weg, aber unter Umständen verbleiben auch Simulationen, die numerische Fehler enthalten. Das betrifft aber nur sehr wenige Simulationen, der Anteil an inkludierten Simulationen steigt fast gar nicht. Für die späteren Untersuchungen werden also alle Simulationen entfernt, bei denen der selbe Preis mehr als einmal vorkommt.
+To ensure the reliability of the analysis, simulations exhibiting numerical errors will be excluded, as they are not correctly executed. However, since it is possible for identical prices to occur naturally in correct simulations, a threshold must be determined that retains as many valid simulations as possible while filtering out erroneous ones.
+
+Figure \ref{fig:max_number_of_same_prices_cumulative_percentage} illustrates the cumulative percentage of simulations that do not exceed a given threshold for the maximum number of identical price occurrences. If the threshold is set to 1 -— meaning only simulations where no price ever appears more than once are retained —- 68.40\% of the simulations remain. Increasing the threshold reduces the number of discarded simulations, but at the cost of potentially including simulations with numerical errors. However, the impact is minimal, as the increase in retained simulations is negligible beyond a certain point.
+
+For the final analysis, all simulations where any price appears more than once will be excluded to ensure data integrity.
 
 \begin{figure}
     \centering
@@ -35,9 +40,13 @@
     \label{fig:max_number_of_same_prices_ratio_D}
 \end{figure}
 
-- Untersuchung, woher diese Fehler kommen: Dazu bestimmen des Anteils der Simulationen, die korrekt in Abhängigkeit eines jeden einzelnen Parameters des Heston-Modells (siehe Abbildung \ref{fig:max_number_of_same_prices_ratio_parameters}). Man erkennt, dass mit zunehmendem $\sigma$ die Fehler zunehmen, während mit zunehmendem $\theta$ und $\kappa$ die Fehler abnehmen. Die Parameter $\mu$, $\rho$ und $v_0$ haben keinen Einfluss auf die Fehlerhäufigkeit. Das legt nahe, dass die Fehler mit der Feller condition zusammenhängen. Deshalb untersuche ich nun die Fehlerhäufigkeit und den Wert $D = 2\kappa\theta - \sigma^2$. Ist dieser Wert positiv, so ist die Feller condition erfüllt, je negativer er ist, desto weniger erfüllt ist die Feller condition. Abbildung \ref{fig:max_number_of_same_prices_ratio_D} zeigt, dass, sobald die Feller condition nicht mehr erfüllt ist, die Fehlerhäufigkeit stark zunimmt. Wenn die Feller condition erfüllt ist, so sind 99.90\% der Simulationen korrekt, ist die Feller condition nicht erfüllt, so sind es nur 25.48\%. Insgesamt erfüllen 57.80\% der Simulationen die Feller condition.
-- Im Folgenden wird untersucht, in welchen Szenrien welche Expansionsmethoden die theoretische Verteilung am besten approximieren. Für gegebene Level an Skewness und Kurtosis wird analysiert, wie gut sich die Gram-Charlier-Expansion eignet. Nutzung der Gram-Charlier-Expansion, da dies die einfachste Methode ist. In einem zweiten Teil wird dann untersucht, inwiefern es Unterschiede in den Expansionsmethoden gibt, wie sie die Verteilung allgemein approximieren und wie sie die Tails approximieren können. Zudem wird dabei auch auf die Feller condition eingegangen, wie diese die Ergebnisse beeinflusst.
-- In der Auswertung fokussieren wir uns nur auf Simulationen mit $\mu=0$, da bei $\mu=0.05$ sehr viele Simulationen fehlerhaft sind. Zudem betrachten wir nur Simulationen, in denen die Feller condition erfüllt ist, da bei nicht erfüllter Feller condition insbesondere die Werte für die theoretische Skewness und theoretische Kurtosis extreme Werte annehmen (siehe Abbildung \ref{fig:kde_theoretical_skewness_kurtosis_feller_false}).
+To analyze the source of these numerical errors, we examine the proportion of correct simulations as a function of each individual Heston model parameter (see Figure \ref{fig:max_number_of_same_prices_ratio_parameters}). The results show that as $\sigma$ increases, the error rate rises, whereas increasing $\theta$ and $\kappa$ reduces the frequency of errors. In contrast, the parameters $\mu$, $\rho$, and $v_0$ appear to have no impact on the occurrence of errors. This suggests a strong relationship between numerical errors and the Feller condition.
+
+To further investigate this relationship, we analyze the error frequency in relation to the value $D = 2\kappa\theta - \sigma^2$. If $D > 0$, the Feller condition is satisfied; the more negative $D$, the more strongly it is violated. Figure \ref{fig:max_number_of_same_prices_ratio_D} confirms that once the Feller condition is no longer met, the error rate increases significantly. When the condition is satisfied, 99.90\% of the simulations are correct, whereas when it is violated, only 25.48\% are correct. Overall, 57.80\% of the simulations satisfy the Feller condition.
+
+Following this analysis, we evaluate which expansion methods best approximate the theoretical distribution under different conditions. First, we examine how well the Gram-Charlier expansion performs for given levels of skewness and kurtosis, as this is the simplest method. In the second part of the analysis, we compare different expansion methods in terms of their general ability to approximate the distribution, their accuracy in capturing the tails, and their sensitivity to the Feller condition.
+
+For the final evaluation, we focus only on simulations with $\mu=0$, as a large proportion of simulations with $\mu=0.05$ contain errors. Additionally, we restrict our analysis to simulations where the Feller condition is met, since violations of the condition lead to extreme values for theoretical skewness and kurtosis (see Figure \ref{fig:kde_theoretical_skewness_kurtosis_feller_false}).
 
 \begin{figure}
     \centering
@@ -65,7 +74,11 @@
     \label{fig:GC_cum_KS_p_value_histogram}
 \end{figure}
 
-- In Abbildung \ref{fig:GC_cum_KS_p_value_histogram} sieht man die Verteilung der p values des Kolmogorov-Smirnov-Tests für die Gram-Charlier Expansion mit Kumulanten im Vergleich zur theoretischen Dichte. Dabei wurden alle Simulationen entfernt, bei denen der selbe Preis mehr als einmal vorkommt. Ein p Wert von über 5\% bedeutet, dass es keine signifikanten Unterschiede zwischen den beiden Verteilungen gibt, die Gram-Charlier Expansion auf Basis von Kumulanten approximiert die theoretische Dichte also gut genug. Man sieht, dass dies für einige Parameterkombinationen nicht der Fall ist; insgesamt für 52.48\% der Simulationen. Für restliche Expansionsmethoden siehe Tabelle \ref{tab:KS_p_value_percentage}.
+Figure \ref{fig:GC_cum_KS_p_value_histogram} shows the distribution of p-values from the Kolmogorov-Smirnov test comparing the Gram-Charlier expansion based on cumulants to the theoretical density. All simulations where the same price appeared more than once have been removed.
+
+A p-value above 5\% indicates that there is no statistically significant difference between the two distributions, meaning that the Gram-Charlier expansion based on cumulants provides an adequate approximation of the theoretical density. However, the results reveal that for some parameter combinations, the approximation does not hold; overall, 52.48\% of the simulations fail to meet this threshold.
+
+For results on other expansion methods, see Table \ref{tab:KS_p_value_percentage}.
 
 \begin{table}[h]
     \centering
@@ -79,7 +92,9 @@
     \label{tab:KS_p_value_percentage}
 \end{table}
 
-- Weiterhin erkennt man in Tabelle \ref{tab:KS_p_value_percentage}, dass die Expansionsmethoden besser mit der Methode der Kumulanten als mit der Methode der Momente abschneiden. Die Cornish-Fisher Expansion und die Saddlepoint Approximation, die in Kapitel \ref{sec:literature} kurz angerissen worden sind, scheiden am schlechtesten ab und werden deshalb in den weiteren Untersuchungen nicht weiter betrachtet, genau so wie die Expansionsmethoden auf Basis von Momenten. Der Grund, warum die Methode der Kumulanten besser abschneidet, ist, dass diese die theoretische Skewness und Kurtosis des Heston Modells besser einfangen als die Methode der Momente, wie man in Abbildung \ref{fig:theoretical_vs_real_skewness_kurtosis} sieht. Die Skewness und Kurtosis von Neuberger \& Payne (2021) sind direkt aus den Momenten berechnet, Neuberger and Payne haben es auch so in ihrem Paper beschrieben. %TODO: darauf achten, dass "einfangen" mit "capture" übersetzt wird
+Furthermore, Table \ref{tab:KS_p_value_percentage} shows that expansion methods perform better when based on cumulants rather than moments. Among the examined methods, the Cornish-Fisher expansion and the Saddlepoint approximation, which were briefly discussed in Chapter \ref{sec:literature}, perform the worst. Consequently, these methods, along with all moment-based expansion approaches, will not be considered in further analyses.
+
+The superior performance of the cumulant-based approach can be attributed to its ability to better capture the theoretical skewness and kurtosis of the Heston model compared to the moment-based approach. This is clearly illustrated in Figure \ref{fig:theoretical_vs_real_skewness_kurtosis}. The skewness and kurtosis values proposed by Neuberger \& Payne (\citeyear{neubergerSkewnessStockMarket2021}) are derived directly from raw moments, as described in their original paper.
 
 \begin{figure}
     \centering
@@ -92,7 +107,7 @@
     \begin{subfigure}[b]{0.4\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/theoretical_skewness_vs_NP_rskewness_feller_condition_true.png}
-        \caption{Theoretical Skewness vs Skewness from Neuberger \& Payne (2021)}
+        \caption{Theoretical Skewness vs Skewness from Neuberger \& Payne (\citeyear{neubergerSkewnessStockMarket2021})}
     \end{subfigure}
     \bigskip % https://tex.stackexchange.com/questions/475149/using-subfigure-and-creating-two-rows-of-figures
     \begin{subfigure}[b]{0.4\textwidth}
@@ -104,16 +119,17 @@
     \begin{subfigure}[b]{0.4\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/theoretical_kurtosis_vs_NP_rexcess_kurtosis_feller_condition_true.png}
-        \caption{Theoretical Kurtosis vs Kurtosis from Neuberger \& Payne (2021)}
+        \caption{Theoretical Kurtosis vs Kurtosis from Neuberger \& Payne (\citeyear{neubergerSkewnessStockMarket2021})}
     \end{subfigure}
-    \caption{Comparison of the theoretical skewness and kurtosis with the skewness and kurtosis from the Cumulants and the real skewness and kurtosis from Neuberger \& Payne (2021) for simulations where the Feller condition is fulfilled. Invalid simulations are excluded.}
+    \caption{Comparison of the theoretical skewness and kurtosis with the skewness and kurtosis from the Cumulants and the real skewness and kurtosis from Neuberger \& Payne (\citeyear{neubergerSkewnessStockMarket2021}) for simulations where the Feller condition is fulfilled. Invalid simulations are excluded.}
     \label{fig:theoretical_vs_real_skewness_kurtosis}
 \end{figure}
 
-- Wir untersuchen nun, ob es Zusammenhänge zwischen den Parametern des Heston-Modells und den p Werten des Kolmogorov-Smirnov-Tests gibt. Abbildung \ref{fig:pairplot_GC_cum_KS_muzero} zeigt einen Pairplot für alle Parameterkombinationen (außer $\mu$) und die p Werte des Kolmogorov-Smirnov-Tests für die Gram-Charlier Expansion
-mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto höher ist der Anteil an p values über 5\% und damit desto öfter approximiert die Gram-Charlier Expansion mit Kumulanten die theoretische Dichte gut.
-- Man sieht in den Farbverläufen, welche Parameter einen Einfluss zu haben scheinen, das trifft auf $\sigma$, $\kappa$ und $\theta$ zu. Der Parameter $\rho$ scheint eher keinen Einfluss haben, egal wie man diesen Parameter wählt und den anderen Parameter fixiert, die Farbe ändert sich nicht. Selbiges gilt für $v_0$. Man würde auch erwarten, dass $v_0$ keinen Einfluss hat, da $v_0$ die Startvolatilität ist und wir, um die unbedingten Momente und Kumulanten zu bestimmen, einen Burnin von 3 Jahren (bei 15 Jahren Simulationsdauer) verwenden. 
-- Für den Parameter $\sigma$ sieht man, dass dieser so gering wie möglich sein sollte, während $\kappa$ so hoch wie möglich sein sollte. Die Wahl des Parameters $\theta$ scheint schwieriger zu sein, da es keine klare Tendenz gibt. Grundsätzlich scheint $\theta$ mit steigendem $\kappa$ auch größer gewählt werden, zum anderen sollte bei kleinem $\sigma$ auch ein kleines $\theta$ gewählt werden. Eine Darstellung aller 3 Parameter in einem 3D-Plot zeigt Abbildung \ref{fig:GC_cum_KS_3d_p_value_sigma_kappa_theta_muzero}.
+We now examine whether there are correlations between the Heston model parameters and the p-values from the Kolmogorov-Smirnov test. Figure \ref{fig:pairplot_GC_cum_KS_muzero} presents a pair plot illustrating all parameter combinations (excluding $\mu$) and the p-values of the Kolmogorov-Smirnov test for the Gram-Charlier expansion based on cumulants compared to the theoretical density. The more yellow the region, the higher the proportion of p-values above 5\%, indicating a better approximation of the theoretical density by the Gram-Charlier expansion with cumulants.
+
+The color gradients reveal which parameters appear to have an impact. Specifically, $\sigma$, $\kappa$, and $\theta$ seem to influence the quality of the approximation, while $\rho$ appears to have little to no effect. Regardless of how $\rho$ is chosen while holding other parameters fixed, the color distribution remains unchanged. The same applies to $v_0$, which is expected since $v_0$ represents the initial volatility and a burn-in period of three years (out of the 15-year simulation period) was applied to ensure that the unconditional moments and cumulants are not affected by the initial value.
+
+For $\sigma$, the results suggest that lower values lead to better approximations, while higher values of $\kappa$ improve the fit. However, the influence of $\theta$ appears more complex, as there is no clear trend. Generally, higher $\kappa$ values seem to favor higher $\theta$ values, while at low $\sigma$ values, a low $\theta$ is preferable. Figure \ref{fig:GC_cum_KS_3d_p_value_sigma_kappa_theta_muzero} provides a 3D visualization of the relationship between $\sigma$, $\kappa$, and $\theta$ and their impact on the Kolmogorov-Smirnov p-values.
 
 \begin{figure}
     \centering
@@ -129,12 +145,17 @@ mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto h�
     \label{fig:GC_cum_KS_3d_p_value_sigma_kappa_theta_muzero}
 \end{figure}
 
-- Es ist sehr schwer, allgemeingültige Aussagen, welche Parameterkombinationen zu guten Ergebnissen führen, zu treffen. insbesondere grafische Visualisierungen haben das Problem, dass man nicht ausreichend Dimensionen darstellen kann. Daher Einsatz von Klassifizierungsmethoden, die nicht auf grafischer Darstellung basieren, wie z.B. die logistische Regression und Random Forest. Dazu wurden alle gültigen Simulationen genommen und in 80\% Trainings- und 20\% Testdaten aufgeteilt. Die unabhängigen Variablen $X$ sind die Parameter des Heston-Modells, die abhängige Variable $y$ ob der p-value des KS-tests größer als 5\% ist. Die Gruppen sind nicht gleich groß, 60.98\% der Simulationen haben einen p-value über 5\%. Die logistische Regression hat eine Accuracy von 79.53\%, der Random Forest, bestehend aus 100 Decision Trees, eine Accuracy von 91.59\%. Die Precision für $y=1$ beträgt 82\% bzw. 92\%. Die Precision ist relevant, weil sie den Anteil der True Positives an allen Positives angibt und ein geringer Wert hier bedeuten würde, dass Parameterkombinationen, die keine Approximation mittels Gram-Charlier zulassen würden, mit Gram-Charlier approximiert werden. Wenn auf dieser Basis Preise für Wertpapiere gefunden werden sollen, so könnte dies zu großen Verlusten führen.
-- Schaut man sich die Koeffizienten der logistischen Regression (siehe Tabelle \ref{tab:logistic_regression_coefficients}) oder den Feature Importance des Random Forests (siehe Abbildung \ref{fig:feature_importances}) an, so stellt man fest, dass $\sigma$ mit Abstand der wichtigste Parameter ist. $\theta$ und $\kappa$ sind auch wichtig, aber welcher von beiden wichtiger ist, darüber sind sich die Modelle nicht einig. Auch welche Rolle $\rho$ spielt, ist nicht klar: In der logisitischen Regression nicht, im Random Forest schon. $\mu$ und $v_0$ spielen keine Rolle. Alle Parameter sind auch statistisch signifikant.
+It is challenging to derive general rules for which parameter combinations lead to good approximations, primarily due to the limitations of graphical visualizations, which cannot effectively represent high-dimensional relationships. To overcome this, we employ classification methods that do not rely on visual representation, such as logistic regression and random forests.
+
+For this analysis, all valid simulations were used and split into 80\% training data and 20\% test data. The independent variables $X$ are the Heston model parameters, while the dependent variable $y$ indicates whether the Kolmogorov-Smirnov p-value exceeds 5\%. The dataset is imbalanced, with 60.98\% of simulations yielding a p-value above 5\%. The logistic regression model achieves an accuracy of 79.53\%, while the random forest model, consisting of 100 decision trees, reaches 91.59\% accuracy. The precision for $y = 1$ is 82\% for logistic regression and 92\% for the random forest model.
+
+Precision is particularly relevant in this context, as it represents the proportion of true positives among all predicted positives. A low precision would imply that parameter combinations unsuitable for the Gram-Charlier approximation are mistakenly classified as suitable. In a financial context, where such approximations might be used to price securities, incorrect classifications could lead to substantial financial losses.
+
+Examining the logistic regression coefficients (Table \ref{tab:logistic_regression_coefficients}) and the feature importance scores from the random forest model (Figure \ref{fig:feature_importances}) reveals that $\sigma$ is by far the most influential parameter. Both $\theta$ and $\kappa$ are also important, but the models disagree on which of the two has a stronger impact. The role of $\rho$ is also unclear—it is insignificant in logistic regression but influential in the random forest model. Conversely, $\mu$ and $v_0$ play no significant role. All parameters included in the models are statistically significant.
 
 \begin{table}
     \centering
-    \begin{tabular}{l|c}
+    \begin{tabular}{l|c|c|c|c}
         \textbf{Parameter} & \textbf{Coefficient} & \textbf{Standard Error} & $z$ & $\mathbb{P}>\vert z\vert$ \\
         \hline
         const & -0.8708 & 0.010 & -84.332 & 0.000 \\
@@ -159,8 +180,11 @@ mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto h�
 \section{Comparing the Expansion Methods}
 
 \subsection{General Approximation}
-- Bisher haben wir die Ergebnisse Gram-Charlier-Expansion aus vielen Perspektiven betrachtet, aber es stellt sich die Frage, ob sich Expansionsmethoden überhaupt lohnen? Dazu vergleichen wir in einem ersten Schritt, ob das hinzufügen des 3. und 4. Kumulanten die Ergebnisse verbessert, und zwar in Abhängigkeit der theoretischen Skewness und Kurtosis. Als Expansionsmethode, die nur die ersten beiden Kumulanten verwendet, wählen wir die Normalverteilung wobei die Kumulanten die Parameter $\mu$ und $\sigma$ bestimmen (see \ref{fig:gc_vs_no_theoretical_skewness_kurtosis}).
-- Man sieht, dass es sich lohnt, eine komplexere Expansionsmethode als die Normalverteilung zu nutzen, da sich die Ergebnisse für gegebene Skewness und Kurtosis verbessern.
+So far, we have analyzed the Gram-Charlier expansion from multiple perspectives. However, an important question remains: Are expansion methods even worth using? To answer this, we first examine whether adding the third and fourth cumulants improves the results, specifically in relation to the theoretical skewness and kurtosis.
+
+As a baseline model, we use the normal distribution, which relies only on the first two cumulants—the mean ($\mu$) and variance ($\sigma^2$). This allows us to compare whether incorporating higher-order cumulants provides a meaningful advantage. The results of this comparison are shown in Figure \ref{fig:gc_vs_no_theoretical_skewness_kurtosis}.
+
+The findings indicate that using a more complex expansion method than the normal distribution is beneficial, as the approximation improves significantly for given levels of skewness and kurtosis.
 
 \begin{figure}
     \centering
@@ -192,29 +216,29 @@ mit Kumulanten gegen die theoretische Dichte. Je heller die Region ist, desto h�
         \includegraphics[width=\textwidth]{img/theoretical_kurtosis_vs_ratio_gc_ew_feller_condition_true.png}
         \caption{Theoretical Kurtosis}
     \end{subfigure}
-    \caption{Ratio of simulations where the p-value of the Kolmogorov-Smirnov-Test against the theoretical density is above 5\% in relation to the theoretical skewness and kurtosis. GC stands for the Gram-Charlier-Expansion, EW for the Edgeworth-Expansion. A + behind the Expansion denotes the variant with positivity constraints. Feller condition is fulfilled.}
+    \caption{Ratio of simulations where the p-value of the Kolmogorov-Smirnov-Test against the theoretical density is above 5\% in relation to the theoretical skewness and kurtosis. GC stands for the Gram-Charlier-Expansion, EW for the Edgeworth-Expansion. A $+$ behind the Expansion denotes the variant with positivity constraints. Feller condition is fulfilled.}
     \label{fig:gc_vs_ew_theoretical_skewness_kurtosis}
 \end{figure}
 
-- Ein ähnliches Bild ergibt sich im Vergleich der Gram-Charlier-Expansion und Edgeworth-Expansion mit ihren Varianten, die durch die Positivitätsbedingung eingeschränkt sind. Die Ergebnisse sind in Abbildung \ref{fig:gc_vs_ew_theoretical_skewness_kurtosis} dargestellt und man erkennt, dass die positivitätsbeschränkten Varianten deutlich schlechter abschneiden. Das liegt an dem Verzerrungseffekt, den die Positivitätsbedingung mit sich bringt. Es kann auch keine Abhängigkeit von einzelnen Parametern des Heston-Modells festgestellt werden, bei der die positivitätsbeschränkten Varianten besser abschneiden. Allerdings führen die gewählten Parameterkombinationen für die Simulation auch nie zu theoretischen Skewness- oder Kurtosis-Werten, die außerhalb des Gültigkeitsbereichs der Expansionsmethoden liegen, sodass diese negative Werte, und damit keine Dichte mehr, liefern würden.
+A similar pattern emerges when comparing the Gram-Charlier expansion and the Edgeworth expansion, along with their positivity-constrained variants. The results, shown in Figure \ref{fig:gc_vs_ew_theoretical_skewness_kurtosis}, indicate that positivity-constrained variants perform significantly worse. This decline in performance is due to the distortion effect introduced by the positivity constraint.
 
-- In der Datenbank kann man nach Parameterkombinationen suchen, bei denen sich die Edgeworth-Expansion lohnt, das heißt der p value für den Kolmogorov-Smirnov-Test ist für die Edgeworth-Expansion größer als bei der Gram-Charlier-Expansion und liegt über 5\%, während zeitgleich der p value für die Gram-Charlier-Expansion unter 5\% liegt. Insgesamt werden 2866 solcher Parameterkombinationen gefunden, aus insgesamt 501713 möglichen (wie üblich wurden ungültige Simulationen entfernt). Das entspricht einem Anteil von 0.57\%.
+Moreover, no specific Heston model parameter dependencies were found where positivity-constrained expansions outperform their unconstrained counterparts. However, this is largely because the chosen parameter combinations for the simulations never result in theoretical skewness or kurtosis values that exceed the validity range of the expansion methods. As a result, the positivity constraints never actually prevent negative density values, which would otherwise invalidate the expansion as a proper density function.
+
+To investigate cases where the Edgeworth expansion provides a better approximation, we search the database for parameter combinations where:
+\begin{enumerate}
+    \item The p-value from the Kolmogorov-Smirnov test is higher for the Edgeworth expansion than for the Gram-Charlier expansion.
+    \item The p-value for the Edgeworth expansion is above 5\%, while the p-value for the Gram-Charlier expansion is below 5\%.
+\end{enumerate}
+A total of 2,866 such parameter combinations were identified out of 501,713 possible cases (after filtering out invalid simulations), representing only 0.57\% of all simulations. This suggests that the Edgeworth expansion is not a better alternative to the Gram-Charlier expansion for the Heston model.
 
 \subsection{Approximation of the Tails}
-- Um die Tails zu vergleichen nutzen wir den Anderson-Darling-Test. Ein Verleich mittels des Hill-Estimators zur Schätzung des Tail-Index wurde ebenfalls versucht, es war aber nicht möglich ein Plateau im Hill-Plot zu erkennen, was darauf hindeutet, dass die Tails nicht fat genug sind, wie z.B. in der Pareto-Verteilung. Das ist aber ein essentielles Kriterium, um den Hill-Estimator anwenden zu können. 
+To compare the tails of the distributions, we use the Anderson-Darling test. Additionally, we attempted a comparison using the Hill estimator to estimate the tail index. However, it was not possible to identify a plateau in the Hill plot, which suggests that the tails are not sufficiently fat, as seen in distributions like the Pareto distribution. This is a critical requirement for the Hill estimator to be applicable.
 
-- Man könnte vermuten, dass sich die Ergebnisse ändern, wenn man nun einen Test verwendet, der stärker auf die Ränder der Verteilung reagiert, wie den Anderson-Darling-Test. Aber man sieht, dass es praktisch keinen Unterschied zwischen den Abbildungen \ref{fig:pairplot_GC_cum_AD_muzero} + \ref{fig:pairplot_GC_cum_AD_mu005} und den Abbildungen \ref{fig:pairplot_GC_cum_KS_muzero} + \ref{fig:pairplot_GC_cum_KS_mu005} gibt. Das lässt den Schluss zu, dass die Gram-Charlier-Expansion auf Basis von Cumulants auch die Tails gut approximieren kann.
+One might expect that using a test that is more sensitive to the tails, such as the Anderson-Darling test, would yield different results compared to previous tests. However, the comparison between Figure \ref{fig:pairplot_GC_cum_AD_muzero} and Figure \ref{fig:pairplot_GC_cum_KS_muzero} reveals practically no difference. This suggests that the Gram-Charlier expansion based on cumulants provides a good approximation of the tails as well.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{img/pairplot_GC_cum_AD_muzero.png}
     \caption{Pairplot for each pair of parameters for the Heston Model and the percentage of p values of the Anderson-Darling-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density above 5\%. Invalid simulations are excluded and $\mu=0$.}
     \label{fig:pairplot_GC_cum_AD_muzero}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\textwidth]{img/pairplot_GC_cum_AD.png}
-    \caption{Pairplot for each pair of parameters for the Heston Model and the percentage of p values of the Anderson-Darling-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density above 5\%. Invalid simulations are excluded and $\mu=0.05$.}
-    \label{fig:pairplot_GC_cum_AD_mu005}
 \end{figure}
