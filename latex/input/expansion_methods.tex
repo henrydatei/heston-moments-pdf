@@ -57,11 +57,7 @@ where $\mu_i$ are the central moments of the target distribution, and $x^{[i]} =
 
 \section{Gram-Charlier Expansion with Positivity Constraints}
 
-The Gram-Charlier expansion is not an asymptotic expansion, as it does not allow for a well-defined approximation error. The Edgeworth expansion, however, is an asymptotic expansion (\cite{cramerMathematicalMethodsStatistics1999}, Section 17.6) and is therefore preferred. An asymptotic expansion consists of a series of functions $f_n$ that, after a finite number of terms, approximate a function at a specific point $\xi$ (often infinite) as $x$ approaches $\xi$:
-\begin{align}
-    f_{n+1}(x) = o(f_n(x)) \quad x\to\xi \notag
-\end{align}
-Furthermore, the Gram-Charlier expansion can take negative values, which is not permissible for a probability density function. Jondeau \& Rockinger (\citeyear{jondeauGramCharlierDensities2001}) analyzed the conditions under which the expansion remains a valid density. By using Equations \eqref{eq:cumulants_3} and \eqref{eq:cumulants_4}, Equation \eqref{eq:gc_a_expansion_kappa} can be rewritten in terms of the skewness $\gamma_1$ and excess kurtosis $\gamma_2^*$, defining $z = \frac{x-\mu}{\sigma}$:
+The Gram-Charlier expansion can take negative values, which is not permissible for a probability density function. Jondeau \& Rockinger (\citeyear{jondeauGramCharlierDensities2001}) analyzed the conditions under which the expansion remains a valid density. By using Equations \eqref{eq:cumulants_3} and \eqref{eq:cumulants_4}, Equation \eqref{eq:gc_a_expansion_kappa} can be rewritten in terms of the skewness $\gamma_1$ and excess kurtosis $\gamma_2^*$, defining $z = \frac{x-\mu}{\sigma}$:
 \begin{align}
     \label{eq:gc_a_expansion_s_ek}
     f(x)_{GC,A} \approx \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{z^2}{2}\right) \left[1 + \frac{\gamma_1}{6}H_3(z) + \frac{\gamma_2^*}{24}H_4(z)\right]
@@ -124,7 +120,13 @@ A comparison between constrained and unconstrained parameters for four distribut
 \end{figure}
 
 \section{Edgeworth Expansion}
-Originally introduced by Edgeworth \citeyear{edgeworthRepresentationStatisticalFrequency1907}, who suggested computing the approximation up to the sixth term to mitigate the issues associated with asymptotic expansions. A formal representation of the first terms can be found in Brenn \& Anfinsen (\citeyear{brennRevisitGramCharlierEdgeworth2017}).
+
+The Gram-Charlier expansion is not an asymptotic expansion, as it does not allow for a well-defined approximation error. The Edgeworth expansion, however, is an asymptotic expansion (\cite{cramerMathematicalMethodsStatistics1999}, Section 17.6) and is therefore preferred. An asymptotic expansion consists of a series of functions $f_n$ that, after a finite number of terms, approximate a function at a specific point $\xi$ (often infinite) as $x$ approaches $\xi$:
+\begin{align}
+    f_{n+1}(x) = o(f_n(x)) \quad x\to\xi \notag
+\end{align}
+
+Originally introduced by Edgeworth (\citeyear{edgeworthRepresentationStatisticalFrequency1907}), who suggested computing the approximation up to the sixth term to mitigate the issues associated with asymptotic expansions. A formal representation of the first terms can be found in Brenn \& Anfinsen (\citeyear{brennRevisitGramCharlierEdgeworth2017}).
 \begin{align}
     f(x)_{EW} \approx &\; \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \notag\\[1ex]
     &\; \times \Biggl[ 1 
@@ -195,7 +197,7 @@ This equation is valid as long as $H_6(z) \neq 0$, which occurs at six points:
 
 The positivity boundary for the Edgeworth expansion is determined by plotting the lines $\gamma_1(\gamma_2^*, z)$ for many values of $z$, skipping over the six singularities. Figure \ref{fig:ew_boundary_lines} shows that the positivity region for the Edgeworth expansion is smaller than for the Gram-Charlier expansion. For $\gamma_1 = 0$, the excess kurtosis is constrained between 0 and 4, which matches the boundary of the Gram-Charlier expansion since both expansions are identical when skewness is zero.
 
-As with the Gram-Charlier expansion, the positivity boundary is given by the envelope of the lines $\gamma_1(\gamma_2^*, z)$. We obtain this by computing the intersections of pairs of parabolic equations. The equations are to long to be displayed here, you can find them in the corresponding GitHub repository\footnote{\url{https://github.com/henrydatei/heston-moments-pdf}}. These intersections are shown in Figures \ref{fig:ew_boundary_intersections_1} to \ref{fig:ew_boundary_intersections_7}.
+As with the Gram-Charlier expansion, the positivity boundary is given by the envelope of the lines $\gamma_1(\gamma_2^*, z)$. We obtain this by computing the intersections of pairs of parabolic equations. The equations are too long to be displayed here, you can find them in the corresponding GitHub repository\footnote{\url{https://github.com/henrydatei/heston-moments-pdf}}. These intersections are shown in Figures \ref{fig:ew_boundary_intersections_1} to \ref{fig:ew_boundary_intersections_7}.
 
 Since each $\gamma_1(\gamma_2^*, z)$ equation is a parabola, the positivity region can be computed by:
 \begin{enumerate}
@@ -206,7 +208,7 @@ Since each $\gamma_1(\gamma_2^*, z)$ equation is a parabola, the positivity regi
     \begin{align}
         1 + \frac{0.222}{6}He_3(z) + \frac{4.01}{24}He_4(z) + \frac{0.222^2}{72}He_6(z)<0 \notag
     \end{align}
-    gives a solution: $-1.84611<z<-1.75826$. This might be due to Python's float datatype which maps to IEEE-754 double precision with 64 bits where 52 bits are used for the fraction which equals about 16 decimal digits (\cite{pythonfoundation15FloatingPointArithmetic,leonardo.zAnswerHowCan2013}) To be conservative, we remove any intersection with $\gamma_2^* \notin [0,4]$.
+    gives a solution: $-1.84611<z<-1.75826$. This might be due to Python's float datatype which maps to IEEE-754 double precision with 64 bits where 52 bits are used for the fraction which equals about 16 decimal digits (\cite{pythonfoundation15FloatingPointArithmetic,leonardo.zAnswerHowCan2013}). To be conservative, we remove any intersection with $\gamma_2^* \notin [0,4]$.
     \item Adding the points $(0,0)$ and $(4,0)$ completes the positivity region. A linear interpolation between the closest computed boundary points results in the final positivity boundary (see Figure \ref{fig:ew_boundary_intersections_7}).
 \end{enumerate}
 

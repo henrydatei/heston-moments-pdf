@@ -15,7 +15,7 @@ Figure \ref{fig:max_number_of_same_prices_distribution} illustrates the distribu
 
 To ensure the reliability of the analysis, simulations exhibiting numerical errors will be excluded, as they are not correctly executed. However, since it is possible for identical prices to occur naturally in correct simulations, a threshold must be determined that retains as many valid simulations as possible while filtering out erroneous ones.
 
-Figure \ref{fig:max_number_of_same_prices_cumulative_percentage} illustrates the cumulative percentage of simulations that do not exceed a given threshold for the maximum number of identical price occurrences. If the threshold is set to 1 -— meaning only simulations where no price ever appears more than once are retained —- 68.40\% of the simulations remain. Increasing the threshold reduces the number of discarded simulations, but at the cost of potentially including simulations with numerical errors. However, the impact is minimal, as the increase in retained simulations is negligible beyond a certain point.
+Figure \ref{fig:max_number_of_same_prices_cumulative_percentage} illustrates the cumulative percentage of simulations that do not exceed a given threshold for the maximum number of identical price occurrences. If the threshold is set to 1—meaning only simulations where no price ever appears more than once are retained-68.40\% of the simulations remain. Increasing the threshold reduces the number of discarded simulations, but at the cost of potentially including simulations with numerical errors. However, the impact is minimal, as the increase in retained simulations is negligible beyond a certain point.
 
 For the final analysis, all simulations where any price appears more than once will be excluded to ensure data integrity.
 
@@ -44,7 +44,7 @@ To analyze the source of these numerical errors, we examine the proportion of co
 
 To further investigate this relationship, we analyze the error frequency in relation to the value $D = 2\kappa\theta - \sigma^2$. If $D > 0$, the Feller condition is satisfied; the more negative $D$, the more strongly it is violated. Figure \ref{fig:max_number_of_same_prices_ratio_D} confirms that once the Feller condition is no longer met, the error rate increases significantly. When the condition is satisfied, 99.90\% of the simulations are correct, whereas when it is violated, only 25.48\% are correct. Overall, 57.80\% of the simulations satisfy the Feller condition.
 
-Following this analysis, we evaluate which expansion methods best approximate the theoretical distribution under different conditions. First, we examine how well the Gram-Charlier expansion performs for given levels of skewness and kurtosis, as this is the simplest method. In the second part of the analysis, we compare different expansion methods in terms of their general ability to approximate the distribution, their accuracy in capturing the tails, and their sensitivity to the Feller condition.
+Following this analysis, we evaluate which expansion methods best approximate the theoretical distribution under different conditions. First, we examine how well the Gram-Charlier expansion performs for given levels of skewness and kurtosis, as this is the simplest expansion method. In the second part of the analysis, we compare different expansion methods in terms of their general ability to approximate the distribution and their accuracy in capturing the tails.
 
 For the final evaluation, we focus only on simulations with $\mu=0$, as a large proportion of simulations with $\mu=0.05$ contain errors. Additionally, we restrict our analysis to simulations where the Feller condition is met, since violations of the condition lead to extreme values for theoretical skewness and kurtosis (see Figure \ref{fig:kde_theoretical_skewness_kurtosis_feller_false}).
 
@@ -70,7 +70,7 @@ For the final evaluation, we focus only on simulations with $\mu=0$, as a large 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{img/GC_cum_KS_p_value_histogram.png}
-    \caption{Distribution of p values of the Kolmogorov-Smirnov-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density without invalid simulations}
+    \caption{Distribution of p-values of the Kolmogorov-Smirnov-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density without invalid simulations}
     \label{fig:GC_cum_KS_p_value_histogram}
 \end{figure}
 
@@ -138,7 +138,7 @@ For $\sigma$, the results suggest that lower values lead to better approximation
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{img/pairplot_GC_cum_KS_muzero.png}
-    \caption{Pairplot for each pair of parameters for the Heston Model and the percentage of p values of the Kolmogorov-Smirnov-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density above 5\%. Invalid simulations are excluded and $\mu=0$.}
+    \caption{Pairplot for each pair of parameters for the Heston Model and the percentage of p-values of the Kolmogorov-Smirnov-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density above 5\%. Invalid simulations are excluded and $\mu=0$.}
     \label{fig:pairplot_GC_cum_KS_muzero}
 \end{figure}
 
@@ -155,7 +155,7 @@ For this analysis, all valid simulations were used and split into 80\% training 
 
 Precision is particularly relevant in this context, as it represents the proportion of true positives among all predicted positives. A low precision would imply that parameter combinations unsuitable for the Gram-Charlier approximation are mistakenly classified as suitable. In a financial context, where such approximations might be used to price securities, incorrect classifications could lead to substantial financial losses.
 
-Examining the logistic regression coefficients (Table \ref{tab:logistic_regression_coefficients}) and the feature importance scores from the random forest model (Figure \ref{fig:feature_importances}) reveals that $\sigma$ is by far the most influential parameter. Both $\theta$ and $\kappa$ are also important, but the models disagree on which of the two has a stronger impact. The role of $\rho$ is also unclear—it is insignificant in logistic regression but influential in the random forest model. Conversely, $\mu$ and $v_0$ play no significant role. All parameters included in the models are statistically significant.
+Examining the logistic regression coefficients (Table \ref{tab:logistic_regression_coefficients}) and the feature importance scores from the random forest model (Figure \ref{fig:feature_importances}) reveals that $\sigma$ is by far the most influential parameter. Both $\theta$ and $\kappa$ are also important, but the models disagree on which of the two has a stronger impact. The role of $\rho$ is also unclear—it is insignificant in logistic regression but influential in the random forest model. Conversely, $\mu$ and $v_0$ play no significant role. All parameters included in the models are statistically significant. From this we see that the relationship between the Heston model parameters and the quality of the approximation is complex and not easily captured by simple rules.
 
 \begin{table}
     \centering
@@ -238,11 +238,11 @@ A total of 2,866 such parameter combinations were identified out of 501,713 poss
 \subsection{Approximation of the Tails}
 To compare the tails of the distributions, we use the Anderson-Darling test. Additionally, we attempted a comparison using the Hill estimator to estimate the tail index. However, it was not possible to identify a plateau in the Hill plot, which suggests that the tails are not sufficiently fat, as seen in distributions like the Pareto distribution. This is a critical requirement for the Hill estimator to be applicable.
 
-One might expect that using a test that is more sensitive to the tails, such as the Anderson-Darling test, would yield different results compared to previous tests. However, the comparison between Figure \ref{fig:pairplot_GC_cum_AD_muzero} and Figure \ref{fig:pairplot_GC_cum_KS_muzero} reveals practically no difference. This suggests that the Gram-Charlier expansion based on cumulants provides a good approximation of the tails as well.
+One might expect that using a test that is more sensitive to the tails, such as the Anderson-Darling test, would yield different results compared to previous tests. However, the comparison between Figure \ref{fig:pairplot_GC_cum_AD_muzero} and Figure \ref{fig:pairplot_GC_cum_KS_muzero} reveals barely lower p-values for the Anderson-Darling test. However, the patterns remain consistent, with $\sigma$, $\kappa$, and $\theta$ having the most significant impact on the quality of the approximation.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{img/pairplot_GC_cum_AD_muzero.png}
-    \caption{Pairplot for each pair of parameters for the Heston Model and the percentage of p values of the Anderson-Darling-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density above 5\%. Invalid simulations are excluded and $\mu=0$.}
+    \caption{Pairplot for each pair of parameters for the Heston Model and the percentage of p-values of the Anderson-Darling-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density above 5\%. Invalid simulations are excluded and $\mu=0$.}
     \label{fig:pairplot_GC_cum_AD_muzero}
 \end{figure}

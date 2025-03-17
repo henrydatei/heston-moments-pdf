@@ -55,12 +55,12 @@ where $b_1$ and $g_1$ are estimators of the population skewness, while $G_1$ and
 Various estimation methods for kurtosis exist, such as those presented by Joanes \& Gill (\citeyear{joanesComparingMeasuresSample1998}):
 \begin{align}
     g_2 &= \frac{\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^4}{\left[\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^2\right]^2} \notag \\
-    \hat{\gamma}_2 &= \frac{n(n+1)}{(n-1)(n-2)(n-3)}\sum_{i=1}^n \left(\frac{x_i-\bar{x}}{\hat{\sigma}}\right)^4 \notag
-\end{align}
-where $g_2$ estimates the kurtosis of a population and $G_2$ estimates the kurtosis of a sample. A commonly used alternative is excess kurtosis, which is obtained by subtracting 3:
-\begin{align}
-    \gamma_2^* &= \gamma_2 - 3\notag \\
+    \hat{\gamma}_2 &= \frac{n(n+1)}{(n-1)(n-2)(n-3)}\sum_{i=1}^n \left(\frac{x_i-\bar{x}}{\hat{\sigma}}\right)^4 \notag \\
     G_2 &= \frac{n-1}{(n-2)(n-3)}[(n+1)g_2 + 6] \notag
+\end{align}
+where $g_2$ and $\hat{\gamma}_2$ estimate the kurtosis of a population and $G_2$ estimates the kurtosis of a sample. A commonly used alternative is excess kurtosis, which is obtained by subtracting 3:
+\begin{align}
+    \gamma_2^* &= \gamma_2 - 3\notag
 \end{align}
 This adjustment is motivated by the fact that for a standard normally distributed variable $X$, the kurtosis is $\gamma_2 = 3$ and the excess kurtosis is $\gamma_2^* = 0$. In general, due to the high powers involved in the definitions of skewness and kurtosis, these estimators are highly sensitive to outliers. In the following, the term moments will be used broadly to include related measures such as variance, skewness, and kurtosis.
 
