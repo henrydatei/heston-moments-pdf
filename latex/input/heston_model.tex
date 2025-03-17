@@ -36,7 +36,7 @@ The characteristic function always exists, even if the probability density funct
 \begin{align}
     f(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty} e^{-\mathrm{i}tx}\phi(t)\mathrm{d}t \notag
 \end{align}
-Gatheral (\citeyear{gatheralVolatilitySurfacePractitioner2011}) derives the characteristic function of the Heston model as
+Due to the affine structure of the Heston model, its return's characteristic function can be represented in closed form, which facilitates efficient analytical and numerical evaluations (\cite{hestonClosedFormSolutionOptions1993}). Gatheral (\citeyear{gatheralVolatilitySurfacePractitioner2011}) derives the characteristic function of the Heston model as
 \begin{align}
     \phi(t) = \exp(A + B + C) \notag
 \end{align}
@@ -120,7 +120,10 @@ where $Z$ is standard normally distributed, and $\xi_1$ and $\xi_2$ are constant
 
 \section{The First 4 Moments of the Heston Model}
 
-We now focus on the moments of the Heston Model but care must be taken with notation, as symbols such as $\mu$ and $\sigma$ usually denoting the mean and variance are now used to represent the drift and volatility of the Heston model (see Equations \eqref{eq:heston_model_price} and \eqref{eq:heston_model_variance}). The noncentral moments are denoted by $\mu_1$ through $\mu_4$, while the central and standardized moments are denoted by $\zeta_1$ through $\zeta_4$.
+We now focus on the moments of the Heston Model but care must be taken with notation, as symbols such as $\mu$ and $\sigma$ usually denoting the mean and variance are now used to represent the drift and volatility of the Heston model (see Equations \eqref{eq:heston_model_price} and \eqref{eq:heston_model_variance}). The noncentral moments are denoted by $\mu_1$ through $\mu_4$, while the central and standardized moments are denoted by $\zeta_1$ through $\zeta_4$. It is possible to use the characteristic function to derive the moments of the Heston model:
+\begin{align}
+    \mu_k &= \mathrm{i}^{-k}\frac{\partial^k\phi(t)}{\partial t^k}\Bigg|_{t=0} \notag
+\end{align}
 
 Fortunately, moments for returns and other related measures have been derived. Okhrin et al. (\citeyear{okhrinSimulatingCoxIngersoll2022}) provide the unconditional noncentral moments for the log-return $r_t = \log(S_t) - \log(S_0)$:
 \begin{align}
@@ -190,7 +193,6 @@ Using the expected instantaneous variance $\mathbb{E}_t(v_s) = \theta + (v_t - \
     &\quad\quad + \exp(2T\kappa)\Bigl(2v_t+\theta(-5-2t\kappa+2T\kappa)\Bigr)
     \Biggr] \notag
 \end{align}
-    
 The third conditional central moment is given by
 \begin{align}
     \mathbb{E}_t(R_t^T-\mathbb{E}_t(R_t^T))^3 &= \mathbb{E}_t(X_T^3) - \frac{3}{2}\mathbb{E}_t(X_T^2Y_T) + \frac{3}{4}\mathbb{E}_t(X_TY_T^2) - \frac{1}{8}\mathbb{E}_t(Y_T^3) \notag
@@ -216,7 +218,6 @@ Dunn et al. (\citeyear{dunnEstimatingOptionPrices2014}) derive the unconditional
     &\quad\quad -\, 8\kappa\mu - 12\kappa\theta - 2\kappa
     \Biggr) \notag
 \end{align}
-    
 Using Equations \eqref{eq:definition_variance}, \eqref{eq:definition_skewness}, and \eqref{eq:definition_kurtosis}, the central and standardized moments follow as
 \begin{align}
     \zeta_1 &= 1+\mu \notag \\
