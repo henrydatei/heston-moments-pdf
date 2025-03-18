@@ -50,13 +50,13 @@ For the final evaluation, we focus only on simulations with $\mu=0$, as a large 
 
 \begin{figure}
     \centering
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/kde_theoretical_skewness_feller_false.png}
         \caption{Theretical Skewness}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/kde_theoretical_kurtosis_feller_false.png}
         \caption{Theoretical Kurtosis}
@@ -102,25 +102,25 @@ The superior performance of the cumulant-based approach can be attributed to its
 
 \begin{figure}
     \centering
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/theoretical_skewness_vs_skewness_from_cumulants_feller_condition_true.png}
         \caption{Theretical Skewness vs Skewness from Cumulants}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/theoretical_skewness_vs_NP_rskewness_feller_condition_true.png}
         \caption{Theoretical Skewness vs Skewness from Neuberger \& Payne (\citeyear{neubergerSkewnessStockMarket2021})}
     \end{subfigure}
     \bigskip % https://tex.stackexchange.com/questions/475149/using-subfigure-and-creating-two-rows-of-figures
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/theoretical_kurtosis_vs_kurtosis_from_cumulants_feller_condition_true.png}
         \caption{Theoretical Kurtosis vs Kurtosis from Cumulants}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/theoretical_kurtosis_vs_NP_rexcess_kurtosis_feller_condition_true.png}
         \caption{Theoretical Kurtosis vs Kurtosis from Neuberger \& Payne (\citeyear{neubergerSkewnessStockMarket2021})}
@@ -137,7 +137,7 @@ For $\sigma$, the results suggest that lower values lead to better approximation
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{img/pairplot_GC_cum_KS_muzero.png}
+    \includegraphics[width=\textwidth]{img/pairplot_GC_cum_KS_muzero.png}
     \caption{Pairplot for each pair of parameters for the Heston Model and the percentage of p-values of the Kolmogorov-Smirnov-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density above 5\%. Invalid simulations are excluded and $\mu=0$.}
     \label{fig:pairplot_GC_cum_KS_muzero}
 \end{figure}
@@ -192,13 +192,13 @@ The findings indicate that using a more complex expansion method than the normal
 
 \begin{figure}
     \centering
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/theoretical_skewness_vs_ratio_feller_condition_true.png}
         \caption{Theretical Skewness}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/theoretical_kurtosis_vs_ratio_feller_condition_true.png}
         \caption{Theoretical Kurtosis}
@@ -209,13 +209,13 @@ The findings indicate that using a more complex expansion method than the normal
 
 \begin{figure}
     \centering
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/theoretical_skewness_vs_ratio_gc_ew_feller_condition_true.png}
         \caption{Theretical Skewness}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/theoretical_kurtosis_vs_ratio_gc_ew_feller_condition_true.png}
         \caption{Theoretical Kurtosis}
@@ -242,7 +242,7 @@ One might expect that using a test that is more sensitive to the tails, such as 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{img/pairplot_GC_cum_AD_muzero.png}
+    \includegraphics[width=0.97\textwidth]{img/pairplot_GC_cum_AD_muzero.png}
     \caption{Pairplot for each pair of parameters for the Heston Model and the percentage of p-values of the Anderson-Darling-Test for the Gram-Charlier Expansion with Cumulants vs the theoretical density above 5\%. Invalid simulations are excluded and $\mu=0$.}
     \label{fig:pairplot_GC_cum_AD_muzero}
 \end{figure}

@@ -18,9 +18,9 @@ The Cornish-Fisher expansion, introduced by Cornish \& Fisher (\citeyear{cornish
 
 Given that $z_p$ is the $p$-quantile of a normal distribution with mean $\mu$ and variance $\sigma^2$, the $p$-quantile of a random variable $X$, denoted as $x_p$, can be approximated as follows (only the first terms shown, as it is common practice) (\cite{abramowitzHandbookMathematicalFunctions1968}, p. 935):
 \begin{align}
-    x_p \approx z_p + \frac{\gamma_1}{6}He_2(z_p) + \frac{\gamma_2^*}{24}He_3(z_p) - \frac{\gamma_1^2}{36}(2\cdot He_3(z_p) + He_1(z_p)) \notag
+    x_p \approx z_p + \frac{\gamma_1}{6}H_2(z_p) + \frac{\gamma_2^*}{24}H_3(z_p) - \frac{\gamma_1^2}{36}(2\cdot H_3(z_p) + H_1(z_p)) \notag
 \end{align}
-To obtain the probability density function (PDF), the quantiles $x_p$ can be numerically computed and differentiated. $He_n(x)$ are the Hermite polynomials, and $\gamma_1$ and $\gamma_2^*$ are the skewness and excess kurtosis of the approximated distribution, respectively.
+To obtain the probability density function (PDF), the quantiles $x_p$ can be numerically computed and differentiated. $H_n(x)$ are the Hermite polynomials, and $\gamma_1$ and $\gamma_2^*$ are the skewness and excess kurtosis of the approximated distribution, respectively.
 
 Aboura \& Maillard (\citeyear{abouraOptionPricingSkewness2016}) point out that the parameters $\gamma_1$ and $\gamma_2^*$ do not correspond to the skewness and excess kurtosis of the approximated distribution. Instead, they denote these parameters as $s = \gamma_1$ and $k = \gamma_2^*$ and provide equations to compute the actual skewness $s^*$ and excess kurtosis $k^*$ of the approximated distribution. Later, Maillard (\citeyear{maillardUserGuideCornish2018}) published the inverse transformation, allowing one to compute the parameters $s$ and $k$ given the actual skewness and excess kurtosis. A corresponding table can be found in the appendix of his paper.
 
