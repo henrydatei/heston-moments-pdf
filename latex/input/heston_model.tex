@@ -178,7 +178,7 @@ where $v_t$ represents the variance at time $t$, $SW$ is the variance swap rate 
 Using the expected instantaneous variance $\mathbb{E}_t(v_s) = \theta + (v_t - \theta)\exp(-\kappa(s-t))$, Mathematica yields the following results:
 \begin{align}
     \int_t^T \mathbb{E}_t(v_s)\,\mathrm{d}s 
-    &= \frac{v_t - \theta + \exp\bigl(\kappa(t-T)\bigr)(-v_t+\theta) - t \theta\kappa + T\theta\kappa}{\kappa} \notag \\[1ex]
+    &= \frac{v_t - \theta + \exp\bigl(\kappa(t-T)\bigr)(-v_t+\theta) + \theta\kappa(T - t)}{\kappa} \notag \\[1ex]
     \rho\sigma\int_t^T \frac{1-\exp\bigl(-\kappa(T-s)\bigr)}{\kappa}\mathbb{E}_t(v_s)\,\mathrm{d}s 
     &= \frac{\exp(-T\kappa)\,\rho\sigma}{\kappa^2} \Biggl[
         \exp(t\kappa)\Bigl(-v_t+2\theta+(t-T)
