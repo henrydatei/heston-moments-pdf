@@ -76,7 +76,7 @@ The most intuitive approach to time discretization is the Euler–Maruyama schem
     X_{t+\Delta} &= X_t - \frac{1}{2}v_t\Delta + \sqrt{v_t}\sqrt{\Delta}Z_{X,t} \notag \\
     v_{t+\Delta} &= v_t + \kappa(\theta - v_t)\Delta + \sigma\sqrt{v_t}\sqrt{\Delta}Z_{v,t} \notag
 \end{align}
-where $Z \sim \mathcal{N}(0,1)$, $\Delta = T/n$, with $T$ representing the total time and $n$ the number of time steps. The correlation between $Z_{X,t}$ and $Z_{v,t}$ can be simulated as follows (\cite{andersenEfficientSimulationHeston2007}): %TODO: andere Quelle finden, nicht immer nur Andersen oder Ostap
+where $Z \sim \mathcal{N}(0,1)$, $\Delta = T/n$, with $T$ representing the total time and $n$ the number of time steps. The correlation between $Z_{X,t}$ and $Z_{v,t}$ can be simulated as follows (\cite{andersenEfficientSimulationHeston2007}):
 \begin{align}
     Z_{v,t} &= \Phi^{-1}(U_1) \notag \\
     Z_{X,t} &= \rho Z_{v,t} + \sqrt{1-\rho^2}\Phi^{-1}(U_2) \notag
